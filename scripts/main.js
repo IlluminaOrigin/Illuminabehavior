@@ -87,6 +87,7 @@ system.events.scriptEventReceive.subscribe(ev => {
             player.getComponent(`inventory`).container.addItem(item)
         }
         case "karo:name": {
+            if(getScore(entity, `hp`) === true) break;
             for (const entity of dimension.getEntities()) {
                 switch (true) {
                     case entity.hasTag("M1"):
