@@ -1,6 +1,7 @@
 import {  world , system , ItemStack, Vector} from "@minecraft/server";
 import { getScore } from "getscore2.js";
 const dimension = world.getDimension(`overworld`)
+import "damage.js"
 
 let name = ""
 let mhp = ""
@@ -21,26 +22,26 @@ system.events.scriptEventReceive.subscribe(ev => {
             //スロット1~26を参照し空気のところや価格を設定してないアイテムは飛ばし合計金額を出す
             for(let i = 1; i < 27; i++) {
                 let item = block.getItem(i)
-                if( typeof item == 'undefined') continue;
+                if( typeof item == `undefined`) continue;
                 const price = item.getLore()
-                if( typeof price[0] == 'undefined' || price[0] == `` || Number(price[0].split(`:`)[1].replace(`円`,``)) == null) continue;
+                if( typeof price[0] == `undefined` || price[0] == `` || Number(price[0].split(`:`)[1].replace(`円`,``)) == null) continue;
                 finalyPrice += Number(price[0].split(`:`)[1].replace(`円`,``)) * item.amount
             }
             //ケース1 合計が0で売却ボタンを押したとき、何も表示せず売却ボタンをプレイヤーから消す
-            if(typeof block.getItem(0) == 'undefined' && finalyPrice == 0) {
+            if(typeof block.getItem(0) == `undefined` && finalyPrice == 0) {
                 dimension.runCommandAsync(`clear @p[x=${ln.x},y=${ln.y},z=${ln.z}] karo:sell`)
                 block.setItem(0 , sellButton)
             } else 
             //ケース2 普通に売却ボタンを押したとき、売却メッセージと共に処理
-            if (typeof block.getItem(0) == 'undefined') {
+            if (typeof block.getItem(0) == `undefined`) {
                 dimension.runCommandAsync(`scoreboard players add @p[x=${ln.x},y=${ln.y},z=${ln.z}] money ${finalyPrice}`)
                 dimension.runCommandAsync(`tellraw @p[x=${ln.x},y=${ln.y},z=${ln.z}] {"rawtext":[{"text":"§l§a${finalyPrice}円手に入れた"}]}`)
                 dimension.runCommandAsync(`clear @p[x=${ln.x},y=${ln.y},z=${ln.z}] karo:sell`)
                 for(let i = 1; i < 27; i++) {
                     let item = block.getItem(i)
-                    if( typeof item == 'undefined') continue;
+                    if( typeof item == `undefined`) continue;
                     const price = item.getLore()
-                    if( typeof price[0] == 'undefined' || price[0] == `` || Number(price[0].split(`:`)[1].replace(`円`,``)) == null) continue;
+                    if( typeof price[0] == `undefined` || price[0] == `` || Number(price[0].split(`:`)[1].replace(`円`,``)) == null) continue;
                     block.setItem(i)
                 }
                 block.setItem(0 , sellButton)
@@ -60,9 +61,9 @@ system.events.scriptEventReceive.subscribe(ev => {
                 dimension.runCommandAsync(`clear @p[x=${ln.x},y=${ln.y},z=${ln.z}] karo:sell`)
                 for(let i = 1; i < 27; i++) {
                     let item = block.getItem(i)
-                    if( typeof item == 'undefined') continue;
+                    if( typeof item == `undefined`) continue;
                     const price = item.getLore()
-                    if( typeof price[0] == 'undefined' || price[0] == `` || Number(price[0].split(`:`)[1].replace(`円`,``)) == null) continue;
+                    if( typeof price[0] == `undefined` || price[0] == `` || Number(price[0].split(`:`)[1].replace(`円`,``)) == null) continue;
                     block.setItem(i)
                 }
                 const beforeitem = block.getItem(0)
@@ -100,7 +101,7 @@ system.events.scriptEventReceive.subscribe(ev => {
                         }
                 }
     
-                let entityScore = getScore(entity, 'hp') / getScore(entity, 'maxhp')
+                let entityScore = getScore(entity, `hp`) / getScore(entity, `maxhp`)
                 let str = "";
                 let str2 = "■■■■■■■■■■";
                 for (let i = 0; i < Math.ceil(entityScore * 10); i++) {
@@ -128,15 +129,15 @@ system.events.scriptEventReceive.subscribe(ev => {
                         {
                             if (!entity.hasTag(`hatu`)) break;
                             const pn = entity.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
-                            let atname = "§l§6LV[" + getScore(entity, 'lv') + "] §r" + pn[1]
+                            let atname = "§l§6LV[" + getScore(entity, `lv`) + "] §r" + pn[1]
                             if (entity.getTags().find(x => x.match("SYOGOD_"))) atname = entity.getTags().find(x => x.match("SYOGOD_")).split(/(?<=^[^_]+?)_/)[1] + `\n` + atname
                             if (entity.hasTag(`toku`)) atname = `§b情報非公開のプレイヤー`
                            
                             entity.nameTag = `${atname} ${mhp}`
                             health.setCurrent(thp)
-                            const px = getScore(entity, 'rx');
-                            const py = getScore(entity, 'ry');
-                            const pz = getScore(entity, 'rz');
+                            const px = getScore(entity, `rx`);
+                            const py = getScore(entity, `ry`);
+                            const pz = getScore(entity, `rz`);
                             if (entity.hasTag(`death`)) {
                                 if (entity.hasTag(`toku`)) pn[1] = `情報非公開のプレイヤー`
                                 const location = new Vector(entity.location.x, entity.location.y, entity.location.z)
@@ -174,7 +175,7 @@ system.events.scriptEventReceive.subscribe(ev => {
                     default:
                         {
                             if (entity.typeId === "minecraft:item" || entity.typeId === "karo:tamasii" || entity.typeId === "karo:message" || entity.typeId === "minecraft:npc" || entity.typeId === "minecraft:arrow" || entity.typeId === "minecraft:chest_minecart" || entity.typeId === "minecraft:command_block_minecart" || entity.typeId === "minecraft:egg" || entity.typeId === "minecraft:falling_block" || entity.typeId === "minecraft:eye_of_ender_signal" || entity.typeId === "minecraft: evocation_fang" || entity.typeId === "minecraft:fireball" || entity.typeId === "minecraft:fishing_hook" || entity.typeId === "minecraft:firewarks_rocket" || entity.typeId === "minecraft:hopper_minecart" || entity.typeId === "minecraft:ender_pearl" || entity.typeId === "minecraft:lighting_bolt" || entity.typeId === "minecraft:lingering_potion" || entity.typeId === "minecraft:moving_block" || entity.typeId === "minecraft:painting" || entity.typeId === "minecraft:shulker_bullet" || entity.typeId === "minecraft:small_fireball" || entity.typeId === "minecraft:llama_spit" || entity.typeId === "minecraft:minecart" || entity.typeId === "minecraft:splash_potion" || entity.typeId === "minecraft:xp_bottle" || entity.typeId === "minecraft:xp_orb" || entity.typeId === "minecraft:wither_skull_dangerous" || entity.typeId === "minecraft:wither_skull" || entity.typeId === "minecraft:tnt" || entity.typeId === "karo:damage") break;
-                            const atname = `§l§6LV[${getScore(entity, 'lv')}]§r ${name}`
+                            const atname = `§l§6LV[${getScore(entity, `lv`)}]§r ${name}`
                             entity.nameTag = `${atname} ${mhp}`
                             break;
                         }
@@ -197,6 +198,14 @@ world.beforeEvents.chatSend.subscribe((ev) => {
     ev.sendToTargets = true
     switch(true) {
         case message.startsWith(`!name`): world.sendMessage(`${sender.nameTag}`); break;
+        case message.startsWith(`!lore`): {
+            let item = sender.getComponent(`inventory`).container.getItem(sender.selectedSlot)
+            system.run(()=>{
+                Lore(item,"短剣",100,"E",120,20,100,20,19,10)
+                sender.getComponent(`inventory`).container.setItem(sender.selectedSlot,item)
+            })
+            break;
+        }
         case message.startsWith(`!item`): {
             sender.sendMessage(`${JSON.stringify(sender.getTags())}`)
             sender.runCommandAsync(`title @s subtitle "[{\"text\":\"${sender.name.replace(/"/,/\"/)}\"},{\"tekitou\":\"zzz\"}]"`)
@@ -204,13 +213,14 @@ world.beforeEvents.chatSend.subscribe((ev) => {
         }
         case message.startsWith(`!saveitem`): {
             let lore = ``
-            for(let i = 0;i < sender.getComponent('minecraft:inventory').container.getSlot(sender.selectedSlot).getLore().length;i++){
-                if(i === 0) lore = `${lore}${sender.getComponent('minecraft:inventory').container.getSlot(sender.selectedSlot).getLore()[0]}`
-                if(i > 0) lore = `${lore},${sender.getComponent('minecraft:inventory').container.getSlot(sender.selectedSlot).getLore()[i]}`
+            for(let i = 0;i < sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).getLore().length;i++){
+                if(i === 0) lore = `${lore}${sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).getLore()[0]}`
+                if(i > 0) lore = `${lore},${sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).getLore()[i]}`
             }
-            sender.runCommandAsync(`title @s subtitle "{\"saveItem\":{\"typeId\":\"${sender.getComponent('minecraft:inventory').container.getSlot(sender.selectedSlot).typeId}\",\"setLore\":[\"${lore}\"],\"itemname\":\"${sender.getComponent('minecraft:inventory').container.getSlot(sender.selectedSlot).nameTag}\"}}"`)
+            sender.runCommandAsync(`title @s subtitle "{\"saveItem\":{\"typeId\":\"${sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).typeId}\",\"setLore\":[\"${lore}\"],\"itemname\":\"${sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).nameTag}\"}}"`)
             break;
         }
+        case message.startsWith(`!lock`): ItemLock(sender)
         case message.startsWith(`!createitem`): sender.runCommandAsync(`title ${message.split(` `)[2]} subtitle "createItem ${message.split(` `)[1]} ${sender.name}"`); break;
         default : {
             if(message.startsWith(`!`)) break;
@@ -272,3 +282,17 @@ world.afterEvents.itemStartUseOn.subscribe((ev) => {
 world.afterEvents.itemStartCharge.subscribe((ev) => {
     world.sendMessage(`ddd`)
 })
+
+function ItemLock(player){
+    if(!player.getComponent(`inventory`).container.getSlot(player.selectedSlot)) return;
+    let lock = player.getComponent(`inventory`).container.getSlot(player.selectedSlot).lockMode
+    if(lock === `inventory`) {
+      lock.none
+    } else if(lock === `none`) {
+      lock.inventory
+    }
+  }
+
+  function Lore(ItemStack, 武器種, 相場価格, 等級, 耐久値, 攻撃力, 命中率, ドロップ率, 強化レベル, 使用可能レベル) {
+    return ItemStack.setLore([ `§l§s===============`, `§l§p- §f種類:武器(${武器種})`, `§l§p- §f相場価格:${相場価格}円`, `§l§p- §f等級:${等級}`, `§l§t---------------`, `§l§u- §f耐久値:(${耐久値}/${耐久値})`, `§l§u- §f攻撃力:${攻撃力}`, `§l§u- §f命中率:${命中率}%`, `§l§u- §fドロップ率:${ドロップ率}`, `§l§u- §f強化レベル:+${強化レベル}`, `§l§u- §f使用可能レベル:Lv.${使用可能レベル}`, `§l§t---------------`, `§l§q- §f<エンチャント1>`, `§l§q- §f<エンチャント2>`, `§l§q- §f<エンチャント3>`, `§l§q- §f<スキルスロット1>`, `§l§q- §f<スキルスロット2>`, ``, `§l§s===============` ])
+  }
