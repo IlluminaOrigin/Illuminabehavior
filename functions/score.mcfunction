@@ -1,5 +1,4 @@
 scoreboard objectives add lv dummy
-scoreboard objectives add job dummy
 scoreboard objectives add hp dummy
 scoreboard objectives add maxhp dummy
 scoreboard objectives add xp dummy

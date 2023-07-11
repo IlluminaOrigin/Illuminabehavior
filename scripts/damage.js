@@ -2,7 +2,7 @@ import { system, world, ItemStack, Vector, Container, ItemTypes, MinecraftItemTy
 import { getScore,setScore } from "getscore.js"; 
 const overworld = world.getDimension('overworld')
 const weaponNumbers = {短剣: [1 , "tanken"],長剣: [2 , "tyouken"],杖:[3 , "tue"],槍:[4 , "yari"],斧:[5 , "斧"]}
-
+const zokuseiType = {1:[2,"炎"],2:[3,"木"],3:[4,"光"],4:[5,"闇"],5:[1,"水"]}
 
 
 //ダメージをエンティティが受けた時に発火
@@ -10,15 +10,39 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     //攻撃者、被ダメ者、ダメージ値、原因を取得
     const { damageSource, hurtEntity: sufferer, damage } = entityHurt;
     const { damagingEntity: attacker ,cause} = damageSource;
+    let suffererHealth = getScore(`hp`, sufferer);
+    let suffererDefensePower = getScore(`def`,sufferer)
+    let suffererMagicDefensePower = getScore(`mdef`,sufferer)
+    let suffererName = Name(sufferer.nameTag)
+    if(!attacker) {
+        suffererHealth -= damage*10
+        setScore(`hp`,sufferer,suffererHealth)
+        if(sufferer?.typeId === "minecraft:player" && suffererHealth <= 0){
+            if(sufferer.hasTag(`toku`)) tn[1] = "情報非公開のプレイヤー"
+            const de = overworld.spawnEntity(
+                "karo:tamasii",
+                new Vector({x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z})
+              );
+            de.nameTag = `${suffererName}`
+            sufferer.runCommandAsync(`gamemode spectator @s`)
+            world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は死んだ`);
+            sufferer.addTag(`death`)
+        } else if(suffererHealth <= 0){
+            sufferer.runCommandAsync(`kill @s`)
+        }
+    }
+
     if(!attacker || !sufferer || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`：`)[1].startsWith(`武器`)) return;
-    world.sendMessage(`ok`)
 
     let suffererLevel = getScore(`lv`,sufferer);
     let attackerLevel = getScore(`lv`,attacker);
     let attackerHealth = getScore(`hp`, attacker);
-    let suffererHealth = getScore(`hp`, sufferer);
-    let sufferDefensePower = getScore(``,sufferer)
-
+    let attackerAttackPower = getScore(`atk`,attacker)
+    let attackerMagicAttackPower = getScore(`matk`,attacker)
+    let hitRate = getScore(`hit`,attacker)
+    let suffererAvoidance = getScore(`agi`,sufferer)
+    let attackerZokuseiType = getScore(`zokusei`,attacker)
+    let suffererZokuseiType = getScore(`zokusei`,sufferer)
 
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
@@ -43,7 +67,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             if (weaponDurability.value < 1) container.clearItem(attacker.selectedSlot);
         });
         let zokusei = 1
-        let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + playerDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
+        let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
 
         suffererHealth -= hurtValue;
@@ -83,11 +107,8 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         if(suffererLevel < attackerLevel){
             damageFactor = 1.2
         }
-        let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,sufferDefensePower,suffererAvoidance,zokusei)
-        if(attack2 < 1){
-            attack2 = 1
-        }
-        attack2 = Math.round(attack2);
+        let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower,suffererAvoidance,zokusei)
+
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§c${attack2}`;
 
         let php = getScore(`hp`,sufferer);
@@ -169,27 +190,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
                 setScore(`money`,attacker,money + (kill * 20))
             }
         }
-    } else {
-        let hp = getScore(`hp`,sufferer)
-        hp -= entityHurt.damage
-        setScore(`hp`,sufferer,hp)
-
-        //HPが0の場合
-        if(sufferer?.typeId == "minecraft:attacker"){
-            if(hp <= 0){
-                const pn = sufferer.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
-                if(sufferer.hasTag(`toku`)) tn[1] = "情報非公開のプレイヤー"
-                const de = overworld.spawnEntity(
-                    "karo:tamasii",
-                    new Vector({x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z})
-                  );
-                de.nameTag = `${pn[1]}`
-                sufferer.runCommandAsync(`gamemode spectator @s`)
-                world.sendMessage(`§4§lDeath§r\n§l§6LV[Lv.${suffererLevel}]§r ${pn[1]}§r§a§l は死んだ`);
-                sufferer.addTag(`death`)
-            }
-        }
-    }
+    } 
 })
 
 
@@ -252,3 +253,15 @@ function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃された�
     if(damage < 1) damage = 1
     return damage;
 }
+
+function Name(playersName){
+    let p4 = []
+    let p = playersName.split(/\n/)
+    if(p.length >= 3) return p[1];
+    for(let i = 0;i < p.length - 1;i++){
+      if(i > 0) p4 += `\n`
+    }
+    if(p4.length === 0) p4[0] = playersName
+    const p6 = p4.toString()
+    return p6;
+  }
