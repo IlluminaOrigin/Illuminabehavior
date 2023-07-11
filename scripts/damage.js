@@ -3,17 +3,25 @@ import { getScore,setScore } from "getscore.js";
 const overworld = world.getDimension('overworld')
 const weaponNumbers = {短剣: [1 , "tanken"],長剣: [2 , "tyouken"],杖:[3 , "tue"],槍:[4 , "yari"],斧:[5 , "斧"]}
 
+
+
+//ダメージをエンティティが受けた時に発火
 world.afterEvents.entityHurt.subscribe(entityHurt => { 
+    //攻撃者、被ダメ者、ダメージ値、原因を取得
     const { damageSource, hurtEntity: sufferer, damage } = entityHurt;
-    const { damagingEntity: attacker } = damageSource;
+    const { damagingEntity: attacker ,cause} = damageSource;
     if(!attacker || !sufferer || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`：`)[1].startsWith(`武器`)) return;
     world.sendMessage(`ok`)
-    //プレイヤーがプレイヤー以外に攻撃
+
     let suffererLevel = getScore(`lv`,sufferer);
     let attackerLevel = getScore(`lv`,attacker);
+    let attackerHealth = getScore(`hp`, attacker);
+    let suffererHealth = getScore(`hp`, sufferer);
+    let sufferDefensePower = getScore(``,sufferer)
 
+
+    //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
-    
         let damageFactor = suffererLevel > attackerLevel ? 2 : 1;
     
         //武器の取得
@@ -34,14 +42,10 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             container.setItem(attacker.selectedSlot, item);
             if (weaponDurability.value < 1) container.clearItem(attacker.selectedSlot);
         });
-        let hurtValue = (attackPower.value + getScore(`atk`,attacker)) * 200;
-        let defensePower = getScore(`def`,sufferer) * 2 + 200;
-
-        hurtValue = Math.round(hurtValue / defensePower / damageFactor);
-        if (hurtValue < 1) hurtValue = 1;
-
-        let suffererHealth = getScore(`hp`, sufferer);
+        let zokusei = 1
+        let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + playerDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
+
         suffererHealth -= hurtValue;
         setScore(`hp`,sufferer,suffererHealth);
         let xp = getScore(`xp`,sufferer);
@@ -79,7 +83,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         if(suffererLevel < attackerLevel){
             damageFactor = 1.2
         }
-        let attack2 = getScore(`atk`,attacker) * 200 / (2 * getScore(`def`,sufferer) + 200) * damageFactor
+        let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,sufferDefensePower,suffererAvoidance,zokusei)
         if(attack2 < 1){
             attack2 = 1
         }
@@ -236,3 +240,15 @@ world.afterEvents.entityHit.subscribe(entityHit => {
 
 });
 
+function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃された人のレベル,防御力,回避率,属性効果){
+    let level = 攻撃された人のレベル / 攻撃した人のレベル
+    if(level > 1.4) level = 1.4
+    if(level < 0.6) level = 0.6
+    let max = (Math.ceil(命中率 / 100) / 10 + (命中率 / 200))
+    if(max < 1) max = 1
+    let min = (Math.ceil(命中率 / 100) / 10 - (命中率 / 200))
+    if(min < 1) min = 1
+    let damage = Math.round((攻撃力 * (Math.random() * ( max - min) + min) * level - (防御力 + (回避率 - 命中率))) * 属性効果)
+    if(damage < 1) damage = 1
+    return damage;
+}
