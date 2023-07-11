@@ -135,7 +135,7 @@ system.events.scriptEventReceive.subscribe(ev => {
                             if (entity.hasTag(`toku`)) atname = `§b情報非公開のプレイヤー`
                            
                             entity.nameTag = `${atname} ${mhp}`
-                            health.setCurrent(thp)
+                            health.setCurrentValue(thp)
                             const px = getScore(entity, `rx`);
                             const py = getScore(entity, `ry`);
                             const pz = getScore(entity, `rz`);

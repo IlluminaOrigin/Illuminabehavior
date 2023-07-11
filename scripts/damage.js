@@ -32,7 +32,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         }
     }
 
-    if(!attacker || !sufferer || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`：`)[1].startsWith(`武器`)) return;
+    if(!attacker || !sufferer || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`)) return;
 
     let suffererLevel = getScore(`lv`,sufferer);
     let attackerLevel = getScore(`lv`,attacker);
@@ -56,8 +56,8 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         
         let weaponDurability = { name: lore[5].split('(')[0],value: Number(lore[5].split('(')[1].split(/\//)[0]), max: Number(lore[5].split('(')[1].split(/\//)[0].split(`)`)[1]) };
         const weaponType = { type: lore[1].split(`(`)[1].split(`)`)[0] };
-        const attackPower = { name: lore[6].split('：')[0], value: Number(lore[6].split('：')[1]) };
-        const weaponInfo = {命中率: Number(lore[7].split('：')[1].split(`%`)[0]),ドロップ率: Number(lore[8].split('：')[1]), 強化レベル: Number(lore[9].split('：')[1].split(`+`)[1]),使用可能レベル:Number(lore[10].split('：')[1].split(`~`)[0])}
+        const attackPower = { name: lore[6].split(':')[0], value: Number(lore[6].split(':')[1]) };
+        const weaponInfo = {命中率: Number(lore[7].split(':')[1].split(`%`)[0]),ドロップ率: Number(lore[8].split(':')[1]), 強化レベル: Number(lore[9].split(':')[1].split(`+`)[1]),使用可能レベル:Number(lore[10].split(':')[1].split(`~`)[0])}
         const weaponEnchants = {enchant1: lore[12].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[13].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[14].split((/(?<=^[^ ]+?) /))[1]}
         const weaponSkills = {skill1: lore[15].split((/(?<=^[^ ]+?) /))[1] , skill2: lore[16].split((/(?<=^[^ ]+?) /))[1]}
         lore[5] = `${weaponDurability.name}(${weaponDurability.value - 1}/${weaponDurability.max})`;
