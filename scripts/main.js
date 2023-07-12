@@ -6,7 +6,7 @@ import "damage.js"
 let name = ""
 let mhp = ""
 let thp
-system.events.scriptEventReceive.subscribe(ev => {
+system.afterEvents.scriptEventReceive.subscribe(ev => {
     const {id , sourceBlock , message } = ev;
     const ln = sourceBlock?.location
     let sellButton = new ItemStack(`karo:sell`)
