@@ -51,6 +51,8 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let suffererOffhand = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
     let attackerOffhand = attacker.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
     let equipments = [head , chest , legs , feet ]
+    let defensePower = 0
+
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
 
@@ -78,7 +80,6 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         //属性効果
         if(suffererZokuseiType === zokuseiType[weaponZokusei][0]) zokusei = 1.2
         if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
-        let defensePower = 0
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+(Math.random() * (1.1 - -1.1) + -1.1), y: sufferer.location.y+(Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+(Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;
@@ -113,7 +114,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         let zokusei = 1
         if(suffererZokuseiType === zokuseiNumber[attackerZokuseiType][0]) zokusei = 1.2
         if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
-        let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower,suffererAvoidance,zokusei)
+        let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower + defensePower,suffererAvoidance,zokusei)
         //防具エンチャント
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x + (Math.random() * (1.1 - -1.1) + -1.1) , y: sufferer.location.y+ (Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+ (Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§c${hurtValue}`;
         suffererHealth -= hurtValue
