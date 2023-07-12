@@ -1,10 +1,10 @@
-import { system, world, ItemStack, Vector, Container, ItemTypes, MinecraftItemTypes, BlockType, MinecraftBlockTypes, BlockPermutation, MinecraftEntityTypes } from "@minecraft/server";
+import { system, world, ItemStack, Vector, Container, ItemTypes,EquipmentSlot, MinecraftItemTypes, BlockType, MinecraftBlockTypes, BlockPermutation, MinecraftEntityTypes, EntityEquipmentInventoryComponent } from "@minecraft/server";
 import { getScore,setScore } from "getscore.js";
-import { Damage,Name } from "functions.js"; 
+import { Damage,Name } from "functions.js";
 const overworld = world.getDimension('overworld')
 const weaponNumbers = {短剣: [1 , "tanken"],長剣: [2 , "tyouken"],杖:[3 , "tue"],槍:[4 , "yari"],斧:[5 , "斧"]}
-const zokuseiNumber = {1:[2,"炎"],2:[3,"木"],3:[4,"雷"],4:[5,"水"],5:[6,"土"],6:[7,"闇"],7:[1,"無"]}
-const zokuseiType = {"§c炎":[2,"炎"],"§a木":[3,"木"],"§e雷":[4,"雷"],"§b水":[5,"水"],"§g土":[6,"土"],"§1闇":[7,"闇"],"§7無":[1,"無"]}
+const zokuseiNumber = {1:[2,7,"炎"],2:[3,1,"木"],3:[4,2,"雷"],4:[5,3,"水"],5:[6,4,"土"],6:[7,5,"闇"],7:[1,6,"無"]}
+const zokuseiType = {"§c炎":[2,1,"炎"],"§a木":[3,2,"木"],"§e雷":[4,3,"雷"],"§b水":[5,4,"水"],"§g土":[6,5,"土"],"§1闇":[7,6,"闇"],"§7無":[1,7,"無"]}
 
 //ダメージをエンティティが受けた時に発火
 world.afterEvents.entityHurt.subscribe(entityHurt => { 
@@ -45,17 +45,23 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let suffererAvoidance = getScore(`agi`,sufferer)
     let attackerZokuseiType = getScore(`zokusei`,attacker)
     let suffererZokuseiType = getScore(`zokusei`,sufferer)
-
+    let head = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.head)
+    let chest = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.chest)
+    let legs = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.legs)
+    let feet = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.feet)
+    let suffererOffhand = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
+    let attackerOffhand = attacker.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
 
         //武器の取得
-        /** @type { Container } 
+        /** 
+         * @type { Container } 
         */
         const container = attacker.getComponent("inventory").container;
         const item = container.getItem(attacker.selectedSlot);
         const lore = item.getLore();
-        
+        let weaponZokusei = lore[4].split(`:`)[1]
         let weaponDurability = { name: lore[6].split('(')[0],value: Number(lore[6].split('(')[1].split(/\//)[0]), max: Number(lore[6].split('(')[1].split(/\//)[0].split(`)`)[1]) };
         const weaponType = { type: lore[1].split(`(`)[1].split(`)`)[0] };
         const attackPower = { name: lore[7].split(':')[0], value: Number(lore[7].split(':')[1]) };
@@ -70,6 +76,9 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         });
         let zokusei = 1
         //属性効果
+        if(suffererZokuseiType === zokuseiType[weaponZokusei][0]) zokusei = 1.2
+        if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
+
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;
@@ -108,7 +117,8 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         }
         //属性効果
         let zokusei = 1
-        
+        if(suffererZokuseiType === zokuseiNumber[attackerZokuseiType][0]) zokusei = 1.2
+        if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
         let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower,suffererAvoidance,zokusei)
         //防具エンチャント
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§c${hurtValue}`;
