@@ -65,7 +65,7 @@ export function Name(playerName){
     let p = playerName.split(/\n/)
     for(let i = 0;i < p.length - 1;i++){
         returnName += p[i]
-        if(i > 0 && i < p.length - 2) returnName += `\n`
+        if(i < p.length - 2) returnName += `\n`
     }
     return returnName
 }
