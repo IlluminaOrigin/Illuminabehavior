@@ -1,5 +1,5 @@
 import {  world , system , ItemStack, Vector} from "@minecraft/server";
-import { getScore } from "getscore2.js";
+import { getScore } from "getscore.js";
 const dimension = world.getDimension(`overworld`)
 
 
