@@ -213,13 +213,6 @@ world.afterEvents.blockBreak.subscribe(ev => {
     }
 })
 
-/*world.events.beforeItemUseOn.subscribe(ev => {
-    const { source } = ev;
-    let location = ev.getBlockLocation();
-    const block = source.dimension.getBlock(location);
-    if(source.hasTag(`admin`)) return
-    if(block.typeId == "minecraft:iron_trapdoor" || block.typeId == "minecraft:flower_pot" || block.typeId == "minecraft:crafting_table" || block.typeId == "minecraft:anvil" || block.typeId == "minecraft:trapdoor" || block.typeId == "minecraft:spruce_trapdoor" || block.typeId == "minecraft:birch_trapdoor" || block.typeId == "minecraft:jungle_trapdoor" || block.typeId == "minecraft:acacia_trapdoor" || block.typeId == "minecraft:dark_oak_trapdoor" || block.typeId == "minecraft:crimson_trapdoor" || block.typeId == "minecraft:warped_trapdoor" || block.typeId == "minecraft:mangrove_trapdoor" ) ev.cancel = true
-})*/
 
 world.afterEvents.entityHitEntity.subscribe(entityHit => {
     const { damagingEntity: player , hitEntity: entity } = entityHit;

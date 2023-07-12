@@ -11,10 +11,9 @@ world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
         world.sendMessage(`aaa`)
         ev.cancel = true;
     }
-})
-*/
+})*/
 
-world.afterEvents.itemStartUseOn.subscribe((ev) => {
+/*world.afterEvents.itemStartUseOn.subscribe((ev) => {
     if(ev.itemStack.typeId === `minecraft:brush` && ev.block.typeId.includes(`coral`)) {
         world.sendMessage(`startuse`)
     }
@@ -27,3 +26,4 @@ world.afterEvents.itemStopUseOn.subscribe((ev) =>{
 
 })
 
+*/
