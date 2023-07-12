@@ -1,9 +1,8 @@
 import {  world , system } from "@minecraft/server";
 import "damage.js"
 import "scriptevents.js"
-
-
-
+import "chat.js"
+import "spawn.js"
 
 /*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
