@@ -15,7 +15,6 @@ world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
 */
 
 world.afterEvents.itemStartUseOn.subscribe((ev) => {
-    world.sendMessage(`${ev.block.typeId}`)
     if(ev.itemStack.typeId === `minecraft:brush` && ev.block.typeId.includes(`coral`)) {
         world.sendMessage(`startuse`)
     }
