@@ -260,8 +260,8 @@ function rename(playersName){
     return p6;
   } 
 
-world.afterEvents.entityHit.subscribe((ev) => {
-    const {entity , hitBlock , hitEntity} = ev;
+world.afterEvents.entityHitBlock.subscribe((ev) => {
+    const {entity , hitBlock} = ev;
     if(!entity.hasTag(`combo`)) return;
     if(hitBlock){
         world.sendMessage(`a`)
