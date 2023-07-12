@@ -3,7 +3,7 @@
     "header": {
         "description": "RPG用アドオン\nmade by かろん",
         "name": "RPGbehavior",
-        "uuid": "4b593c6d-da32-4a99-a36d-82a11a88d5aa",
+        "uuid": "4b593c6d-da32-4a99-a36d-82a11a88d9aa",
         "version": [ 0, 0, 2 ],
         "min_engine_version": [ 1, 20, 0 ]
     },
@@ -12,7 +12,7 @@
             "description": "",
             "type": "script",
             "entry": "scripts/main.js",
-            "uuid": "15be119b-10c3-42f5-b06f-3eb1884ebca8",
+            "uuid": "15be119b-10c3-42f5-b06f-3eb1884ebca9",
             "version": [0, 0, 2]
         }
     ],
