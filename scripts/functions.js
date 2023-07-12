@@ -49,7 +49,6 @@ export function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃さ
     if(max < 1.5) max = 1.5
     let min = (Math.ceil(命中率 / 100) / 2 - (命中率 / 200))
     if(min < 0.5) min = 0.5
-    world.sendMessage(`${min} ${max}`)
     let damage = Math.round(((攻撃力 + (Math.random() * ( max - min) + min)) * level - (防御力 + (回避率 - 命中率))) * 属性効果)
     if(damage < 1) damage = 1
     return damage;
