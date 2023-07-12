@@ -79,7 +79,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         //属性効果
         if(suffererZokuseiType === zokuseiType[weaponZokusei][0]) zokusei = 1.2
         if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
-
+        let defensePower = 0
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;
@@ -96,10 +96,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             } 
             xp = Math.round(xp)
             if (xp <= 0) xp = 1;
-            const entity = overworld.spawnEntity(
-                "karo:message",
-                {x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z}
-            );
+            const entity = overworld.spawnEntity("karo:message",{x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z});
             entity.nameTag = `${attackerName}`;
             let j = getScore(`${weaponNumbers[weaponType.type][1]}`,attacker);
             setScore(`${weaponNumbers[weaponType.type][1]}`,attacker,j + 1);
