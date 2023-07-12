@@ -1,5 +1,6 @@
 import { system, world, ItemStack, Vector, Container, ItemTypes, MinecraftItemTypes, BlockType, MinecraftBlockTypes, BlockPermutation, MinecraftEntityTypes } from "@minecraft/server";
-import { getScore,setScore } from "getscore.js"; 
+import { getScore,setScore } from "getscore.js";
+import { Damage,Name } from "functions.js"; 
 const overworld = world.getDimension('overworld')
 const weaponNumbers = {短剣: [1 , "tanken"],長剣: [2 , "tyouken"],杖:[3 , "tue"],槍:[4 , "yari"],斧:[5 , "斧"]}
 const zokuseiType = {1:[2,"炎"],2:[3,"木"],3:[4,"光"],4:[5,"闇"],5:[1,"水"]}
@@ -241,27 +242,5 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
 
 });
 
-function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃された人のレベル,防御力,回避率,属性効果){
-    let level = 攻撃された人のレベル / 攻撃した人のレベル
-    if(level > 1.4) level = 1.4
-    if(level < 0.6) level = 0.6
-    let max = (Math.ceil(命中率 / 100) / 10 + (命中率 / 200))
-    if(max < 1) max = 1
-    let min = (Math.ceil(命中率 / 100) / 10 - (命中率 / 200))
-    if(min < 1) min = 1
-    let damage = Math.round((攻撃力 * (Math.random() * ( max - min) + min) * level - (防御力 + (回避率 - 命中率))) * 属性効果)
-    if(damage < 1) damage = 1
-    return damage;
-}
 
-function Name(playersName){
-    let p4 = []
-    let p = playersName.split(/\n/)
-    if(p.length >= 3) return p[1];
-    for(let i = 0;i < p.length - 1;i++){
-      if(i > 0) p4 += `\n`
-    }
-    if(p4.length === 0) p4[0] = playersName
-    const p6 = p4.toString()
-    return p6;
-  }
+
