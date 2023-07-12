@@ -9,12 +9,11 @@ const zokuseiType = {"§c炎":[2,1,"炎"],"§a木":[3,2,"木"],"§e雷":[4,3,"�
 //ダメージをエンティティが受けた時に発火
 world.afterEvents.entityHurt.subscribe(entityHurt => { 
     //攻撃者、被ダメ者、ダメージ値、原因を取得
-    const { damageSource, hurtEntity: sufferer, damage } = entityHurt;
-    const { damagingEntity: attacker ,cause} = damageSource;
+    let { damageSource, hurtEntity: sufferer, damage } = entityHurt;
+    let { damagingEntity: attacker ,cause} = damageSource;
     let suffererHealth = getScore(`hp`, sufferer);
     let suffererDefensePower = getScore(`def`,sufferer)
     let suffererMagicDefensePower = getScore(`mdef`,sufferer)
-    let attackerName = Name(attacker.nameTag)
     let suffererName = Name(sufferer.nameTag)
     if(!attacker) {
         suffererHealth -= damage*10
@@ -35,7 +34,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     }
 
     if(!attacker || !sufferer || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`)) return;
-
+    let attackerName = Name(attacker.nameTag)
     let suffererLevel = getScore(`lv`,sufferer);
     let attackerLevel = getScore(`lv`,attacker);
     let attackerHealth = getScore(`hp`, attacker);
@@ -97,13 +96,13 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             xp = Math.round(xp)
             if (xp <= 0) xp = 1;
             const entity = overworld.spawnEntity("karo:message",{x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z});
-            entity.nameTag = `${attackerName}`;
             let j = getScore(`${weaponNumbers[weaponType.type][1]}`,attacker);
             setScore(`${weaponNumbers[weaponType.type][1]}`,attacker,j + 1);
             let hasxp = getScore(`hasxp`,attacker);
             setScore(`hasxp`,attacker,hasxp + xp);
             let money = getScore(`money`,attacker);
             setScore(`money`,attacker,money + col);
+            entity.nameTag = `${attackerName}\nXP: +${xp}\nMoney: +${money}`;
             //ドロップアイテムとか今後はここに書く
             const loot = sufferer.getTags().find(x => x.match("loot_")).split(/(?<=^[^_]+?)_/);
             sufferer.runCommandAsync(`loot spawn ~ ~ ~ loot ${loot[1]}`);

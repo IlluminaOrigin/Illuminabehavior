@@ -1,4 +1,4 @@
-import { Container, ItemLockMode,system } from '@minecraft/server'
+import { world , Container, ItemLockMode,system } from '@minecraft/server'
 
 export function rename(playersName){
     let p4 = []
@@ -54,14 +54,20 @@ export function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃さ
     return damage;
 }
 
-export function Name(playersName){
+/**
+ * 
+ * @param {string} playerName 
+ * @returns 
+ */
+export function Name(playerName){
     let p4 = []
-    let p = playersName.split(/\n/)
+    let p = playerName.split(/\\n/)
     if(p.length >= 3) return p[1];
+    if(p.length == 2) return p[0];
     for(let i = 0;i < p.length - 1;i++){
       if(i > 0) p4 += `\n`
     }
-    if(p4.length === 0) p4[0] = playersName
+    if(p4.length === 0) p4[0] = playerName
     const p6 = p4.toString()
     return p6;
 }
