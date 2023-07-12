@@ -56,7 +56,6 @@ export function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃さ
 }
 
 /**
- * 
  * @param {string} playerName 
  * @returns 
  */
