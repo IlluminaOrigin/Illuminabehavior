@@ -19,3 +19,4 @@ scoreboard objectives add maxmp dummy
 scoreboard objectives add rx dummy
 scoreboard objectives add ry dummy
 scoreboard objectives add rz dummy
+scoreboard objectives add zokusei dummy

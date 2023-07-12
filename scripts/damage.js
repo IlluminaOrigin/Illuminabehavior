@@ -3,8 +3,8 @@ import { getScore,setScore } from "getscore.js";
 import { Damage,Name } from "functions.js"; 
 const overworld = world.getDimension('overworld')
 const weaponNumbers = {短剣: [1 , "tanken"],長剣: [2 , "tyouken"],杖:[3 , "tue"],槍:[4 , "yari"],斧:[5 , "斧"]}
-const zokuseiNumber = {1:[2,"炎"],2:[3,"木"],3:[4,"光"],4:[5,"闇"],5:[1,"水"]}
-const zokuseiType = {"§c炎":[2,"炎"],"§a木":[3,"木"],"§e光":[4,"光"],"§1闇":[5,"闇"],"§b水":[1,"水"]}
+const zokuseiNumber = {1:[2,"炎"],2:[3,"木"],3:[4,"雷"],4:[5,"水"],5:[6,"土"],6:[7,"闇"],7:[1,"無"]}
+const zokuseiType = {"§c炎":[2,"炎"],"§a木":[3,"木"],"§e雷":[4,"雷"],"§b水":[5,"水"],"§g土":[6,"土"],"§1闇":[7,"闇"],"§7無":[1,"無"]}
 
 //ダメージをエンティティが受けた時に発火
 world.afterEvents.entityHurt.subscribe(entityHurt => { 
@@ -49,17 +49,18 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
 
         //武器の取得
-        /** @type { Container } */
+        /** @type { Container } 
+        */
         const container = attacker.getComponent("inventory").container;
         const item = container.getItem(attacker.selectedSlot);
         const lore = item.getLore();
         
-        let weaponDurability = { name: lore[5].split('(')[0],value: Number(lore[5].split('(')[1].split(/\//)[0]), max: Number(lore[5].split('(')[1].split(/\//)[0].split(`)`)[1]) };
+        let weaponDurability = { name: lore[6].split('(')[0],value: Number(lore[6].split('(')[1].split(/\//)[0]), max: Number(lore[6].split('(')[1].split(/\//)[0].split(`)`)[1]) };
         const weaponType = { type: lore[1].split(`(`)[1].split(`)`)[0] };
-        const attackPower = { name: lore[6].split(':')[0], value: Number(lore[6].split(':')[1]) };
-        const weaponInfo = {命中率: Number(lore[7].split(':')[1].split(`%`)[0]),ドロップ率: Number(lore[8].split(':')[1]), 強化レベル: Number(lore[9].split(':')[1].split(`+`)[1]),使用可能レベル:Number(lore[10].split(':')[1].split(`~`)[0])}
-        const weaponEnchants = {enchant1: lore[12].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[13].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[14].split((/(?<=^[^ ]+?) /))[1]}
-        const weaponSkills = {skill1: lore[15].split((/(?<=^[^ ]+?) /))[1] , skill2: lore[16].split((/(?<=^[^ ]+?) /))[1]}
+        const attackPower = { name: lore[7].split(':')[0], value: Number(lore[7].split(':')[1]) };
+        const weaponInfo = {命中率: Number(lore[8].split(':')[1].split(`%`)[0]),ドロップ率: Number(lore[9].split(':')[1]), 強化レベル: Number(lore[10].split(':')[1].split(`+`)[1]),使用可能レベル:Number(lore[11].split(':')[1].split(`~`)[0])}
+        const weaponEnchants = {enchant1: lore[13].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[14].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[15].split((/(?<=^[^ ]+?) /))[1]}
+        const weaponSkills = {skill1: lore[16].split((/(?<=^[^ ]+?) /))[1] , skill2: lore[17].split((/(?<=^[^ ]+?) /))[1]}
         lore[5] = `${weaponDurability.name}(${weaponDurability.value - 1}/${weaponDurability.max})`;
         system.run(() => { 
             item.setLore(lore);
