@@ -33,7 +33,8 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         }
     }
 
-    if(!attacker || !sufferer || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`)) return;
+    if(!attacker || !sufferer) return;
+    if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
     let attackerName = Name(attacker.nameTag)
     let suffererLevel = getScore(`lv`,sufferer);
     let attackerLevel = getScore(`lv`,attacker);
@@ -113,14 +114,14 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         //属性効果
         let zokusei = 1
         if(suffererZokuseiType === zokuseiNumber[attackerZokuseiType][0]) zokusei = 1.2
-        if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
+        //if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
         let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower + defensePower,suffererAvoidance,zokusei)
         //防具エンチャント
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x + (Math.random() * (1.1 - -1.1) + -1.1) , y: sufferer.location.y+ (Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+ (Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§c${hurtValue}`;
         suffererHealth -= hurtValue
         setScore(`hp`,sufferer,suffererHealth)
         //hpが0の場合
-        if(php <= 0){
+        if(suffererHealth <= 0){
             const pn = sufferer.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
             if(sufferer.hasTag(`toku`)) pn[1] = "情報非公開のプレイヤー"
             const de = overworld.spawnEntity(
@@ -222,7 +223,7 @@ world.afterEvents.blockBreak.subscribe(ev => {
 
 world.afterEvents.entityHitEntity.subscribe(entityHit => {
     const { damagingEntity: player , hitEntity: entity } = entityHit;
-
+    if(player.typeId !== `minecraft:player`) return;
     if (entity) {
         if (!player.clicks) player.clicks = [];
         player.clicks.push(Date.now());
