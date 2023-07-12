@@ -9,7 +9,7 @@ world.beforeEvents.chatSend.subscribe((ev) => {
         case message.startsWith(`!lore`): {
             let item = sender.getComponent(`inventory`).container.getItem(sender.selectedSlot)
             system.run(()=>{
-                Lore(item,"短剣",100,"E",120,20,100,20,19,10)
+                Lore(item,"短剣",100,"E",120,20,100,20,19,10,"§c炎")
                 sender.getComponent(`inventory`).container.setItem(sender.selectedSlot,item)
             })
             break;

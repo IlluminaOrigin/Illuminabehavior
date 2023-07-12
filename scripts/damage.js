@@ -3,8 +3,8 @@ import { getScore,setScore } from "getscore.js";
 import { Damage,Name } from "functions.js"; 
 const overworld = world.getDimension('overworld')
 const weaponNumbers = {短剣: [1 , "tanken"],長剣: [2 , "tyouken"],杖:[3 , "tue"],槍:[4 , "yari"],斧:[5 , "斧"]}
-const zokuseiType = {1:[2,"炎"],2:[3,"木"],3:[4,"光"],4:[5,"闇"],5:[1,"水"]}
-
+const zokuseiNumber = {1:[2,"炎"],2:[3,"木"],3:[4,"光"],4:[5,"闇"],5:[1,"水"]}
+const zokuseiType = {"§c炎":[2,"炎"],"§a木":[3,"木"],"§e光":[4,"光"],"§1闇":[5,"闇"],"§b水":[1,"水"]}
 
 //ダメージをエンティティが受けた時に発火
 world.afterEvents.entityHurt.subscribe(entityHurt => { 
@@ -47,8 +47,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
 
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
-        let damageFactor = suffererLevel > attackerLevel ? 2 : 1;
-    
+
         //武器の取得
         /** @type { Container } */
         const container = attacker.getComponent("inventory").container;
