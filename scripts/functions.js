@@ -1,3 +1,5 @@
+import { Container, ItemLockMode,system } from '@minecraft/server'
+
 export function rename(playersName){
     let p4 = []
     let p = playersName.split(/\n/)
@@ -15,14 +17,24 @@ export function rename(playersName){
     return p6;
 } 
 
+/**
+ * 
+ * @param {import('@minecraft/server').Player} player 
+ * @returns 
+ */
 export function ItemLock(player){
-    if(!player.getComponent(`inventory`).container.getSlot(player.selectedSlot)) return;
-    let lock = player.getComponent(`inventory`).container.getSlot(player.selectedSlot).lockMode
-    if(lock === `inventory`) {
-        lock.none
-    } else if(lock === `none`) {
-        lock.inventory
+    if(!player.getComponent(`inventory`).container.getItem(player.selectedSlot)) return;
+/**
+ * @type { Container } container  
+ */
+    let container = player.getComponent(`inventory`).container
+    let item = container.getItem(player.selectedSlot)
+    if(item.lockMode === `inventory`) {
+        system.run(()=>{item.lockMode = `none`})
+    } else if(item.lockMode === `none`) {
+        system.run(()=>{item.lockMode = `inventory`})
     }
+    system.run(()=>{container.setItem(player.selectedSlot,item)})
 }
 
 export function Lore(ItemStack, 武器種, 相場価格, 等級, 耐久値, 攻撃力, 命中率, ドロップ率, 強化レベル, 使用可能レベル, 属性) {
