@@ -280,7 +280,7 @@ world.afterEvents.itemStartUseOn.subscribe((ev) => {
     world.sendMessage(`bbb`)
 })
 
-world.afterEvents.itemStartCharge.subscribe((ev) => {
+world.afterEvents.itemStartUse.subscribe((ev) => {
     world.sendMessage(`ddd`)
 })
 
