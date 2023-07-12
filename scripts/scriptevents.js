@@ -89,7 +89,7 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
         }
         case "karo:name": {
             for (const entity of dimension.getEntities()) {
-            if(getScore(entity, `hp`) === true) continue;
+            if(getScore(`hp`,entity) === true) continue;
 
                 switch (true) {
                     case entity.hasTag("M1"):
@@ -104,7 +104,7 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                         }
                 }
     
-                let entityScore = getScore(entity, `hp`) / getScore(entity, `maxhp`)
+                let entityScore = getScore(`hp`,entity) / getScore(`maxhp`,entity)
                 let str = "";
                 let str2 = "■■■■■■■■■■";
                 for (let i = 0; i < Math.ceil(entityScore * 10); i++) {
@@ -132,15 +132,15 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                         {
                             if (!entity.hasTag(`hatu`)) break;
                             const pn = entity.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
-                            let atname = "§l§6LV[" + getScore(entity, `lv`) + "] §r" + pn[1]
+                            let atname = "§l§6LV[" + getScore(`lv`,entity) + "] §r" + pn[1]
                             if (entity.getTags().find(x => x.match("SYOGOD_"))) atname = entity.getTags().find(x => x.match("SYOGOD_")).split(/(?<=^[^_]+?)_/)[1] + `\n` + atname
                             if (entity.hasTag(`toku`)) atname = `§b情報非公開のプレイヤー`
                            
                             entity.nameTag = `${atname} ${mhp}`
                             health.setCurrentValue(thp)
-                            const px = getScore(entity, `rx`);
-                            const py = getScore(entity, `ry`);
-                            const pz = getScore(entity, `rz`);
+                            const px = getScore(`rx`,entity);
+                            const py = getScore(`ry`,entity);
+                            const pz = getScore(`rz`,entity);
                             if (entity.hasTag(`death`)) {
                                 if (entity.hasTag(`toku`)) pn[1] = `情報非公開のプレイヤー`
                                 const location = new Vector(entity.location.x, entity.location.y, entity.location.z)
@@ -178,7 +178,7 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                     default:
                         {
                             if (entity.typeId === "minecraft:item" || entity.typeId === "karo:tamasii" || entity.typeId === "karo:message" || entity.typeId === "minecraft:npc" || entity.typeId === "minecraft:arrow" || entity.typeId === "minecraft:chest_minecart" || entity.typeId === "minecraft:command_block_minecart" || entity.typeId === "minecraft:egg" || entity.typeId === "minecraft:falling_block" || entity.typeId === "minecraft:eye_of_ender_signal" || entity.typeId === "minecraft: evocation_fang" || entity.typeId === "minecraft:fireball" || entity.typeId === "minecraft:fishing_hook" || entity.typeId === "minecraft:firewarks_rocket" || entity.typeId === "minecraft:hopper_minecart" || entity.typeId === "minecraft:ender_pearl" || entity.typeId === "minecraft:lighting_bolt" || entity.typeId === "minecraft:lingering_potion" || entity.typeId === "minecraft:moving_block" || entity.typeId === "minecraft:painting" || entity.typeId === "minecraft:shulker_bullet" || entity.typeId === "minecraft:small_fireball" || entity.typeId === "minecraft:llama_spit" || entity.typeId === "minecraft:minecart" || entity.typeId === "minecraft:splash_potion" || entity.typeId === "minecraft:xp_bottle" || entity.typeId === "minecraft:xp_orb" || entity.typeId === "minecraft:wither_skull_dangerous" || entity.typeId === "minecraft:wither_skull" || entity.typeId === "minecraft:tnt" || entity.typeId === "karo:damage") break;
-                            const atname = `§l§6LV[${getScore(entity, `lv`)}]§r ${name}`
+                            const atname = `§l§6LV[${getScore(`lv`,entity)}]§r ${name}`
                             entity.nameTag = `${atname} ${mhp}`
                             break;
                         }

@@ -45,12 +45,12 @@ export function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃さ
     let level = 攻撃された人のレベル / 攻撃した人のレベル
     if(level > 1.4) level = 1.4
     if(level < 0.6) level = 0.6
-    let max = (Math.ceil(命中率 / 100) * 2 + (命中率 / 200))
-    if(max < 1) max = 1
+    let max = (Math.ceil(命中率 / 100) * 4 + (命中率 / 200))
+    if(max < 1.5) max = 1.5
     let min = (Math.ceil(命中率 / 100) / 2 - (命中率 / 200))
     if(min < 0.5) min = 0.5
     world.sendMessage(`${min} ${max}`)
-    let damage = Math.round((攻撃力 * (Math.random() * ( max - min) + min) * level - (防御力 + (回避率 - 命中率))) * 属性効果)
+    let damage = Math.round(((攻撃力 + (Math.random() * ( max - min) + min)) * level - (防御力 + (回避率 - 命中率))) * 属性効果)
     if(damage < 1) damage = 1
     return damage;
 }
@@ -61,14 +61,11 @@ export function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃さ
  * @returns 
  */
 export function Name(playerName){
-    let p4 = []
-    let p = playerName.split(/\\n/)
-    if(p.length >= 3) return p[1];
-    if(p.length == 2) return p[0];
+    let returnName
+    let p = playerName.split(/\n/)
     for(let i = 0;i < p.length - 1;i++){
-      if(i > 0) p4 += `\n`
+        returnName += p[i]
+        if(i > 0 && i < p.length - 2) returnName += `\n`
     }
-    if(p4.length === 0) p4[0] = playerName
-    const p6 = p4.toString()
-    return p6;
+    return returnName
 }

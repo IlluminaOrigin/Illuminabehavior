@@ -96,8 +96,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             } 
             xp = Math.round(xp)
             if (xp <= 0) xp = 1;
-            const entity = overworld.spawnEntity("karo:message",{x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z});
-            entity.nameTag = `${attackerName}\nXP: +${xp}\nMoney: +${col}`;
+            const entity = overworld.spawnEntity("karo:message",{x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z}).nameTag = `${attackerName}\nXP: +${xp}\nMoney: +${col}`;
             let j = getScore(`${weaponNumbers[weaponType.type][1]}`,attacker);
             setScore(`${weaponNumbers[weaponType.type][1]}`,attacker,j + 1);
             let hasxp = getScore(`hasxp`,attacker);
