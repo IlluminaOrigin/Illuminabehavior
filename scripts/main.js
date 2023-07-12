@@ -188,12 +188,6 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
     }
 })
 
-world.afterEvents.blockBreak.subscribe((ev) => {
-    const { brokenBlockPermutation , player } = ev;
-    if(player.hasTag(`testt`) && brokenBlockPermutation.hasTag(`log`)) {
-        player.sendMessage(`木を壊した`);
-    }
-})
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
@@ -261,14 +255,8 @@ function rename(playersName){
     return p6;
   } 
 
-world.afterEvents.entityHitBlock.subscribe((ev) => {
-    const {entity , hitBlock} = ev;
-    if(!entity.hasTag(`combo`)) return;
-    if(hitBlock){
-        world.sendMessage(`a`)
-    }
-})
 
+/*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
     const { id, entity } = ev;
     if(id == `minecraft:crystal_explode`) {
@@ -276,13 +264,20 @@ world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
         ev.cancel = true;
     }
 })
+*/
 
 world.afterEvents.itemStartUseOn.subscribe((ev) => {
-    world.sendMessage(`bbb`)
+    world.sendMessage(`${ev.block.typeId}`)
+    if(ev.itemStack.typeId === `minecraft:brush` && ev.block.typeId.includes(`coral`)) {
+        world.sendMessage(`startuse`)
+    }
 })
 
-world.afterEvents.itemStartUse.subscribe((ev) => {
-    world.sendMessage(`ddd`)
+world.afterEvents.itemStopUseOn.subscribe((ev) =>{
+    if(ev.itemStack.typeId === `minecraft:brush` && ev.block.hasTag(`ore`)) {
+        
+    }
+
 })
 
 function ItemLock(player){
