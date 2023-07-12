@@ -2,7 +2,7 @@
     "format_version": 2,
     "header": {
         "description": "RPG用アドオン\nmade by かろん",
-        "name": "RPGbehavior",
+        "name": "RPGbehavior v.0.0.2",
         "uuid": "4b593c6d-da32-4a99-a36d-82a11a88d9aa",
         "version": [ 0, 0, 2 ],
         "min_engine_version": [ 1, 20, 0 ]
