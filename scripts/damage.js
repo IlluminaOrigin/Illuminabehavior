@@ -62,17 +62,17 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         const item = container.getItem(attacker.selectedSlot);
         const lore = item.getLore();
         let weaponZokusei = lore[4].split(`:`)[1]
-        let weaponDurability = { name: lore[6].split('(')[0],value: Number(lore[6].split('(')[1].split(/\//)[0]), max: Number(lore[6].split('(')[1].split(/\//)[0].split(`)`)[1]) };
+        let weaponDurability = { name: lore[6].split('(')[0],value: Number(lore[6].split('(')[1].split(/\//)[0]), max: Number(lore[6].split('(')[1].split(/\//)[1].split(`)`)[0]) };
         const weaponType = { type: lore[1].split(`(`)[1].split(`)`)[0] };
         const attackPower = { name: lore[7].split(':')[0], value: Number(lore[7].split(':')[1]) };
         const weaponInfo = {命中率: Number(lore[8].split(':')[1].split(`%`)[0]),ドロップ率: Number(lore[9].split(':')[1]), 強化レベル: Number(lore[10].split(':')[1].split(`+`)[1]),使用可能レベル:Number(lore[11].split(':')[1].split(`~`)[0])}
         const weaponEnchants = {enchant1: lore[13].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[14].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[15].split((/(?<=^[^ ]+?) /))[1]}
         const weaponSkills = {skill1: lore[16].split((/(?<=^[^ ]+?) /))[1] , skill2: lore[17].split((/(?<=^[^ ]+?) /))[1]}
-        lore[5] = `${weaponDurability.name}(${weaponDurability.value - 1}/${weaponDurability.max})`;
+        lore[6] = `${weaponDurability.name}(${weaponDurability.value - 1}/${weaponDurability.max})`;
         system.run(() => { 
             item.setLore(lore);
             container.setItem(attacker.selectedSlot, item);
-            if (weaponDurability.value < 1) container.clearItem(attacker.selectedSlot);
+            if (weaponDurability.value < 1) container.setItem(attacker.selectedSlot);
         });
         let zokusei = 1
         //属性効果
@@ -80,9 +80,10 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
         let defensePower = 0
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
-        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
+        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+(Math.random() * (1.1 - -1.1) + -1.1), y: sufferer.location.y+(Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+(Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;
         setScore(`hp`,sufferer,suffererHealth);
+        world.sendMessage(`${suffererHealth}`)
         let xp = getScore(`xp`,sufferer);
         let col = getScore(`money`,sufferer);
         if (suffererHealth <= 0) {
@@ -118,7 +119,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
         let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower,suffererAvoidance,zokusei)
         //防具エンチャント
-        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§c${hurtValue}`;
+        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x + (Math.random() * (1.1 - -1.1) + -1.1) , y: sufferer.location.y+ (Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+ (Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§c${hurtValue}`;
         suffererHealth -= hurtValue
         setScore(`hp`,sufferer,suffererHealth)
         //hpが0の場合
@@ -143,13 +144,13 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         const item = container.getItem(attacker.selectedSlot);
         const lore = item.getLore();
         
-        let weaponDurability = { name: lore[6].split('(')[0],value: Number(lore[6].split('(')[1].split(/\//)[0]), max: Number(lore[6].split('(')[1].split(/\//)[0].split(`)`)[1]) };
+        let weaponDurability = { name: lore[6].split('(')[0],value: Number(lore[6].split('(')[1].split(/\//)[0]), max: Number(lore[6].split('(')[1].split(/\//)[1].split(`)`)[0]) };
         const weaponType = { type: lore[1].split(`(`)[1].split(`)`)[0] };
         const attackPower = { name: lore[7].split(':')[0], value: Number(lore[7].split(':')[1]) };
         const weaponInfo = {命中率: Number(lore[8].split(':')[1].split(`%`)[0]),ドロップ率: Number(lore[9].split(':')[1]), 強化レベル: Number(lore[10].split(':')[1].split(`+`)[1]),使用可能レベル:Number(lore[11].split(':')[1].split(`~`)[0])}
         const weaponEnchants = {enchant1: lore[13].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[14].split((/(?<=^[^ ]+?) /))[1] , enchant1: lore[15].split((/(?<=^[^ ]+?) /))[1]}
         const weaponSkills = {skill1: lore[16].split((/(?<=^[^ ]+?) /))[1] , skill2: lore[17].split((/(?<=^[^ ]+?) /))[1]}
-        lore[5] = `${weaponDurability.name}(${weaponDurability.value - 1}/${weaponDurability.max})`;
+        lore[6] = `${weaponDurability.name}(${weaponDurability.value - 1}/${weaponDurability.max})`;
         system.run(() => { 
             item.setLore(lore);
             container.setItem(attacker.selectedSlot, item);
@@ -162,10 +163,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         //エンチャントとかの処理
 
 
-        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
-        suffererHealth -= hurtValue;
-        setScore(`hp`,sufferer,suffererHealth);
-        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+0.5, y: sufferer.location.y+0.5, z: sufferer.location.z+0.5}).nameTag = `§a${hurtValue}`;
+        sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+(Math.random() * (1.1 - -1.1) + -1.1), y: sufferer.location.y+(Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+(Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;
         setScore(`hp`,sufferer,suffererHealth);
         if(suffererHealth <= 0){

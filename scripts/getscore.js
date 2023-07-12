@@ -7,8 +7,7 @@ import { world } from '@minecraft/server';
  */
 export function getScore(objective,target) {
     try {
-        if (typeof target === 'string') return world.scoreboard.getObjective(objective).getScores().find(({ participant }) => participant.displayName === target).score;
-        return world.scoreboard.getObjective(objective).getScore(target.scoreboardIdentity);
+        return world.scoreboard.getObjective(objective).getScore(target);
     }
     catch(e){return true;}
 }
@@ -19,8 +18,7 @@ export function getScore(objective,target) {
  */
 export function setScore(objective,target,number) {
     try {
-        if (typeof target === 'string') return world.scoreboard.getObjective(objective).getScores().find(({ participant }) => participant.displayName === target).score;
-        return target.scoreboardIdentity.setScore(world.scoreboard.getObjective(objective),number)
+        return world.scoreboard.getObjective(objective).setScore(target,number)
     }
     catch(e){return true;}
 }
