@@ -61,7 +61,7 @@ export function Damage(攻撃力,命中率,攻撃した人のレベル,攻撃さ
  * @returns 
  */
 export function Name(playerName){
-    let returnName
+    let returnName = ``
     let p = playerName.split(/\n/)
     for(let i = 0;i < p.length - 1;i++){
         returnName += p[i]
