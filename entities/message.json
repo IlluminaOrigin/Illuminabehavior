@@ -16,7 +16,7 @@
         "components": {
             "minecraft:timer": {
                 "looping": false,
-                "time": 3,
+                "time": 2,
                 "randomInterval": false,
                 "time_down_event": {
                     "event": "despawn"
