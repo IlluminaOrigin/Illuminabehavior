@@ -96,13 +96,13 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             xp = Math.round(xp)
             if (xp <= 0) xp = 1;
             const entity = overworld.spawnEntity("karo:message",{x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z});
+            entity.nameTag = `${attackerName}\nXP: +${xp}\nMoney: +${col}`;
             let j = getScore(`${weaponNumbers[weaponType.type][1]}`,attacker);
             setScore(`${weaponNumbers[weaponType.type][1]}`,attacker,j + 1);
             let hasxp = getScore(`hasxp`,attacker);
             setScore(`hasxp`,attacker,hasxp + xp);
             let money = getScore(`money`,attacker);
             setScore(`money`,attacker,money + col);
-            entity.nameTag = `${attackerName}\nXP: +${xp}\nMoney: +${money}`;
             //ドロップアイテムとか今後はここに書く
             const loot = sufferer.getTags().find(x => x.match("loot_")).split(/(?<=^[^_]+?)_/);
             sufferer.runCommandAsync(`loot spawn ~ ~ ~ loot ${loot[1]}`);
