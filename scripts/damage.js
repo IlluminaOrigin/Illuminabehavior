@@ -83,7 +83,6 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+(Math.random() * (1.1 - -1.1) + -1.1), y: sufferer.location.y+(Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+(Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;
         setScore(`hp`,sufferer,suffererHealth);
-        world.sendMessage(`${suffererHealth}`)
         let xp = getScore(`xp`,sufferer);
         let col = getScore(`money`,sufferer);
         if (suffererHealth <= 0) {
@@ -109,9 +108,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             sufferer.runCommandAsync(`kill @s`)
         }
     } else if (attacker && attacker.typeId !== "minecraft:player" && sufferer.typeId == "minecraft:player") {
-        if(suffererLevel < attackerLevel){
-            damageFactor = 1.2
-        }
+
         //属性効果
         let zokusei = 1
         if(suffererZokuseiType === zokuseiNumber[attackerZokuseiType][0]) zokusei = 1.2
@@ -170,11 +167,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             const tn = attacker.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
             if(sufferer.hasTag(`toku`)) pn[1] = "情報非公開のプレイヤー"
             if(attacker.hasTag(`toku`)) tn[1] = "情報非公開のプレイヤー"
-            const de = overworld.spawnEntity(
-                "karo:tamasii",
-                new Vector({x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z})
-              );
-            de.nameTag = `${suffererName}`
+            const de = overworld.spawnEntity("karo:tamasii", new Vector({x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z})).nameTag = `${suffererName}`
             sufferer.runCommandAsync(`gamemode spectator @s`)
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
             sufferer.addTag(`death`)
