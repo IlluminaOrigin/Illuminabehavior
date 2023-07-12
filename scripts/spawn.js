@@ -28,6 +28,7 @@ world.afterEvents.entitySpawn.subscribe(ev => {
       for (let i = 0; i < score.length; i++) {
         entity.runCommandAsync(`scoreboard players set @s ${score[i]} ${st[i]}`)
       }
+      entity.addEffect(`resistance`,1000000,{amplifier: 255,showParticles: false})
       entity.addTag(`loot_${loot}`)
       entity.addTag(`${name}`)
   }
