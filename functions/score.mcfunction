@@ -20,3 +20,5 @@ scoreboard objectives add rx dummy
 scoreboard objectives add ry dummy
 scoreboard objectives add rz dummy
 scoreboard objectives add zokusei dummy
+scoreboard objectives add hasxp dummy
+scoreboard objectives add killc dummy
