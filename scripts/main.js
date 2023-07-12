@@ -121,7 +121,7 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                 mhp = `\n${c+str}§7${str2}`;
                 thp = Math.ceil(entityScore / 0.05);
                 if (thp <= 1) thp = 1
-                const health = entity.getComponent("attribute")
+                const health = entity.getComponent("health")
                 switch (entity.typeId) {
                     case "minecraft:armor_stand":
                         {
