@@ -51,6 +51,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let feet = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.feet)
     let suffererOffhand = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
     let attackerOffhand = attacker.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
+    let equipments = [head , chest , legs , feet ]
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
 
