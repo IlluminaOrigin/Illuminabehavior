@@ -22,7 +22,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             if(sufferer.hasTag(`toku`)) tn[1] = "情報非公開のプレイヤー"
             const de = overworld.spawnEntity(
                 "karo:tamasii",
-                new Vector({x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z})
+                new Vector({x: sufferer.location.x , y: sufferer.location.y, z: sufferer.location.z})
               );
             de.nameTag = `${suffererName}`
             sufferer.runCommandAsync(`gamemode spectator @s`)
