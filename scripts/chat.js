@@ -1,5 +1,5 @@
 import {  world , system } from "@minecraft/server";
-import {rename , ItemLock , Lore} from "functions.js"
+import {rename , ItemLock , Lore,Name} from "functions.js"
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
@@ -28,7 +28,12 @@ world.beforeEvents.chatSend.subscribe((ev) => {
             sender.runCommandAsync(`title @s subtitle "{\"saveItem\":{\"typeId\":\"${sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).typeId}\",\"setLore\":[\"${lore}\"],\"itemname\":\"${sender.getComponent(`minecraft:inventory`).container.getSlot(sender.selectedSlot).nameTag}\"}}"`)
             break;
         }
-        case message.startsWith(`!lock`): ItemLock(sender)
+        case message.startsWith(`!lock`): ItemLock(sender); break;
+        case message.startsWith(`!kill`): {
+            const entity = world.getDimension(`overworld`).getEntities({type: `karo:tamasii`,closest: 1,maxDistance: 5,name: Name(sender.nameTag),location:sender.location})
+            if(entity.length == 0) return;
+            entity[0].runCommandAsync(`kill @s`)
+        }
         case message.startsWith(`!createitem`): sender.runCommandAsync(`title ${message.split(` `)[2]} subtitle "createItem ${message.split(` `)[1]} ${sender.name}"`); break;
         default : {
             if(message.startsWith(`!`)) break;
