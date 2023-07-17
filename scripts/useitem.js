@@ -1,4 +1,5 @@
 import { world } from "@minecraft/server";
+import * as UI from "@minecraft/server-ui"
 
 world.afterEvents.itemUse.subscribe((ev)=>{
     switch(ev.itemStack.typeId){
