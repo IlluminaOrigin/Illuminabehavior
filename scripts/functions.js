@@ -86,7 +86,7 @@ export function GuildCreate(source, guildName) {
     }
     const guilds = world.scoreboard.getObjective(`guildname`).getScores()
     let guildNumber = null
-    let guildsAmount = []
+    let guildsAmount = [1]
     let guildNames = []
     for(let i = 0;i < guilds.length;i++){
       guildsAmount[guildsAmount.length] = guilds[i].score
@@ -144,6 +144,13 @@ export function GuildNameChange(source, newName) {
     const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
     if(typeof sourceGuild === 'undefined') return;
     if(!source.hasTag(`guildOwner`)) return;
+    let guildNames = []
+    for(let i = 0;i < guilds.length;i++){
+      guildNames[guildNames.length] = guilds[i].participant.displayName
+    }
+    if(guildNames.indexOf(newName) !== -1) {
+      source.sendMessage(`§cその名前は使えません`)
+    }
     const guilds = world.scoreboard.getObjective(`guildname`).getScores()
     let guildNumber = null
     for(let i = 0;i < guilds.length;i++){
