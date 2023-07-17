@@ -54,6 +54,30 @@ world.afterEvents.itemUse.subscribe((ev)=>{
  *                                                                                                                    *
  **********************************************************************************************************************/
 
+export function GuildTaxSetting(source) {
+  if(!source.hasTag(`guildOwner`)) return;
+  const guilds1 = world.scoreboard.getObjective(`guildmoneyper`).getScores()
+  let guildMoney = 0
+  for(let i = 0;i < guilds1.length;i++){
+    if(guilds1[i].participant.displayName === `${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) guildMoney = guilds1[i].score
+  }
+  const guilds2 = world.scoreboard.getObjective(`guildxpper`).getScores()
+  let guildXP = 0
+  for(let i = 0;i < guilds2.length;i++){
+    if(guilds2[i].participant.displayName === `${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) guildXP = guilds2[i].score
+  }
+  const form = new UI.ModalFormData()
+  form.title(`§l徴収率変更`)
+  form.slider(`金徴収率`,0,100,1,guildMoney,)
+  form.slider(`経験値徴収率`,0,100,1,guildXP)
+  form.show(source).then((rs)=>{
+    if(rs.canceled) return;
+    world.scoreboard.getObjective(`guildmoneyper`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,rs.formValues[0])
+    world.scoreboard.getObjective(`guildxpper`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,rs.formValues[1])
+    source.sendMessage(`徴収率変更\n金: ${rs.formValues[0]}%\n経験値: ${rs.formValues[1]}%`)
+  })
+}
+
 export function GuildTresureWithdraw(source) {
   if(!source.hasTag(`guildOwner`)) return;
   const guilds1 = world.scoreboard.getObjective(`guildmoney`).getScores()

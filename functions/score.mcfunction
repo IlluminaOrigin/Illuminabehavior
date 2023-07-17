@@ -24,3 +24,5 @@ scoreboard objectives add guildname dummy
 scoreboard objectives add guildmoney dummy
 scoreboard objectives add guildxp dummy
 scoreboard objectives add playerguild dummy
+scoreboard objectives add guildmoneyper dummy
+scoreboard objectives add guildxpper dummy
