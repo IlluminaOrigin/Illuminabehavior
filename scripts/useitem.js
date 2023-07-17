@@ -16,6 +16,7 @@ world.afterEvents.itemUse.subscribe((ev)=>{
             break;
         }
         case "karo:guildadmin":{
+            if(!world.scoreboard.getObjective(`playerguild`).getScore(ev.source) || world.scoreboard.getObjective(`playerguild`).getScore(ev.source) === 0) return;
             GuildAdminForm(ev.source)
             break;
         }
