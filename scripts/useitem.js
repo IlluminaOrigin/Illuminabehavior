@@ -123,6 +123,7 @@ export function GuildCreate(source, guildName) {
     }
     if(guildName.length > 15) {
       source.sendMessage(`§cギルド名は15文字以内にしてください。`)
+      return;
     }
     const guilds = world.scoreboard.getObjective(`guildname`).getScores()
     let guildNumber = null
@@ -134,6 +135,7 @@ export function GuildCreate(source, guildName) {
     }
     if(guildNames.indexOf(guildName) !== -1) {
       source.sendMessage(`§cその名前は使えません`)
+      return;
     }
     const GuildMaxNumber = Math.max(...guildsAmount)
     source.sendMessage(`§aギルド§r「 ${guildName} §r」§aを作成しました。`)
@@ -184,6 +186,10 @@ export function GuildNameChange(source, newName) {
     const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
     if(typeof sourceGuild === 'undefined') return;
     if(!source.hasTag(`guildOwner`)) return;
+    if(newName.length > 15) {
+        source.sendMessage(`§cギルド名は15文字以内にしてください。`)
+        return;
+    }
     const guilds = world.scoreboard.getObjective(`guildname`).getScores()
     let guildNames = []
     for(let i = 0;i < guilds.length;i++){
@@ -191,6 +197,7 @@ export function GuildNameChange(source, newName) {
     }
     if(guildNames.indexOf(newName) !== -1) {
       source.sendMessage(`§cその名前は使えません`)
+      return;
     }
     let guildNumber = null
     for(let i = 0;i < guilds.length;i++){
