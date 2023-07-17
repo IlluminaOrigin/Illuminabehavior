@@ -122,13 +122,12 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         setScore(`hp`,sufferer,suffererHealth)
         //hpが0の場合
         if(suffererHealth <= 0){
-            const pn = sufferer.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
-            if(sufferer.hasTag(`toku`)) pn[1] = "情報非公開のプレイヤー"
+            if(sufferer.hasTag(`toku`)) suffererName = "情報非公開のプレイヤー"
             const de = overworld.spawnEntity(
                 "karo:tamasii",
                 new Vector(sufferer.location.x, sufferer.location.y,sufferer.location.z)
               );
-            de.nameTag = `${pn[1]}`
+            de.nameTag = `${suffererName}`
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
             sufferer.addTag(`death`)
             sufferer.runCommandAsync(`gamemode spectator @s`)
@@ -157,7 +156,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         let zokusei = 1
         //属性効果演算を書く
 
-        
+
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         //エンチャントとかの処理
 
