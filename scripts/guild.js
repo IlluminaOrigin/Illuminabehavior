@@ -67,7 +67,7 @@ export function GuildNameChangeForm(source){
     })
 }
 
-export function GuildNameChangeForm(source){
+export function GuildDeleteForm(source) {
     const form = new UI.ActionFormData()
     form.title(`ギルド削除`)
     form.body(`削除すると元には戻せません。本当に削除しますか？`)

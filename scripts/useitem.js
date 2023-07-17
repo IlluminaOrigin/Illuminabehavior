@@ -1,8 +1,8 @@
 import { world } from "@minecraft/server";
-import { GuildAddAdmin,GuildAddMember,GuildCreate,GuildDelete,GuildNameChange,GuildOwnerChange,GuildRemoveAdmin,GuildRemoveMember } from "functions.js";
 import { GuildAdminForm,GuildCreateForm,GuildNameChangeForm,GuildDeleteForm } from "guild.js";
 
-world.afterEvents.itemUse.subscribe((ev)=>{
+world.afterEvents.itemStartUseOn.subscribe((ev)=>{
+    world.sendMessage(`b`)
     switch(ev.itemStack.typeId){
         case "karo:guildinvite":{
             if(Number(ev.itemStack.getLore()[0]) == NaN || Number(ev.itemStack.getLore()[0]) == 0) return;
