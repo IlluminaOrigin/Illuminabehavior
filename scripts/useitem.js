@@ -96,8 +96,12 @@ export function GuildAdminForm(source){
                 GuildRemoveAdmin(source)
                 break;
             }
-            case 4:
-            case 5:
+            case 4: {
+                GuildTresureWithdraw(source)
+            }
+            case 5: {
+                GuildTaxSetting(source)
+            }
             case 6: {
                 GuildNameChangeForm(source)
                 break;
