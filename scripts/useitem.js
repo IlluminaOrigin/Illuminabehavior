@@ -54,6 +54,13 @@ world.afterEvents.itemUse.subscribe((ev)=>{
  *                                                                                                                    *
  **********************************************************************************************************************/
 
+export function GuildTresureWithdraw(source) {
+  if(!source.hasTag(`guildOwner`)) return;
+
+  const form = new UI.ModalFormData()
+  form.slider(`金引き出し`,0,)
+}
+
 export function GuildCreateForm(source){
     const form = new UI.ModalFormData()
     form.title(`ギルド作成`)
@@ -179,6 +186,8 @@ export function GuildCreate(source, guildName) {
      */
     const selectSlot = source.getComponent(`inventory`).container
     selectSlot.setItem(source.selectedSlot,guildAdminItem)
+    world.scoreboard.getObjective(`guildmoney`).setScore(`${GuildMaxNumber + 1}`,0)
+    world.scoreboard.getObjective(`guildxp`).setScore(`${GuildMaxNumber + 1}`,0)
     world.scoreboard.getObjective(`guildname`).setScore(`${guildName}`,GuildMaxNumber + 1)
     world.scoreboard.getObjective(`playerguild`).setScore(source,GuildMaxNumber + 1)
 }

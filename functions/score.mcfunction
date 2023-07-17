@@ -11,8 +11,6 @@ scoreboard objectives add mdef dummy
 scoreboard objectives add vit dummy
 scoreboard objectives add agi dummy
 scoreboard objectives add hit dummy
-scoreboard objectives add cri dummy
-scoreboard objectives add tec dummy
 scoreboard objectives add point dummy
 scoreboard objectives add mp dummy
 scoreboard objectives add maxmp dummy
@@ -22,3 +20,7 @@ scoreboard objectives add rz dummy
 scoreboard objectives add zokusei dummy
 scoreboard objectives add hasxp dummy
 scoreboard objectives add killc dummy
+scoreboard objectives add guildname dummy
+scoreboard objectives add guildmoney dummy
+scoreboard objectives add guildxp dummy
+scoreboard objectives add playerguild dummy
