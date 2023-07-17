@@ -180,6 +180,7 @@ export function GuildAddMember(source){
       const item = new ItemStack(`karo:guildInvite`)
       item.setLore([`${sourceGuild}`])
       players[rs.formValues[0]].getComponent(`inventory`).container.addItem(item)
+      players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aからギルドへ招待されました。`)
       source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドに招待しました。`)
     })
 }
