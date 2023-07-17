@@ -157,6 +157,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         let zokusei = 1
         //属性効果演算を書く
 
+        
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         //エンチャントとかの処理
 
