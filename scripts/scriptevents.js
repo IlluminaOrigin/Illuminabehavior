@@ -142,12 +142,11 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                             const py = getScore(`ry`,entity);
                             const pz = getScore(`rz`,entity);
                             if (entity.hasTag(`death`)) {
-                                if (entity.hasTag(`toku`)) pn[1] = `情報非公開のプレイヤー`
                                 const location = new Vector(entity.location.x, entity.location.y, entity.location.z)
                                 const as2 = dimension.getEntities({
                                     location: location,
                                     type: "karo:tamasii",
-                                    name: `${pn[1]}`,
+                                    name: `${atname}`,
                                     closest: 1,
                                     maxDistance: 5
                                 })

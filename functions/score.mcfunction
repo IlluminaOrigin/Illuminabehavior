@@ -26,3 +26,6 @@ scoreboard objectives add guildxp dummy
 scoreboard objectives add playerguild dummy
 scoreboard objectives add guildmoneyper dummy
 scoreboard objectives add guildxpper dummy
+scoreboard objectives add px dummy
+scoreboard objectives add py dummy
+scoreboard objectives add pz dummy
