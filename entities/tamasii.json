@@ -24,7 +24,7 @@
             },
             "minecraft:collision_box": {
                 "width": 0.01,
-                "height": 0.5
+                "height": 2
             },
             "minecraft:projectile": {
                 "onHit":  {

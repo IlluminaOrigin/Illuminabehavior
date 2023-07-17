@@ -1,7 +1,7 @@
 import {  world , system , ItemStack, Vector} from "@minecraft/server";
 import { getScore } from "getscore.js";
+import {Name} from "functions.js"
 const dimension = world.getDimension(`overworld`)
-
 
 let name = ""
 let mhp = ""
@@ -146,17 +146,13 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                                 const as2 = dimension.getEntities({
                                     location: location,
                                     type: "karo:tamasii",
-                                    name: `${atname}`,
+                                    name: `${Name(entity.nameTag)}`,
                                     closest: 1,
                                     maxDistance: 5
                                 })
                                 if ([...as2].length == 0) {
                                     entity.runCommandAsync(`gamemode a @s`)
-                                    entity.teleport({
-                                        x: Number(px) + 0.5,
-                                        y: Number(py) + 0.5,
-                                        z: Number(pz) + 0.5
-                                    }, dimension, 0, 0, false)
+                                    entity.teleport({x: Number(px) + 0.5,y: Number(py) + 0.5,z: Number(pz) + 0.5},{dimension: dimension,rotation:{x:0,y:0},checkForBlocks: false})
                                     entity.runCommandAsync(`scoreboard players operation @s hp = @s maxhp`)
                                     entity.removeTag(`death`)
                                     break;
@@ -165,11 +161,11 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
                                 for (const as of dimension.getEntities({
                                         location: location,
                                         type: "karo:tamasii",
-                                        name: `${pn[1]}`,
+                                        name: `${Name(entity.nameTag)}`,
                                         closest: 1,
                                         maxDistance: 5
                                     })) {
-                                    entity.teleport(as.location, dimension, 0, 0, false)
+                                    entity.teleport(as.location, {dimension: dimension,rotation:{x:0,y:0}})
                                 }
                             }
                             break;

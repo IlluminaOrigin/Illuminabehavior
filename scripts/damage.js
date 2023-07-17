@@ -125,7 +125,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             if(sufferer.hasTag(`toku`)) suffererName = "情報非公開のプレイヤー"
             const de = overworld.spawnEntity(
                 "karo:tamasii",
-                new Vector(sufferer.location.x, sufferer.location.y,sufferer.location.z)
+                new Vector(sufferer.location.x, sufferer.location.y + 1,sufferer.location.z)
               );
             de.nameTag = `${suffererName}`
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
@@ -169,7 +169,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             const tn = attacker.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
             if(sufferer.hasTag(`toku`)) pn[1] = "情報非公開のプレイヤー"
             if(attacker.hasTag(`toku`)) tn[1] = "情報非公開のプレイヤー"
-            const de = overworld.spawnEntity("karo:tamasii", new Vector({x: sufferer.location.x, y: sufferer.location.y, z: sufferer.location.z}))
+            const de = overworld.spawnEntity("karo:tamasii", new Vector({x: sufferer.location.x, y: sufferer.location.y + 1, z: sufferer.location.z}))
             de.nameTag = `${suffererName}`
             sufferer.runCommandAsync(`gamemode spectator @s`)
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
