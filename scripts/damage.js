@@ -114,7 +114,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         //属性効果
         let zokusei = 1
         if(suffererZokuseiType === zokuseiNumber[attackerZokuseiType][0]) zokusei = 1.2
-        //if(zokuseiType[weaponZokusei][1] === zokuseiNumber[suffererZokuseiType][1]) zokusei = 0.8
+        if(suffererZokuseiType === zokuseiNumber[attackerZokuseiType][1]) zokusei = 0.8
         let hurtValue = Damage(attackerAttackPower, hitRate,attackerLevel,suffererLevel,suffererDefensePower + defensePower,suffererAvoidance,zokusei)
         //防具エンチャント
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x + (Math.random() * (1.1 - -1.1) + -1.1) , y: sufferer.location.y+ (Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+ (Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§c${hurtValue}`;
