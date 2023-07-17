@@ -1,4 +1,4 @@
-import { world } from "@minecraft/server";
+import { Entity, world ,ItemStack} from "@minecraft/server";
 import * as UI from "@minecraft/server-ui"
 
 world.afterEvents.itemUse.subscribe((ev)=>{
@@ -111,7 +111,7 @@ export function GuildDeleteForm(source) {
 
 /**
  * 
- * @param {import('@minecraft/server').Player} source 
+ * @param {import('@minecraft/server').Player|Entity} source 
  * @param {String} guildName 
  * @returns 
  */
@@ -136,7 +136,7 @@ export function GuildCreate(source, guildName) {
       source.sendMessage(`§cその名前は使えません`)
     }
     const GuildMaxNumber = Math.max(...guildsAmount)
-    source.sendMessage(`§aギルド§r「 ${guilds[guildNumber].participant.displayName} §r」§aを作成しました。`)
+    source.sendMessage(`§aギルド§r「 ${guildName} §r」§aを作成しました。`)
     source.addTag(`guildOwner`)
     const guildAdminItem = new ItemStack(`karo:guildadmin`)
     /**
@@ -144,7 +144,7 @@ export function GuildCreate(source, guildName) {
      */
     const selectSlot = source.getComponent(`inventory`).container
     selectSlot.setItem(source.selectedSlot,guildAdminItem)
-    world.scoreboard.getObjective(`guildname`).setScore(`${newName}`,GuildMaxNumber + 1)
+    world.scoreboard.getObjective(`guildname`).setScore(`${guildName}`,GuildMaxNumber + 1)
     world.scoreboard.getObjective(`playerguild`).setScore(source,GuildMaxNumber + 1)
 }
   
@@ -184,6 +184,7 @@ export function GuildNameChange(source, newName) {
     const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
     if(typeof sourceGuild === 'undefined') return;
     if(!source.hasTag(`guildOwner`)) return;
+    const guilds = world.scoreboard.getObjective(`guildname`).getScores()
     let guildNames = []
     for(let i = 0;i < guilds.length;i++){
       guildNames[guildNames.length] = guilds[i].participant.displayName
@@ -191,7 +192,6 @@ export function GuildNameChange(source, newName) {
     if(guildNames.indexOf(newName) !== -1) {
       source.sendMessage(`§cその名前は使えません`)
     }
-    const guilds = world.scoreboard.getObjective(`guildname`).getScores()
     let guildNumber = null
     for(let i = 0;i < guilds.length;i++){
       if(guilds[i].score === sourceGuild) {
@@ -215,6 +215,7 @@ export function GuildAddMember(source){
     const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
     if(typeof sourceGuild === 'undefined') return;
     const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === 0)
+    if(players.length === 0) {NotPlayerIs(source); return;}
     let buttons = []
     for(const p of players){
       buttons[buttons.length] = Name(p.nameTag)
@@ -244,6 +245,7 @@ export function GuildRemoveMember(source){
   let players 
   if(source.hasTag("guildAdmin")) world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner","guildAdmin"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
   if(source.hasTag("guildOwner")) world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(players.length === 0) {NotPlayerIs(source); return;}
   let buttons = []
   for(const p of players){
     buttons[buttons.length] = Name(p.nameTag)
@@ -270,6 +272,7 @@ export function GuildAddAdmin(source){
   const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
   if(typeof sourceGuild === 'undefined') return;
   const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner","guildAdmin"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(players.length === 0) {NotPlayerIs(source); return;}
   let buttons = []
   for(const p of players){
     buttons[buttons.length] = Name(p.nameTag)
@@ -295,6 +298,7 @@ export function GuildRemoveAdmin(source){
   const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
   if(typeof sourceGuild === 'undefined') return;
   const players = world.getDimension(`overworld`).getPlayers({tags:["hatu","guildAdmin"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(players.length === 0) {NotPlayerIs(source); return;}
   let buttons = []
   for(const p of players){
     buttons[buttons.length] = Name(p.nameTag)
@@ -320,6 +324,7 @@ export function GuildOwnerChange(source){
   const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
   if(typeof sourceGuild === 'undefined') return;
   const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(players.length === 0) {NotPlayerIs(source); return;}
   let buttons = []
   for(const p of players){
     buttons[buttons.length] = Name(p.nameTag)
@@ -334,4 +339,12 @@ export function GuildOwnerChange(source){
     players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aによってギルドオーナーになりました。`)
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドオーナーにしました。`)
   })
+}
+
+export function NotPlayerIs(source){
+    const form = new UI.ActionFormData()
+    form.title(`§lお知らせ`)
+    form.body(`§l§c対象に合うプレイヤーがいません。`)
+    form.button(`§lOK`)
+    form.show(source)
 }
