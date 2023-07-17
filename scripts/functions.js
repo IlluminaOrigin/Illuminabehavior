@@ -184,3 +184,30 @@ export function GuildAddMember(source){
       source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドに招待しました。`)
     })
 }
+
+/**
+ * 
+ * @param {import('@minecraft/server').Player} source 
+ * @returns 
+ */
+export function GuildRemoveMember(source){
+  if(!source.hasTag(`guildOwner` && !source.hasTag(`guildAdmin`))) return;
+  const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
+  if(typeof sourceGuild === 'undefined') return;
+  let players 
+  if(source.hasTag("guildAdmin")) world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner","guildAdmin"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(source.hasTag("guildOwner")) world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  let buttons = []
+  for(const p of players){
+    buttons[buttons.length] = Name(p.nameTag)
+  }
+  const form = new UI.ModalFormData
+  form.title(`メンバー削除`)
+  form.dropdown(`削除するメンバーを選択`,buttons)
+  form.show(source).then((rs)=>{
+    if(rs.canceled) return;
+    world.scoreboard.getObjective(`playerguild`).setScore(players[rs.formValues[0]],0)
+    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§cギルドから削除されました。`)
+    source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドから削除しました。`)
+  })
+}
