@@ -207,6 +207,7 @@ export function GuildRemoveMember(source){
   form.show(source).then((rs)=>{
     if(rs.canceled) return;
     world.scoreboard.getObjective(`playerguild`).setScore(players[rs.formValues[0]],0)
+    players[rs.formValues[0]].removeTag(`guildAdmin`)
     players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§cギルドから削除されました。`)
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドから削除しました。`)
   })
