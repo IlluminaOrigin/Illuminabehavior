@@ -56,9 +56,28 @@ world.afterEvents.itemUse.subscribe((ev)=>{
 
 export function GuildTresureWithdraw(source) {
   if(!source.hasTag(`guildOwner`)) return;
-
+  const guilds1 = world.scoreboard.getObjective(`guildmoney`).getScores()
+  let guildMoney = 0
+  for(let i = 0;i < guilds1.length;i++){
+    if(guilds1[i].participant.displayName === `${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) guildMoney = guilds1[i].score
+  }
+  const guilds2 = world.scoreboard.getObjective(`guildxp`).getScores()
+  let guildXP = 0
+  for(let i = 0;i < guilds2.length;i++){
+    if(guilds2[i].participant.displayName === `${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) guildXP = guilds2[i].score
+  }
   const form = new UI.ModalFormData()
-  form.slider(`金引き出し`,0,)
+  form.title(`§lギルド財産引き出し`)
+  form.slider(`金引き出し`,0,guildMoney,1)
+  form.slider(`経験値引き出し`,0,guildXP,1)
+  form.show(source).then((rs)=>{
+    if(rs.canceled) return;
+    world.scoreboard.getObjective(`money`).setScore(source,world.scoreboard.getObjective(`money`).getScore(source) + rs.formValues[0])
+    world.scoreboard.getObjective(`hasxp`).setScore(source,world.scoreboard.getObjective(`hasxp`).getScore(source) + rs.formValues[1])
+    world.scoreboard.getObjective(`guildmoney`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,world.scoreboard.getObjective(`guildmoney`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[0])
+    world.scoreboard.getObjective(`guildxp`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,world.scoreboard.getObjective(`guildxp`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[1])
+    source.sendMessage(`金: +${world.scoreboard.getObjective(`guildmoney`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[0]}\n経験値: +${world.scoreboard.getObjective(`guildxp`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[1]}`)
+  })
 }
 
 export function GuildCreateForm(source){
@@ -79,8 +98,8 @@ export function GuildAdminForm(source){
     form.button(`§l§0メンバー削除`)
     form.button(`§l§0幹部追加`)
     form.button(`§l§0幹部削除`)
-    form.button(`ギルド財産引き出し`)
-    form.button(`ギルド徴収割合変更`)
+    form.button(`§lギルド財産引き出し`)
+    form.button(`§lギルド徴収割合変更`)
     form.button(`§l§0ギルド名変更`)
     form.button(`§l§0オーナー変更`)
     form.button(`§l§0ギルド削除`)
