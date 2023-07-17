@@ -133,3 +133,26 @@ export function GuildDelete(source) {
     world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
 }
 
+/**
+ * 
+ * @param {import('@minecraft/server').Player} source 
+ * @param {String} newName
+ * @returns 
+ */
+export function GuildNameChange(source, newName) {
+    const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
+    if(typeof sourceGuild === 'undefined') return;
+    if(!source.hasTag(`guildOwner`)) return;
+    const guilds = world.scoreboard.getObjective(`guildname`).getScores()
+    let guildNumber = null
+    for(let i = 0;i < guilds.length;i++){
+      if(guilds[i].score === sourceGuild) {
+        guildNumber = i
+      }
+    }
+    if(guildNumber === null) return;
+    const newGuildNumber = guilds[guildNumber].score
+    source.sendMessage(`§aあなたのギルドの名前を§r ${guilds[guildNumber].participant.displayName} §r§aから§r ${newName} §r§aに変更しました。`)
+    world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
+    world.scoreboard.getObjective(`guildname`).setScore(`${newName}`,newGuildNumber)
+  }
