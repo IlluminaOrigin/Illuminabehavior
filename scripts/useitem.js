@@ -1,4 +1,5 @@
 import { Entity, world ,ItemStack} from "@minecraft/server";
+import { Name } from "functions.js";
 import * as UI from "@minecraft/server-ui"
 
 world.afterEvents.itemUse.subscribe((ev)=>{
@@ -20,6 +21,10 @@ world.afterEvents.itemUse.subscribe((ev)=>{
             break;
         }
         case "karo:guildcreate":{
+            if(world.scoreboard.getObjective(`playerguild`).getScore(ev.source) !== 0) {
+                ev.source.sendMessage(`§c既に別のギルドに加入中の為使えません。`)
+                return;
+            }
             GuildCreateForm(ev.source)
             break;
         }
@@ -97,6 +102,7 @@ export function GuildAdminForm(source){
 }
 
 export function GuildNameChangeForm(source){
+    if(!source.hasTag(`guildOwner`)) return;
     const form = new UI.ModalFormData()
     form.title(`ギルド名変更`)
     form.textField(`変更後のギルド名を入力`,`新しいギルド名を入力`,`ギルド`)
@@ -107,6 +113,7 @@ export function GuildNameChangeForm(source){
 }
 
 export function GuildDeleteForm(source) {
+    if(!source.hasTag(`guildOwner`)) return;
     const form = new UI.ActionFormData()
     form.title(`ギルド削除`)
     form.body(`削除すると元には戻せません。本当に削除しますか？`)
@@ -182,6 +189,8 @@ export function GuildDelete(source) {
     source.runCommandAsync(`title @s subtitle "deleteGuild ${guilds[guildNumber].participant.displayName}"`)
     if(guildNumber === null) return;
     source.sendMessage(`§aあなたのギルドが削除されました。`)
+    source.removeTag(`guildOwner`)
+    source.removeTag(`guildAdmin`)
     world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
 }
 
@@ -351,6 +360,7 @@ export function GuildOwnerChange(source){
   form.show(source).then((rs)=>{
     if(rs.canceled) return;
     players[rs.formValues[0]].addTag(`guildOwner`)
+    players[rs.formValues[0]].removeTag(`guildAdmin`)
     source.removeTag(`guildOwner`)
     players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aによってギルドオーナーになりました。`)
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドオーナーにしました。`)
