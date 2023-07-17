@@ -109,7 +109,7 @@ function GuildDelete(source) {
   for(let i = 0;i < members.length;i++){
     if(members[i].score === sourceGuild) world.scoreboard.getObjective(`playerguild`).removeParticipant(members[i].participant)
   }
-  source.runCommandAsync(`title @s subtitle `)
+  source.runCommandAsync(`title @s subtitle "deleteGuild ${guilds[guildNumber].participant.displayName}"`)
   if(guildNumber === null) return;
   source.sendMessage(`§aあなたのギルドが削除されました。`)
   world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
