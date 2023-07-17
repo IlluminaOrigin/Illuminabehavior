@@ -1,4 +1,6 @@
 import { world } from "@minecraft/server";
+import { GuildAddAdmin,GuildAddMember,GuildCreate,GuildDelete,GuildNameChange,GuildOwnerChange,GuildRemoveAdmin,GuildRemoveMember } from "functions.js";
+import { GuildAdminForm,GuildCreateForm,GuildNameChangeForm,GuildDeleteForm } from "guild.js";
 
 world.afterEvents.itemUse.subscribe((ev)=>{
     switch(ev.itemStack.typeId){

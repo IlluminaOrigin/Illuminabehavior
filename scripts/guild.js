@@ -24,7 +24,45 @@ export function GuildAdminForm(source){
     form.button(`§l§0ギルド削除`)
     form.show(source).then((rs)=>{
         if(rs.canceled) return;
-        GuildCreate(source,rs.formValues[0])
+        switch(rs.selection){
+            case 0: {
+                GuildAddMember(source)
+                break;
+            }
+            case 1: {
+                GuildRemoveMember(source)
+                break;
+            }
+            case 2: {
+                GuildAddAdmin(source)
+                break;
+            }
+            case 3: {
+                GuildRemoveAdmin(source)
+                break;
+            }
+            case 4: {
+                GuildNameChangeForm(source)
+                break;
+            }
+            case 5: {
+                GuildOwnerChange(source)
+                break;
+            }
+            case 6: {
+                GuildDeleteForm(source)
+                break;
+            }
+        }
     })
 }
 
+export function GuildNameChangeForm(source){
+    const form = new UI.ModalFormData()
+    form.title(`ギルド名変更`)
+    form.textField(`変更後のギルド名を入力`,`新しいギルド名を入力`,`ギルド`)
+    form.show(source).then((rs)=>{
+        if(rs.canceled) return;
+        GuildNameChange(source,rs.formValues[0])
+    })
+}
