@@ -17,6 +17,7 @@ world.afterEvents.itemUse.subscribe((ev)=>{
             }
             world.scoreboard.getObjective(`playerguild`).setScore(ev.source,Number(ev.itemStack.getLore()[0]))
             ev.source.sendMessage(`§aギルドに加入しました。`)
+            ev.source.removeTag(`guildAdmin`)
             ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
             break;
         }
