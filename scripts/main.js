@@ -3,6 +3,7 @@ import "damage.js"
 import "scriptevents.js"
 import "chat.js"
 import "spawn.js"
+import "useitem.js"
 
 /*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
