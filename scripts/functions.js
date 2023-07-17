@@ -269,3 +269,29 @@ export function GuildRemoveAdmin(source){
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドの幹部から外しました。`)
   })
 }
+
+/**
+ * 
+ * @param {import('@minecraft/server').Player} source 
+ * @returns 
+ */
+export function GuildOwnerChange(source){
+  if(!source.hasTag(`guildOwner`)) return;
+  const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
+  if(typeof sourceGuild === 'undefined') return;
+  const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  let buttons = []
+  for(const p of players){
+    buttons[buttons.length] = Name(p.nameTag)
+  }
+  const form = new UI.ModalFormData
+  form.title(`ギルドオーナー変更`)
+  form.dropdown(`ギルドオーナーにするメンバーを選択`,buttons)
+  form.show(source).then((rs)=>{
+    if(rs.canceled) return;
+    players[rs.formValues[0]].addTag(`guildOwner`)
+    source.removeTag(`guildOwner`)
+    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aによってギルドオーナーになりました。`)
+    source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドオーナーにしました。`)
+  })
+}
