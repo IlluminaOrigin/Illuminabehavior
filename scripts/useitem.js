@@ -211,7 +211,7 @@ export function GuildNameChange(source, newName) {
  * @returns 
  */
 export function GuildAddMember(source){
-    if(!source.hasTag(`guildOwner` && !source.hasTag(`guildAdmin`))) return;
+    if(!source.hasTag(`guildOwner`) && !source.hasTag(`guildAdmin`)) return;
     const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
     if(typeof sourceGuild === 'undefined') return;
     const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === 0)
@@ -238,7 +238,7 @@ export function GuildAddMember(source){
  * @returns 
  */
 export function GuildRemoveMember(source){
-  if(!source.hasTag(`guildOwner` && !source.hasTag(`guildAdmin`))) return;
+  if(!source.hasTag(`guildOwner`) && !source.hasTag(`guildAdmin`)) return;
   const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
   if(typeof sourceGuild === 'undefined') return;
   let players 
