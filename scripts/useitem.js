@@ -9,6 +9,14 @@ world.afterEvents.itemUse.subscribe((ev)=>{
             ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
             break;
         }
+        case "karo:guildcreate":{
+            GuildCreateForm(ev.source)
+            break;
+        }
+        case "karo:guildadmin":{
+            GuildAdminForm(ev.source)
+            break;
+        }
         default: return;
     }
 })
