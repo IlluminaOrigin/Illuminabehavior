@@ -98,7 +98,7 @@ export function GuildCreate(source, guildName) {
     const GuildMaxNumber = Math.max(...guildsAmount)
     source.sendMessage(`§aギルド§r「 ${guilds[guildNumber].participant.displayName} §r」§aを作成しました。`)
     source.addTag(`guildOwner`)
-    const guildAdminItem = new ItemStack(`karo:guildAdmin`)
+    const guildAdminItem = new ItemStack(`karo:guildadmin`)
     /**
      * @type {Container} selectSlot
      */
@@ -184,7 +184,7 @@ export function GuildAddMember(source){
     form.dropdown(`追加メンバーを選択`,buttons)
     form.show(source).then((rs)=>{
       if(rs.canceled) return;
-      const item = new ItemStack(`karo:guildInvite`)
+      const item = new ItemStack(`karo:guildinvite`)
       item.setLore([`${sourceGuild}`])
       players[rs.formValues[0]].getComponent(`inventory`).container.addItem(item)
       players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aからギルドへ招待されました。`)
