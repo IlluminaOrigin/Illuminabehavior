@@ -76,7 +76,7 @@ export function GuildTresureWithdraw(source) {
     world.scoreboard.getObjective(`hasxp`).setScore(source,world.scoreboard.getObjective(`hasxp`).getScore(source) + rs.formValues[1])
     world.scoreboard.getObjective(`guildmoney`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,world.scoreboard.getObjective(`guildmoney`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[0])
     world.scoreboard.getObjective(`guildxp`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,world.scoreboard.getObjective(`guildxp`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[1])
-    source.sendMessage(`金: +${world.scoreboard.getObjective(`guildmoney`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[0]}\n経験値: +${world.scoreboard.getObjective(`guildxp`).getScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`) - rs.formValues[1]}`)
+    source.sendMessage(`金: +${rs.formValues[0]}\n経験値: +${rs.formValues[1]}`)
   })
 }
 
