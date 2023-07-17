@@ -1,4 +1,4 @@
-import { Entity, world ,ItemStack} from "@minecraft/server";
+import { Entity, world ,ItemStack, BlockWaterContainerComponent} from "@minecraft/server";
 import { Name } from "functions.js";
 import * as UI from "@minecraft/server-ui"
 
@@ -148,9 +148,11 @@ export function GuildAdminForm(source){
             }
             case 4: {
                 GuildTresureWithdraw(source)
+                break;
             }
             case 5: {
                 GuildTaxSetting(source)
+                break;
             }
             case 6: {
                 GuildNameChangeForm(source)
