@@ -231,6 +231,8 @@ export function GuildCreate(source, guildName) {
     selectSlot.setItem(source.selectedSlot,guildAdminItem)
     world.scoreboard.getObjective(`guildmoney`).setScore(`${GuildMaxNumber + 1}`,0)
     world.scoreboard.getObjective(`guildxp`).setScore(`${GuildMaxNumber + 1}`,0)
+    world.scoreboard.getObjective(`guildmoneyper`).setScore(`${GuildMaxNumber + 1}`,1)
+    world.scoreboard.getObjective(`guildxpper`).setScore(`${GuildMaxNumber + 1}`,1)
     world.scoreboard.getObjective(`guildname`).setScore(`${guildName}`,GuildMaxNumber + 1)
     world.scoreboard.getObjective(`playerguild`).setScore(source,GuildMaxNumber + 1)
 }
