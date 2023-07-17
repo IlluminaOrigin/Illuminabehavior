@@ -72,6 +72,8 @@ export function GuildAdminForm(source){
     form.button(`§l§0メンバー削除`)
     form.button(`§l§0幹部追加`)
     form.button(`§l§0幹部削除`)
+    form.button(`ギルド財産引き出し`)
+    form.button(`ギルド徴収割合変更`)
     form.button(`§l§0ギルド名変更`)
     form.button(`§l§0オーナー変更`)
     form.button(`§l§0ギルド削除`)
@@ -94,15 +96,17 @@ export function GuildAdminForm(source){
                 GuildRemoveAdmin(source)
                 break;
             }
-            case 4: {
+            case 4:
+            case 5:
+            case 6: {
                 GuildNameChangeForm(source)
                 break;
             }
-            case 5: {
+            case 7: {
                 GuildOwnerChange(source)
                 break;
             }
-            case 6: {
+            case 8: {
                 GuildDeleteForm(source)
                 break;
             }
