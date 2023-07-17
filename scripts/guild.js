@@ -66,3 +66,15 @@ export function GuildNameChangeForm(source){
         GuildNameChange(source,rs.formValues[0])
     })
 }
+
+export function GuildNameChangeForm(source){
+    const form = new UI.ActionFormData()
+    form.title(`ギルド削除`)
+    form.body(`削除すると元には戻せません。本当に削除しますか？`)
+    form.button(`§l§0キャンセル`)
+    form.button(`§l§c削除する`)
+    form.show(source).then((rs)=>{
+        if(rs.canceled) return;
+        if(rs.selection === 1) GuildDelete(source)
+    })
+}
