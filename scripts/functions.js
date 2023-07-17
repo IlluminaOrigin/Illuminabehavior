@@ -212,3 +212,53 @@ export function GuildRemoveMember(source){
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドから削除しました。`)
   })
 }
+
+/**
+ * 
+ * @param {import('@minecraft/server').Player} source 
+ * @returns 
+ */
+export function GuildAddAdmin(source){
+  if(!source.hasTag(`guildOwner`)) return;
+  const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
+  if(typeof sourceGuild === 'undefined') return;
+  const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner","guildAdmin"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  let buttons = []
+  for(const p of players){
+    buttons[buttons.length] = Name(p.nameTag)
+  }
+  const form = new UI.ModalFormData
+  form.title(`幹部追加`)
+  form.dropdown(`幹部にするメンバーを選択`,buttons)
+  form.show(source).then((rs)=>{
+    if(rs.canceled) return;
+    players[rs.formValues[0]].addTag(`guildAdmin`)
+    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aによってギルドの幹部になりました。`)
+    source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドの幹部にしました。`)
+  })
+}
+
+/**
+ * 
+ * @param {import('@minecraft/server').Player} source 
+ * @returns 
+ */
+export function GuildRemoveAdmin(source){
+  if(!source.hasTag(`guildOwner`)) return;
+  const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
+  if(typeof sourceGuild === 'undefined') return;
+  const players = world.getDimension(`overworld`).getPlayers({tags:["hatu","guildAdmin"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  let buttons = []
+  for(const p of players){
+    buttons[buttons.length] = Name(p.nameTag)
+  }
+  const form = new UI.ModalFormData
+  form.title(`幹部削除`)
+  form.dropdown(`幹部から外すメンバーを選択`,buttons)
+  form.show(source).then((rs)=>{
+    if(rs.canceled) return;
+    players[rs.formValues[0]].removeTag(`guildAdmin`)
+    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§cによってギルドの幹部権限を剥奪されました。`)
+    source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドの幹部から外しました。`)
+  })
+}
