@@ -4,7 +4,16 @@ import * as UI from "@minecraft/server-ui"
 world.afterEvents.itemUse.subscribe((ev)=>{
     switch(ev.itemStack.typeId){
         case "karo:guildinvite":{
-            if(isNaN(Number(ev.itemStack.getLore()[0])) || Number(ev.itemStack.getLore()[0]) == 0) return;
+            if(isNaN(Number(ev.itemStack.getLore()[0])) || Number(ev.itemStack.getLore()[0]) == 0) {
+                ev.source.sendMessage(`§c招待が無効です。`)
+                ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
+                return;
+            }
+            if(world.scoreboard.getObjective(`playerguild`).getScore(ev.source) !== 0) {
+                ev.source.sendMessage(`§c既に別のギルドに加入中の為使えません。`)
+                ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
+                return;
+            }
             world.scoreboard.getObjective(`playerguild`).setScore(ev.source,Number(ev.itemStack.getLore()[0]))
             ev.source.sendMessage(`§aギルドに加入しました。`)
             ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
