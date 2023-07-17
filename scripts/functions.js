@@ -1,4 +1,5 @@
-import { world , Container, ItemLockMode,system } from '@minecraft/server'
+import { world , Container, ItemLockMode,system, ItemStack } from '@minecraft/server'
+import * as UI from "@minecraft/server-ui"
 
 export function rename(playersName){
     let p4 = []
@@ -155,4 +156,30 @@ export function GuildNameChange(source, newName) {
     source.sendMessage(`§aあなたのギルドの名前を§r ${guilds[guildNumber].participant.displayName} §r§aから§r ${newName} §r§aに変更しました。`)
     world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
     world.scoreboard.getObjective(`guildname`).setScore(`${newName}`,newGuildNumber)
-  }
+}
+
+/**
+ * 
+ * @param {import('@minecraft/server').Player} source 
+ * @returns 
+ */
+export function GuildAddMember(source){
+    if(!source.hasTag(`guildOwner` && !source.hasTag(`guildAdmin`))) return;
+    const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
+    if(typeof sourceGuild === 'undefined') return;
+    const players = world.getDimension(`overworld`).getPlayers({tags:["hatu"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === 0)
+    let buttons = []
+    for(const p of players){
+      buttons[buttons.length] = Name(p.nameTag)
+    }
+    const form = new UI.ModalFormData
+    form.title(`メンバー追加`)
+    form.dropdown(`追加メンバーを選択`,buttons)
+    form.show(source).then((rs)=>{
+      if(rs.canceled) return;
+      const item = new ItemStack(`karo:guildInvite`)
+      item.setLore([`${sourceGuild}`])
+      players[rs.formValues[0]].getComponent(`inventory`).container.addItem(item)
+      source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドに招待しました。`)
+    })
+}
