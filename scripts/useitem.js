@@ -68,13 +68,13 @@ export function GuildTaxSetting(source) {
   }
   const form = new UI.ModalFormData()
   form.title(`§l徴収率変更`)
-  form.slider(`金徴収率`,0,100,1,guildMoney,)
+  form.slider(`金徴収率`,0,100,1,guildMoney)
   form.slider(`経験値徴収率`,0,100,1,guildXP)
   form.show(source).then((rs)=>{
     if(rs.canceled) return;
     world.scoreboard.getObjective(`guildmoneyper`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,rs.formValues[0])
     world.scoreboard.getObjective(`guildxpper`).setScore(`${world.scoreboard.getObjective(`playerguild`).getScore(source)}`,rs.formValues[1])
-    source.sendMessage(`徴収率変更\n金: ${rs.formValues[0]}%\n経験値: ${rs.formValues[1]}%`)
+    source.sendMessage(`§a徴収率変更\n金: ${rs.formValues[0]} パーセント \n経験値: ${rs.formValues[1]} パーセント`)
   })
 }
 
