@@ -20,6 +20,4 @@ scoreboard players set @a rz 1
 scoreboard players set @a zokusei 1
 scoreboard players set @a hasxp 1
 scoreboard players set @a killc 0
-scoreboard players set @a playerguild 0
-scoreboard players set @a guildmoneyper 1
-scoreboard players set @a guildxpper 1
+scoreboard players add @a playerguild 0
