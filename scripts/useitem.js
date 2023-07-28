@@ -341,8 +341,8 @@ export function GuildRemoveMember(source){
   const sourceGuild = world.scoreboard.getObjective(`playerguild`).getScore(source)
   if(typeof sourceGuild === 'undefined') return;
   let players 
-  if(source.hasTag("guildAdmin")) world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner","guildAdmin"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
-  if(source.hasTag("guildOwner")) world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(source.hasTag("guildAdmin")) players = world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner","guildAdmin"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
+  if(source.hasTag("guildOwner")) players = world.getDimension(`overworld`).getPlayers({tags:["hatu"],excludeTags:["guildOwner"]}).filter(p => world.scoreboard.getObjective(`playerguild`).getScore(p) === world.scoreboard.getObjective(`playerguild`).getScore(source))
   if(players.length === 0) {NotPlayerIs(source); return;}
   let buttons = []
   for(const p of players){
@@ -355,7 +355,7 @@ export function GuildRemoveMember(source){
     if(rs.canceled) return;
     world.scoreboard.getObjective(`playerguild`).setScore(players[rs.formValues[0]],0)
     players[rs.formValues[0]].removeTag(`guildAdmin`)
-    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§cギルドから削除されました。`)
+    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§cによりギルドから削除されました。`)
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドから削除しました。`)
   })
 }
