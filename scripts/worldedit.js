@@ -13,6 +13,7 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
     }
     if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_feather`){
         featherBlock.set(ev.player.name,ev.brokenBlockPermutation)
+        ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
     }
 })
 
@@ -22,7 +23,7 @@ world.afterEvents.itemUse.subscribe((ev)=>{
         ev.source.sendMessage(`§a終点座標を (${endVector.get(ev.source.name)}) にしました`)
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_feather`){
-        ev.dimension.fillBlocks(ev.source.getBlockFromViewDirection(),ev.source.getBlockFromViewDirection(),featherBlock.get(ev.source.name))
+        world.getDimension(`overworld`).fillBlocks(ev.source.getBlockFromViewDirection().block.location,ev.source.getBlockFromViewDirection().block.location,featherBlock.get(ev.source.name))
     }
 })
 
