@@ -1,9 +1,9 @@
-import {  world , system, MinecraftBlockTypes } from "@minecraft/server";
+import {  world , system, MinecraftBlockTypes, BlockPermutation,Block } from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
 let featherBlock = new Map()
-
+const airBlock = world.getDimension(`overworld`).getBlock({x:0,y:0,z:0})
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
     if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_axe`){
@@ -34,12 +34,12 @@ world.afterEvents.itemUse.subscribe((ev)=>{
         world.getDimension(`overworld`).fillBlocks({x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},{x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},MinecraftBlockTypes.glass)
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_shovel`){
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.sand,{matchingBlock: MinecraftBlockTypes.air})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.sand,{matchingBlock: airBlock.permutation})
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_brush`){
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock: MinecraftBlockTypes.air})
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock: MinecraftBlockTypes.air})
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},MinecraftBlockTypes.unknown,{matchingBlock: MinecraftBlockTypes.air})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock:airBlock.permutation})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock: airBlock.permutation})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},MinecraftBlockTypes.unknown,{matchingBlock: airBlock.permutation})
     }
 })
 
