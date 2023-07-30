@@ -15,6 +15,10 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
         featherBlock.set(ev.player.name,ev.brokenBlockPermutation)
         ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
     }
+    if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_info`){
+        ev.player.sendMessage(`§b${ev.brokenBlockPermutation.getItemStack().typeId.split(`:`)[1]}`)
+        ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
+    }
 })
 
 world.afterEvents.itemUse.subscribe((ev)=>{
@@ -50,7 +54,7 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                 ev.sender.sendMessage(`§c範囲を選択できていません。`)
                 return;
             }
-            ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]}`)
+            if(ev.message.split(` `)[1] !== `0`) ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]}`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました`)
         }
     }
