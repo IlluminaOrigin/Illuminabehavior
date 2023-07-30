@@ -4,6 +4,7 @@ import "scriptevents.js"
 import "chat.js"
 import "spawn.js"
 import "useitem.js"
+import "worldedit.js"
 
 /*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
