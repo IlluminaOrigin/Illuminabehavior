@@ -1,4 +1,4 @@
-import {  world , system, MinecraftBlockTypes, BlockPermutation,Block } from "@minecraft/server";
+import {  world , MinecraftBlockTypes } from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()

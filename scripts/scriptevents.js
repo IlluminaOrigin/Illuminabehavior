@@ -87,99 +87,95 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
             if(args[3] !== `undefined`) item.nameTag = args[3]
             player.getComponent(`inventory`).container.addItem(item)
         }
-        case "karo:name": {
-            for (const entity of dimension.getEntities()) {
-            if(getScore(`hp`,entity) === true) continue;
+    }
+})
 
-                switch (true) {
-                    case entity.hasTag("M1"):
-                        {
-                            name = "スライム"
-                            break;
-                        }
-                    default:
-                        {
-                            name = entity.name
-                            break;
-                        }
-                }
-    
-                let entityScore = getScore(`hp`,entity) / getScore(`maxhp`,entity)
-                let str = "";
-                let str2 = "■■■■■■■■■■";
-                for (let i = 0; i < Math.ceil(entityScore * 10); i++) {
-                    str += "■";
-                    str2 = str2.slice(0, -1);
-                }
-                let c = "";
-                if (entityScore > 0.5) {
-                    c = "§a";
-                } else if (entityScore > 0.2) {
-                    c = "§e";
-                } else {
-                    c = "§c";
-                }
-                mhp = `\n${c+str}§7${str2}`;
-                thp = Math.ceil(entityScore / 0.05);
-                if (thp <= 1) thp = 1
-                const health = entity.getComponent("health")
-                switch (entity.typeId) {
-                    case "minecraft:armor_stand":
-                        {
-                            break;
-                        }
-                    case "minecraft:player":
-                        {
-                            if (!entity.hasTag(`hatu`)) break;
-                            const pn = entity.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
-                            let atname = "§l§6LV[" + getScore(`lv`,entity) + "] §r" + pn[1]
-                            if (entity.getTags().find(x => x.match("SYOGOD_"))) atname = entity.getTags().find(x => x.match("SYOGOD_")).split(/(?<=^[^_]+?)_/)[1] + `\n` + atname
-                            if (entity.hasTag(`toku`)) atname = `§b情報非公開のプレイヤー`
-                           
-                            entity.nameTag = `${atname} ${mhp}`
-                            health.setCurrentValue(thp)
-                            const px = getScore(`rx`,entity);
-                            const py = getScore(`ry`,entity);
-                            const pz = getScore(`rz`,entity);
-                            if (entity.hasTag(`death`)) {
-                                const location = new Vector(entity.location.x, entity.location.y, entity.location.z)
-                                const as2 = dimension.getEntities({
-                                    location: location,
-                                    type: "karo:tamasii",
-                                    name: `${Name(entity.nameTag)}`,
-                                    closest: 1,
-                                    maxDistance: 5
-                                })
-                                if ([...as2].length == 0) {
-                                    entity.runCommandAsync(`gamemode a @s`)
-                                    entity.teleport({x: Number(px) + 0.5,y: Number(py) + 0.5,z: Number(pz) + 0.5},{dimension: dimension,rotation:{x:0,y:0},checkForBlocks: false})
-                                    entity.runCommandAsync(`scoreboard players operation @s hp = @s maxhp`)
-                                    entity.removeTag(`death`)
-                                    break;
-                                }
-    
-                                for (const as of dimension.getEntities({
-                                        location: location,
-                                        type: "karo:tamasii",
-                                        name: `${Name(entity.nameTag)}`,
-                                        closest: 1,
-                                        maxDistance: 5
-                                    })) {
-                                    entity.teleport(as.location, {dimension: dimension,rotation:{x:0,y:0}})
-                                }
-                            }
-                            break;
-                        }
-                    default:
-                        {
-                            if (entity.typeId === "minecraft:item" || entity.typeId === "karo:tamasii" || entity.typeId === "karo:message" || entity.typeId === "minecraft:npc" || entity.typeId === "minecraft:arrow" || entity.typeId === "minecraft:chest_minecart" || entity.typeId === "minecraft:command_block_minecart" || entity.typeId === "minecraft:egg" || entity.typeId === "minecraft:falling_block" || entity.typeId === "minecraft:eye_of_ender_signal" || entity.typeId === "minecraft: evocation_fang" || entity.typeId === "minecraft:fireball" || entity.typeId === "minecraft:fishing_hook" || entity.typeId === "minecraft:firewarks_rocket" || entity.typeId === "minecraft:hopper_minecart" || entity.typeId === "minecraft:ender_pearl" || entity.typeId === "minecraft:lighting_bolt" || entity.typeId === "minecraft:lingering_potion" || entity.typeId === "minecraft:moving_block" || entity.typeId === "minecraft:painting" || entity.typeId === "minecraft:shulker_bullet" || entity.typeId === "minecraft:small_fireball" || entity.typeId === "minecraft:llama_spit" || entity.typeId === "minecraft:minecart" || entity.typeId === "minecraft:splash_potion" || entity.typeId === "minecraft:xp_bottle" || entity.typeId === "minecraft:xp_orb" || entity.typeId === "minecraft:wither_skull_dangerous" || entity.typeId === "minecraft:wither_skull" || entity.typeId === "minecraft:tnt" || entity.typeId === "karo:damage") break;
-                            const atname = `§l§6LV[${getScore(`lv`,entity)}]§r ${name}`
-                            entity.nameTag = `${atname} ${mhp}`
-                            break;
-                        }
-                }
+system.runInterval((ev)=>{
+    for (const entity of dimension.getEntities()) {
+        if(getScore(`hp`,entity) === true) continue;
+        switch (true) {
+            case entity.hasTag("M1"):
+            {
+                name = "スライム"
+                break;
             }
-            break;
+            default:
+            {
+                name = entity.name
+                break;
+            }
+        }
+        let entityScore = getScore(`hp`,entity) / getScore(`maxhp`,entity)
+        let str = "";
+        let str2 = "■■■■■■■■■■";
+        for (let i = 0; i < Math.ceil(entityScore * 10); i++) {
+            str += "■";
+            str2 = str2.slice(0, -1);
+        }
+        let c = "";
+        if (entityScore > 0.5) {
+            c = "§a";
+        } else if (entityScore > 0.2) {
+            c = "§e";
+        } else {
+            c = "§c";
+        }
+        mhp = `\n${c+str}§7${str2}`;
+        thp = Math.ceil(entityScore / 0.05);
+        if (thp <= 1) thp = 1
+        const health = entity.getComponent("health")
+        switch (entity.typeId) {
+            case "minecraft:armor_stand":
+            {
+                break;
+            }
+            case "minecraft:player":
+            {
+                if (!entity.hasTag(`hatu`)) break;
+                const pn = entity.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
+                let atname = "§l§6LV[" + getScore(`lv`,entity) + "] §r" + pn[1]
+                if (entity.getTags().find(x => x.match("SYOGOD_"))) atname = entity.getTags().find(x => x.match("SYOGOD_")).split(/(?<=^[^_]+?)_/)[1] + `\n` + atname
+                if (entity.hasTag(`toku`)) atname = `§b情報非公開のプレイヤー`
+                entity.nameTag = `${atname} ${mhp}`
+                health.setCurrentValue(thp)
+                const px = getScore(`rx`,entity);
+                const py = getScore(`ry`,entity);
+                const pz = getScore(`rz`,entity);
+                if (entity.hasTag(`death`)) {
+                    const location = new Vector(entity.location.x, entity.location.y, entity.location.z)
+                    const as2 = dimension.getEntities({
+                        location: location,
+                        type: "karo:tamasii",
+                        name: `${Name(entity.nameTag)}`,
+                        closest: 1,
+                        maxDistance: 5
+                    })
+                    if ([...as2].length == 0) {
+                        entity.runCommandAsync(`gamemode a @s`)
+                        entity.teleport({x: Number(px) + 0.5,y: Number(py) + 0.5,z: Number(pz) + 0.5},{dimension: dimension,rotation:{x:0,y:0},checkForBlocks: false})
+                        entity.runCommandAsync(`scoreboard players operation @s hp = @s maxhp`)
+                        entity.removeTag(`death`)
+                        break;
+                    }
+                    for (const as of dimension.getEntities({
+                        location: location,
+                        type: "karo:tamasii",
+                        name: `${Name(entity.nameTag)}`,
+                        closest: 1,
+                        maxDistance: 5
+                    })) {
+                        entity.teleport(as.location, {dimension: dimension,rotation:{x:0,y:0}})
+                    }
+                }
+                break;
+            }
+            default:
+            {
+                if (entity.typeId === "minecraft:item" || entity.typeId === "karo:tamasii" || entity.typeId === "karo:message" || entity.typeId === "minecraft:npc" || entity.typeId === "minecraft:arrow" || entity.typeId === "minecraft:chest_minecart" || entity.typeId === "minecraft:command_block_minecart" || entity.typeId === "minecraft:egg" || entity.typeId === "minecraft:falling_block" || entity.typeId === "minecraft:eye_of_ender_signal" || entity.typeId === "minecraft: evocation_fang" || entity.typeId === "minecraft:fireball" || entity.typeId === "minecraft:fishing_hook" || entity.typeId === "minecraft:firewarks_rocket" || entity.typeId === "minecraft:hopper_minecart" || entity.typeId === "minecraft:ender_pearl" || entity.typeId === "minecraft:lighting_bolt" || entity.typeId === "minecraft:lingering_potion" || entity.typeId === "minecraft:moving_block" || entity.typeId === "minecraft:painting" || entity.typeId === "minecraft:shulker_bullet" || entity.typeId === "minecraft:small_fireball" || entity.typeId === "minecraft:llama_spit" || entity.typeId === "minecraft:minecart" || entity.typeId === "minecraft:splash_potion" || entity.typeId === "minecraft:xp_bottle" || entity.typeId === "minecraft:xp_orb" || entity.typeId === "minecraft:wither_skull_dangerous" || entity.typeId === "minecraft:wither_skull" || entity.typeId === "minecraft:tnt" || entity.typeId === "karo:damage") break;
+                const atname = `§l§6LV[${getScore(`lv`,entity)}]§r ${name}`
+                entity.nameTag = `${atname} ${mhp}`
+                break;
+            }
         }
     }
 })
