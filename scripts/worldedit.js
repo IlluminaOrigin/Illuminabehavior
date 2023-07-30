@@ -1,4 +1,4 @@
-import {  world , system } from "@minecraft/server";
+import {  world , system, MinecraftBlockTypes } from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
@@ -29,6 +29,9 @@ world.afterEvents.itemUse.subscribe((ev)=>{
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_feather`){
         world.getDimension(`overworld`).fillBlocks(ev.source.getBlockFromViewDirection().block.location,ev.source.getBlockFromViewDirection().block.location,featherBlock.get(ev.source.name))
     }
+    if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_airblock`){
+        world.getDimension(`overworld`).fillBlocks({x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},{x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},MinecraftBlockTypes.glass)
+    }
 })
 
 world.afterEvents.chatSend.subscribe((ev)=>{
@@ -55,6 +58,14 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                 return;
             }
             if(ev.message.split(` `)[1] !== `0`) ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]}`)
+            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました`)
+        }
+        if(ev.message.startsWith(`\\\\outline`)) {
+            if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
+                ev.sender.sendMessage(`§c範囲を選択できていません。`)
+                return;
+            }
+            if(ev.message.split(` `)[1] !== `0`) ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]} outline`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました`)
         }
     }
