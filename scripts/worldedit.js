@@ -1,6 +1,8 @@
 import {  world , system } from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
+let degrees = new Map()
+
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
     if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_axe`){
@@ -27,9 +29,13 @@ world.afterEvents.chatSend.subscribe((ev)=>{
             ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) をコピーしました`)
         }
-        if(ev.message.startsWith(`\\\\paste`)) {
-            ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z}`)
+        if(ev.message === `\\\\paste`) {
+            if(typeof degrees.get(ev.sender.name) !== 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z} ${degrees.get(ev.sender.name)}_degrees`)
+            if(typeof degrees.get(ev.sender.name) === 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z}`)
             ev.sender.sendMessage(`§a貼り付けました`)
+        }
+        if(ev.message.startsWith(`\\\\rotate`)) {
+            degrees.set(ev.sender.name,ev.message.split(`-`)[1])
         }
     }
 })
