@@ -50,3 +50,9 @@ world.afterEvents.chatSend.subscribe((ev) => {
     }
 })
 
+world.afterEvents.weatherChange.subscribe((ev)=>{
+    if(ev.raining) {world.sendMessage(`雨`)} else
+    if(ev.lightning) {world.sendMessage(`雷`)} else {
+    world.sendMessage(`晴れ`)
+    }
+})
