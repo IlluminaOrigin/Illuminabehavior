@@ -3,8 +3,9 @@ import {rename , ItemLock , Lore,Name} from "functions.js"
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
-    if(message.startsWith(/\\/)) return;
+    
     ev.sendToTargets = true
+    if(message.startsWith(`\\\\`)) return;
     switch(true) {
         case message.startsWith(`!name`): world.sendMessage(`${sender.nameTag}`); break;
         case message.startsWith(`!lore`): {
