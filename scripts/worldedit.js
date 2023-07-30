@@ -2,6 +2,7 @@ import {  world , system } from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
+let featherBlock = new Map()
 
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
@@ -10,12 +11,18 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
         startVector.set(ev.player.name ,`${ev.block.location.x} ${ev.block.location.y} ${ev.block.location.z}`)
         ev.player.sendMessage(`§a始点座標を (${startVector.get(ev.player.name)}) にしました`)
     }
+    if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_feather`){
+        featherBlock.set(ev.player.name,ev.brokenBlockPermutation)
+    }
 })
 
 world.afterEvents.itemUse.subscribe((ev)=>{
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_axe`){
         endVector.set(ev.source.name ,`${ev.source.getBlockFromViewDirection().block.location.x} ${ev.source.getBlockFromViewDirection().block.location.y} ${ev.source.getBlockFromViewDirection().block.location.z}`)
         ev.source.sendMessage(`§a終点座標を (${endVector.get(ev.source.name)}) にしました`)
+    }
+    if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_feather`){
+        ev.dimension.fillBlocks(ev.source.getBlockFromViewDirection(),ev.source.getBlockFromViewDirection(),featherBlock.get(ev.source.name))
     }
 })
 
