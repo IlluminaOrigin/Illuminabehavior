@@ -22,8 +22,9 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
 })
 
 world.afterEvents.itemUse.subscribe((ev)=>{
+    const playerViewLocation = {x: ev.source.getBlockFromViewDirection().block.location.x,y: ev.source.getBlockFromViewDirection().block.location.y,z: ev.source.getBlockFromViewDirection().block.location.z}
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_axe`){
-        endVector.set(ev.source.name ,`${ev.source.getBlockFromViewDirection().block.location.x} ${ev.source.getBlockFromViewDirection().block.location.y} ${ev.source.getBlockFromViewDirection().block.location.z}`)
+        endVector.set(ev.source.name ,`${playerViewLocation.x} ${playerViewLocation.y} ${playerViewLocation.z}`)
         ev.source.sendMessage(`§a終点座標を (${endVector.get(ev.source.name)}) にしました`)
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_feather`){
@@ -31,6 +32,14 @@ world.afterEvents.itemUse.subscribe((ev)=>{
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_airblock`){
         world.getDimension(`overworld`).fillBlocks({x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},{x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},MinecraftBlockTypes.glass)
+    }
+    if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_shovel`){
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.sand,{matchingBlock: MinecraftBlockTypes.air})
+    }
+    if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_brush`){
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock: MinecraftBlockTypes.air})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock: MinecraftBlockTypes.air})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},MinecraftBlockTypes.unknown,{matchingBlock: MinecraftBlockTypes.air})
     }
 })
 
