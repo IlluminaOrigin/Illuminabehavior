@@ -45,5 +45,12 @@ world.afterEvents.chatSend.subscribe((ev)=>{
         if(ev.message.startsWith(`\\\\rotate`)) {
             degrees.set(ev.sender.name,ev.message.split(`-`)[1])
         }
+        if(ev.message.startsWith(`\\\\set`)) {
+            if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
+                ev.sender.sendMessage(`§c範囲を選択できていません。`)
+                return;
+            }
+            world.getDimension(`overworld`).fillBlocks({x: Number(startVector.get(ev.sender.name).split(` `)[0]),y: Number(startVector.get(ev.sender.name).split(` `)[1]),z: Number(startVector.get(ev.sender.name).split(` `)[2])},{x: Number(endVector.get(ev.sender.name).split(` `)[0]),y: Number(endVector.get(ev.sender.name).split(` `)[1]),z: Number(endVector.get(ev.sender.name).split(` `)[2])},ev.message.split(` `)[1])
+            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) をコピーしました`)
     }
 })
