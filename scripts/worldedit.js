@@ -19,6 +19,10 @@ world.afterEvents.itemUse.subscribe((ev)=>{
 world.afterEvents.chatSend.subscribe((ev)=>{
     if(ev.message.startsWith(/\\/)) {
         if(ev.message.startsWith(/\\copy/)) {
+            if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
+                ev.sender.sendMessage(`§c範囲を選択できていません。`)
+                return;
+            }
             ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
             ev.sender.sendMessage(`(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) をコピーしました`)
         }
