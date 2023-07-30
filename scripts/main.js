@@ -1,4 +1,4 @@
-import {  world , system, Player, Container, ItemStack } from "@minecraft/server";
+import * as MC from "@minecraft/server";
 import "damage.js"
 import "scriptevents.js"
 import "chat.js"
@@ -29,7 +29,7 @@ world.afterEvents.itemStopUseOn.subscribe((ev) =>{
 
 */
 
-world.afterEvents.chatSend.subscribe((ev) => {
+MC.world.afterEvents.chatSend.subscribe((ev) => {
     if(ev.message.startsWith("score")) {
         const guilds = world.scoreboard.getObjective(`guildname`).getScores()
         let guildNumber = null
@@ -49,10 +49,8 @@ world.afterEvents.chatSend.subscribe((ev) => {
         world.sendMessage(`${guilds[i].score}`)
     }
 })
-
-world.afterEvents.weatherChange.subscribe((ev)=>{
-    if(ev.raining) {world.sendMessage(`雨`)} else
-    if(ev.lightning) {world.sendMessage(`雷`)} else {
-    world.sendMessage(`晴れ`)
-    }
-})
+/*
+const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
+const dayname = ['日','月','火','水','木','金','土']
+MC.world.sendMessage(`${dates.getMonth()}月${dates.getDate()}日(${dayname[dates.getDay()]})${dates.getHours()}:${dates.getMinutes()}`)
+*/
