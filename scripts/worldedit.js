@@ -42,7 +42,6 @@ world.afterEvents.itemUse.subscribe((ev)=>{
         world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},MinecraftBlockTypes.unknown,{matchingBlock: airBlock.permutation})
     }
 })
-
 world.afterEvents.chatSend.subscribe((ev)=>{
     if(ev.message.startsWith(`\\\\`)) {
         if(ev.message.startsWith(`\\\\copy`)) {
