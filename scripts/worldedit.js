@@ -77,12 +77,13 @@ world.afterEvents.itemUse.subscribe((ev)=>{
 })
 world.afterEvents.chatSend.subscribe((ev)=>{
     if(ev.message.startsWith(`\\\\`)) {
-        let minZahyo
+        let minZahyo = []
         if(typeof startVector.get(ev.sender.name) !== 'undefined' && typeof endVector.get(ev.sender.name) !== 'undefined') {
             let number1_string = startVector.get(ev.sender.name).split(` `)
             let number2_string = endVector.get(ev.sender.name).split(` `)
             for(let i = 0;i < 3;i++){
-                Number(number1_string[i]) < Numver(number2_string[i])
+                if(Number(number1_string[i]) < Number(number2_string[i])) minZahyo[minZahyo.length] = Number(number2_string[i])
+                if(Number(number1_string[i]) > Number(number2_string[i])) minZahyo[minZahyo.length] = Number(number1_string[i])
             }
         }
         if(ev.message.startsWith(`\\\\copy`)) {
@@ -101,6 +102,15 @@ world.afterEvents.chatSend.subscribe((ev)=>{
             ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
             ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} air`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を切り取りました`)
+        }
+        if(ev.message.startsWith(`\\\\kaiten`)) {
+            if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
+                ev.sender.sendMessage(`§c範囲を選択できていません。`)
+                return;
+            }
+            ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
+            ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${minZahyo[0]} ${minZahyo[1]} ${minZahyo[2]} 90_degrees`)
+            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を90度回転させました`)
         }
         if(ev.message === `\\\\paste`) {
             if(typeof degrees.get(ev.sender.name) !== 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z} ${degrees.get(ev.sender.name)}_degrees`)
