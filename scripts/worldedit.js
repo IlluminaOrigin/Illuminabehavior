@@ -85,6 +85,15 @@ world.afterEvents.chatSend.subscribe((ev)=>{
             ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) をコピーしました`)
         }
+        if(ev.message.startsWith(`\\\\cut`)) {
+            if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
+                ev.sender.sendMessage(`§c範囲を選択できていません。`)
+                return;
+            }
+            ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
+            ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} air`)
+            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を切り取りました`)
+        }
         if(ev.message === `\\\\paste`) {
             if(typeof degrees.get(ev.sender.name) !== 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z} ${degrees.get(ev.sender.name)}_degrees`)
             if(typeof degrees.get(ev.sender.name) === 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z}`)
