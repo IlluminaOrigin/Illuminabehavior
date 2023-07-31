@@ -66,7 +66,7 @@ world.afterEvents.chatSend.subscribe((ev)=>{
         if(ev.message === `\\\\paste`) {
             if(typeof degrees.get(ev.sender.name) !== 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z} ${degrees.get(ev.sender.name)}_degrees`)
             if(typeof degrees.get(ev.sender.name) === 'undefined') ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${ev.sender.location.x} ${ev.sender.location.y} ${ev.sender.location.z}`)
-            ev.sender.sendMessage(`§a貼り付けました`)
+            ev.sender.sendMessage(`§a貼り付けました\n§c※出来てない場合、範囲が広い世界の読み込み範囲外にある可能性があります`)
         }
         if(ev.message.startsWith(`\\\\rotate`)) {
             degrees.set(ev.sender.name,ev.message.split(`-`)[1])
@@ -76,8 +76,8 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                 ev.sender.sendMessage(`§c範囲を選択できていません。`)
                 return;
             }
-            if(ev.message.split(` `)[1] !== `0`) ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]}`)
-            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました`)
+            if(ev.message.split(` `)[1] !== `0`) ev.sender.runCommand(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]}`)
+            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました\n§c※出来てない場合、範囲が広い世界の読み込み範囲外にある可能性があります`)
         }
         if(ev.message.startsWith(`\\\\outline`)) {
             if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
@@ -85,7 +85,7 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                 return;
             }
             if(ev.message.split(` `)[1] !== `0`) ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} ${ev.message.split(/(?<=^[^ ]+?) /)[1]} outline`)
-            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました`)
+            ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を${ev.message.split(` `)[1]}にしました\n§c※出来てない場合、範囲が広い世界の読み込み範囲外にある可能性があります`)
         }
     }
 })
