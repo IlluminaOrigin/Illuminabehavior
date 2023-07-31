@@ -82,8 +82,8 @@ world.afterEvents.chatSend.subscribe((ev)=>{
             let number1_string = startVector.get(ev.sender.name).split(` `)
             let number2_string = endVector.get(ev.sender.name).split(` `)
             for(let i = 0;i < 3;i++){
-                if(Number(number1_string[i]) < Number(number2_string[i])) minZahyo[minZahyo.length] = Number(number2_string[i])
-                if(Number(number1_string[i]) > Number(number2_string[i])) minZahyo[minZahyo.length] = Number(number1_string[i])
+                if(Number(number1_string[i]) < Number(number2_string[i])) minZahyo[minZahyo.length] = Number(number1_string[i])
+                if(Number(number1_string[i]) > Number(number2_string[i])) minZahyo[minZahyo.length] = Number(number2_string[i])
             }
         }
         if(ev.message.startsWith(`\\\\copy`)) {
