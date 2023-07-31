@@ -57,5 +57,5 @@ MC.world.sendMessage(`${dates.getMonth()}月${dates.getDate()}日(${dayname[date
 */
 MC.system.runInterval((ev)=>{
     if(MC.world.getPlayers()[0].location.x < 1024) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x + 10,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z})
-})
+},20)
     
