@@ -55,3 +55,7 @@ const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60))
 const dayname = ['日','月','火','水','木','金','土']
 MC.world.sendMessage(`${dates.getMonth()}月${dates.getDate()}日(${dayname[dates.getDay()]})${dates.getHours()}:${dates.getMinutes()}`)
 */
+MC.system.runInterval((ev)=>{
+    if(MC.world.getPlayers()[0].location.x < 1024) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x + 10,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z})
+})
+    
