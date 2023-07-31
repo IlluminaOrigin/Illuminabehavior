@@ -1,11 +1,16 @@
-import {  world , MinecraftBlockTypes,BlockEvent, Block} from "@minecraft/server";
+import {  world , MinecraftBlockTypes,BlockEvent, Block, system} from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
 let featherBlock = new Map()
 let airBlock
+let firstJoin = 0
 world.afterEvents.playerJoin.subscribe((ev)=>{
-    airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
+    if(firstJoin === 0){
+        system.runTimeout((sy)=>{
+            airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
+        },20)
+    }
 })
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
