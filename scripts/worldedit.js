@@ -38,7 +38,7 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
 world.beforeEvents.itemUseOn.subscribe(async ev => {
     const { itemStack, source, block } = ev;
   
-    if ( itemStack.typeId === "minecraft:shears" ) {
+    if ( itemStack.typeId === "karo:we_shears" ) {
       ev.cancel = true;
       await null
       if(ev.source.hasTag(`copy`)) return;
