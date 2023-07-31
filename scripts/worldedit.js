@@ -3,6 +3,7 @@ let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
 let featherBlock = new Map()
+let supoito = new Map()
 let airBlock
 airBlock = world.getDimension(`overworld`).getBlock({x:0 ,y:320,z: 0})
 let firstJoin = 0
@@ -28,7 +29,23 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
         ev.player.sendMessage(`§b${ev.brokenBlockPermutation.getItemStack().typeId.split(`:`)[1]}`)
         ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
     }
+    if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `minecraft:shears`){
+        ev.player.getComponent(`inventory`).container.addItem(ev.brokenBlockPermutation.clone().getItemStack())
+        ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
+    }
 })
+
+world.beforeEvents.itemUseOn.subscribe(async ev => {
+    const { itemStack, source, block } = ev;
+  
+    if ( itemStack.typeId === "minecraft:shears" ) {
+      ev.cancel = true;
+      await null
+      const stack = block.getItemStack(1, true);
+      const { container } = /** @type {Inventory} */ (source.getComponent('minecraft:inventory'));
+      container.addItem(stack);
+    }
+});
 
 world.afterEvents.itemUse.subscribe((ev)=>{
     if(typeof ev.source.getBlockFromViewDirection() === 'undefined') return;

@@ -192,11 +192,11 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
 })
 
 
-const coordinates = new Map();
+/*const coordinates = new Map();
 world.afterEvents.blockBreak.subscribe(ev => {
     const { brokenBlockPermutation: block , player } = ev;
     
-    /** @type { Container} */
+    /** @type { Container} */ /*
     const container = player.getComponent("inventory").container;
     const item = container.getItem(player.selectedSlot) || null;
     if (item && item.typeId === "minecraft:shears") {
@@ -213,6 +213,7 @@ world.afterEvents.blockBreak.subscribe(ev => {
         }
     }
 })
+*/
 
 
 world.afterEvents.entityHitEntity.subscribe(entityHit => {
