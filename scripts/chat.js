@@ -3,7 +3,8 @@ import {rename , ItemLock , Lore,Name} from "functions.js"
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
-    
+    const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
+    const dayname = ['日','月','火','水','木','金','土']
     ev.sendToTargets = true
     if(message.startsWith(`\\\\`)) return;
     switch(true) {
@@ -40,15 +41,15 @@ world.beforeEvents.chatSend.subscribe((ev) => {
         default : {
             if(message.startsWith(`!`)) break;
             if(sender.hasTag(`toku`)) {
-                world.sendMessage(`§b情報非公開のプレイヤー §r: ${message}`);
+                world.sendMessage(`§b情報非公開のプレイヤー §r[${dates.getHours()}:${dates.getMinutes()}] : ${message}`);
                 break;
             }
             if(sender.hasTag(`killer`)){
-                world.sendMessage(`§c${rename(sender.nameTag)} §r: ${message}`);
+                world.sendMessage(`§c${rename(sender.nameTag)} §r[${dates.getHours()}:${dates.getMinutes()}] : ${message}`);
                 break;
             } 
             if(!sender.hasTag(`killer`)){
-                world.sendMessage(`§a${rename(sender.nameTag).replace()} §r: ${message}`);
+                world.sendMessage(`§a${rename(sender.nameTag).replace()} §r[${dates.getHours()}:${dates.getMinutes()}] : ${message}`);
                 break;
             } 
 

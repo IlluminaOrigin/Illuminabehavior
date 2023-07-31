@@ -77,6 +77,14 @@ world.afterEvents.itemUse.subscribe((ev)=>{
 })
 world.afterEvents.chatSend.subscribe((ev)=>{
     if(ev.message.startsWith(`\\\\`)) {
+        let minZahyo
+        if(typeof startVector.get(ev.sender.name) !== 'undefined' && typeof endVector.get(ev.sender.name) !== 'undefined') {
+            let number1_string = startVector.get(ev.sender.name).split(` `)
+            let number2_string = endVector.get(ev.sender.name).split(` `)
+            for(let i = 0;i < 3;i++){
+                Number(number1_string[i]) < Numver(number2_string[i])
+            }
+        }
         if(ev.message.startsWith(`\\\\copy`)) {
             if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
                 ev.sender.sendMessage(`§c範囲を選択できていません。`)
