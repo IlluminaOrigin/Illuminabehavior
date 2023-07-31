@@ -103,6 +103,66 @@ world.afterEvents.chatSend.subscribe((ev)=>{
             ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} air`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を切り取りました`)
         }
+        if(ev.message.split(` `)[0] === `\\\\r`) {
+            const A_x = ev.sender.location.x;
+            const A_z = ev.sender.location.z;
+            // 円の半径
+            const r = Number(ev.message.split(` `)[1]);
+            // 度数からラジアンへの変換関数
+            function degreesToRadians(degrees) {
+                return (degrees * Math.PI) / 180;
+            }
+            // 座標を取得する関数
+            function getCoordinates(angleDegrees, centerX, centerZ, radius) {
+                const angleRadians = degreesToRadians(angleDegrees);
+                const x = centerX + radius * Math.cos(angleRadians);
+                const z = centerZ + radius * Math.sin(angleRadians);
+                return { x, z };
+            }
+            // 1度ずつ右方向に回転しながら座標を取得する
+            for (let angle = 0; angle < 360; angle++) {
+                const { x, z } = getCoordinates(angle, A_x, A_z, r);
+                world.getDimension(`overworld`).fillBlocks({x: x,y: ev.sender.location.y,z: z},{x: x,y: ev.sender.location.y,z: z},MinecraftBlockTypes[ev.message.split(` `)[2]])
+            }
+        }
+        if(ev.message.split(` `)[0] === `\\\\star`) {
+
+        }
+        if(ev.message.split(` `)[0] === `\\\\c`) {
+            // 点Aの座標
+            const A_x = ev.sender.location.x;
+            const A_y = ev.sender.location.y;
+            const A_z = ev.sender.location.z;
+
+            // 円の半径
+            const r = Number(ev.message.split(` `)[1]);
+
+            // 度数からラジアンへの変換関数
+            function degreesToRadians(degrees) {
+                return (degrees * Math.PI) / 180;
+            }
+
+            // 座標を取得する関数
+            function getCoordinates(latitudeDegrees, longitudeDegrees, centerX, centerY, centerZ, radius) {
+                const latitudeRadians = degreesToRadians(latitudeDegrees);
+                const longitudeRadians = degreesToRadians(longitudeDegrees);
+                const x = centerX + radius * Math.cos(longitudeRadians) * Math.sin(latitudeRadians);
+                const y = centerY + radius * Math.sin(longitudeRadians) * Math.sin(latitudeRadians);
+                const z = centerZ + radius * Math.cos(latitudeRadians);
+                return { x, y, z };
+            }
+
+            // 全ての座標を取得する
+            for (let latitude = -180; latitude <= 180; latitude++) {
+                system.run(()=>{
+                    for (let longitude = 0; longitude < 180; longitude++) {
+                    const { x, y, z } = getCoordinates(latitude, longitude, A_x, A_y, A_z, r);
+                    world.getDimension(`overworld`).fillBlocks({x: x,y: y,z: z},{x: x,y: y,z: z},MinecraftBlockTypes[ev.message.split(` `)[2]])
+                }
+                })
+                
+            }
+        }
         if(ev.message.startsWith(`\\\\kaiten`)) {
             if(typeof startVector.get(ev.sender.name) === 'undefined' || typeof endVector.get(ev.sender.name) === 'undefined') {
                 ev.sender.sendMessage(`§c範囲を選択できていません。`)
