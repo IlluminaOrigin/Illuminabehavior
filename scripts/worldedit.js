@@ -31,6 +31,7 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
 })
 
 world.afterEvents.itemUse.subscribe((ev)=>{
+    if(typeof ev.source.getBlockFromViewDirection() === 'undefined') return;
     const playerViewLocation = {x: ev.source.getBlockFromViewDirection().block.location.x,y: ev.source.getBlockFromViewDirection().block.location.y,z: ev.source.getBlockFromViewDirection().block.location.z}
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_axe`){
         endVector.set(ev.source.name ,`${playerViewLocation.x} ${playerViewLocation.y} ${playerViewLocation.z}`)
