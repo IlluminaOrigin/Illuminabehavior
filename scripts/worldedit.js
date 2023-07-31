@@ -109,6 +109,7 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                 return;
             }
             ev.sender.runCommandAsync(`structure save "${ev.sender.name}" ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)}`)
+            ev.sender.runCommandAsync(`fill ${startVector.get(ev.sender.name)} ${endVector.get(ev.sender.name)} air`)
             ev.sender.runCommandAsync(`structure load "${ev.sender.name}" ${minZahyo[0]} ${minZahyo[1]} ${minZahyo[2]} 90_degrees`)
             ev.sender.sendMessage(`§a(${startVector.get(ev.sender.name)}) から (${endVector.get(ev.sender.name)}) を90度回転させました`)
         }
