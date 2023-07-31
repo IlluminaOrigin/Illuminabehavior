@@ -41,11 +41,16 @@ world.beforeEvents.itemUseOn.subscribe(async ev => {
     if ( itemStack.typeId === "minecraft:shears" ) {
       ev.cancel = true;
       await null
+      if(ev.source.hasTag(`copy`)) return;
+      source.addTag(`copy`)
       const stack = block.getItemStack(1, true);
       const { container } = /** @type {Inventory} */ (source.getComponent('minecraft:inventory'));
       container.addItem(stack);
     }
 });
+world.afterEvents.itemStopUseOn.subscribe((ev)=>{
+    ev.source.removeTag(`copy`)
+})
 
 world.afterEvents.itemUse.subscribe((ev)=>{
     if(typeof ev.source.getBlockFromViewDirection() === 'undefined') return;
