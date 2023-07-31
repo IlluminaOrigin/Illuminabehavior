@@ -61,4 +61,3 @@ MC.system.runInterval((ev)=>{
     if(MC.world.getPlayers()[0].location.x > -1200 && MC.world.getPlayers()[0].location.z > 1600) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x - 10,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z})
     if(MC.world.getPlayers()[0].location.x < -1200 && MC.world.getPlayers()[0].location.z > -1600) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z - 10})
 },20)
-    
