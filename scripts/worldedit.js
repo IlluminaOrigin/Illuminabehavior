@@ -42,8 +42,9 @@ world.afterEvents.itemUse.subscribe((ev)=>{
         world.getDimension(`overworld`).fillBlocks({x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},{x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},MinecraftBlockTypes.glass)
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_shovel`){
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.sand,{matchingBlock: airBlock.permutation})
-    }
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},MinecraftBlockTypes.sand,{matchingBlock:airBlock.permutation})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.sand,{matchingBlock: airBlock.permutation})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},MinecraftBlockTypes.sand,{matchingBlock: airBlock.permutation})    }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_brush`){
         world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock:airBlock.permutation})
         world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},MinecraftBlockTypes.unknown,{matchingBlock: airBlock.permutation})

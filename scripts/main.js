@@ -56,8 +56,9 @@ const dayname = ['日','月','火','水','木','金','土']
 MC.world.sendMessage(`${dates.getMonth()}月${dates.getDate()}日(${dayname[dates.getDay()]})${dates.getHours()}:${dates.getMinutes()}`)
 */
 MC.system.runInterval((ev)=>{
-    if(MC.world.getPlayers()[0].location.x < 1200 && MC.world.getPlayers()[0].location.z < 1600) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x + 10,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z})
-    if(MC.world.getPlayers()[0].location.x > 1200 && MC.world.getPlayers()[0].location.z < 1600) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x ,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z + 10})
-    if(MC.world.getPlayers()[0].location.x > -1200 && MC.world.getPlayers()[0].location.z > 1600) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x - 10,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z})
-    if(MC.world.getPlayers()[0].location.x < -1200 && MC.world.getPlayers()[0].location.z > -1600) MC.world.getPlayers()[0].teleport({x: MC.world.getPlayers()[0].location.x,y: MC.world.getPlayers()[0].location.y,z: MC.world.getPlayers()[0].location.z - 10})
+    if(MC.world.getPlayers({tags:[`map`]}).length === 0) return
+    if(MC.world.getPlayers({tags:[`map`]})[0].location.x < 1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z < 1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x + 10,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z})
+    if(MC.world.getPlayers({tags:[`map`]})[0].location.x > 1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z < 1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x ,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z + 10})
+    if(MC.world.getPlayers({tags:[`map`]})[0].location.x > -1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z > 1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x - 10,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z})
+    if(MC.world.getPlayers({tags:[`map`]})[0].location.x < -1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z > -1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z - 10})
 },20)
