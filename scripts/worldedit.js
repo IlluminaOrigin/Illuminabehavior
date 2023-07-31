@@ -3,7 +3,10 @@ let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
 let featherBlock = new Map()
-const airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
+let airBlock
+world.afterEvents.playerJoin.subscribe((ev)=>{
+    airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
+})
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
     if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_axe`){
