@@ -4,11 +4,12 @@ let endVector = new Map()
 let degrees = new Map()
 let featherBlock = new Map()
 let airBlock
+airBlock = world.getDimension(`overworld`).getBlock({x:0 ,y:320,z: 0})
 let firstJoin = 0
 world.afterEvents.playerJoin.subscribe((ev)=>{
     if(firstJoin === 0){
         system.runTimeout((sy)=>{
-            airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
+            airBlock = world.getDimension(`overworld`).getBlock({x:0 ,y:320,z: 0})
         },20)
     }
 })
