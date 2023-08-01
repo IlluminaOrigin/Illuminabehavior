@@ -63,9 +63,24 @@ MC.system.runInterval((ev)=>{
     if(MC.world.getPlayers({tags:[`map`]})[0].location.x < -1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z > -1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z - 10})
 },20)
 
-const playerInventory = new Map()
-
 MC.world.afterEvents.entityDie.subscribe((ev)=>{
-    if(ev.deadEntity.typeId !== `minecraft:player` || !ev.deadEntity.hasTag(`keepInventory`)) return;
-    
+    if(ev.deadEntity.typeId !== `minecraft:player` || ev.deadEntity.hasTag(`keepInventory`)) return;
+    /** 
+    * @type { MC.Container } 
+    */
+    let playerContainer = ev.deadEntity.getComponent(`inventory`).container
+    for(let i = 0; i < 36;i++) {
+        if(typeof playerContainer.getItem(i) === 'undefined') continue;
+        MC.world.getDimension(`overworld`).spawnItem(playerContainer.getItem(i),ev.deadEntity.location)
+    }
+    /** 
+    * @type { MC.EntityEquipmentInventoryComponent } 
+    */
+    let playerEquipment = ev.deadEntity.getComponent(`equipmentInventory`)
+    const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
+    for(let i = 0; i < 4;i++) {
+        if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
+        MC.world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),ev.deadEntity.location)
+    }
+    ev.deadEntity.runCommandAsync(`clear @s`)
 })
