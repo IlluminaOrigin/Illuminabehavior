@@ -47,6 +47,9 @@ world.beforeEvents.itemUseOn.subscribe(async ev => {
       const { container } = /** @type {Inventory} */ (source.getComponent('minecraft:inventory'));
       container.addItem(stack);
     }
+    if(itemStack.typeId === "karo:master_key" && block.typeId === "minecraft:iron_door") {
+        world.sendMessage(`${block.getTags()}`)
+    }
 });
 world.afterEvents.itemStopUseOn.subscribe((ev)=>{
     ev.source.removeTag(`copy`)
