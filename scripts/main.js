@@ -62,3 +62,10 @@ MC.system.runInterval((ev)=>{
     if(MC.world.getPlayers({tags:[`map`]})[0].location.x > -1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z > 1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x - 10,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z})
     if(MC.world.getPlayers({tags:[`map`]})[0].location.x < -1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z > -1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z - 10})
 },20)
+
+const playerInventory = new Map()
+
+MC.world.afterEvents.entityDie.subscribe((ev)=>{
+    if(ev.deadEntity.typeId !== `minecraft:player` || !ev.deadEntity.hasTag(`keepInventory`)) return;
+    
+})
