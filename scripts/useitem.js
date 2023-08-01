@@ -2,6 +2,16 @@ import { Entity, world ,ItemStack, BlockWaterContainerComponent} from "@minecraf
 import { Name } from "functions.js";
 import * as UI from "@minecraft/server-ui"
 
+world.afterEvents.itemUseOn.subscribe((ev)=>{
+  const {source , block , itemStack} = ev;
+  if(itemStack.typeId === "karo:master_key" && block.typeId === "minecraft:iron_door" && block.location.y === source.location.y) {
+    if(block.permutation.getState(`direction`) === 0) { source.teleport({ x: block.location.x + 3.5, y: block.location.y , z: block.location.z + 0.5})}
+    if(block.permutation.getState(`direction`) === 1) { source.teleport({ x: block.location.x +0.5, y: block.location.y , z: block.location.z + 3.5})}
+    if(block.permutation.getState(`direction`) === 2) { source.teleport({ x: block.location.x - 2.5, y: block.location.y , z: block.location.z + 0.5})}
+    if(block.permutation.getState(`direction`) === 3) { source.teleport({ x: block.location.x + 0.5, y: block.location.y , z: block.location.z - 2.5}) }
+  }
+})
+
 world.afterEvents.itemUse.subscribe((ev)=>{
     switch(ev.itemStack.typeId){
         case "karo:guildinvite":{
