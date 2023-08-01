@@ -1,5 +1,5 @@
 import {  world , system } from "@minecraft/server";
-import {rename , ItemLock , Lore,Name} from "functions.js"
+import {rename , ItemLock , Lore, Name , ChatRename} from "functions.js"
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
@@ -47,11 +47,11 @@ world.beforeEvents.chatSend.subscribe((ev) => {
                 break;
             }
             if(sender.hasTag(`killer`)){
-                world.sendMessage(`§c${rename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
+                world.sendMessage(`§c${ChatRename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
                 break;
             } 
             if(!sender.hasTag(`killer`)){
-                world.sendMessage(`§a${rename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
+                world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
                 break;
             } 
 
