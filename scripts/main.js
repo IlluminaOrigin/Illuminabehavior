@@ -6,7 +6,6 @@ import "spawn.js"
 import "useitem.js"
 import "worldedit.js"
 
-MC.world.getDimension(`overworld`).fillBlocks(MC.world.getPlayers()[0].location,MC.world.getPlayers()[0].location,MC.MinecraftBlockTypes.glowingobsidian)
 
 /*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
@@ -87,4 +86,8 @@ MC.system.runInterval((ev)=>{
     }
     ev.deadEntity.runCommandAsync(`clear @s`)
 })
+*/
+
+/* 特殊ブロック
+MC.world.getDimension(`overworld`).fillBlocks(MC.world.getPlayers()[0].location,MC.world.getPlayers()[0].location,MC.MinecraftBlockTypes.glowingobsidian)
 */
