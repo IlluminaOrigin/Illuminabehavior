@@ -73,7 +73,7 @@ MC.world.sendMessage(`${dates.getMonth()}月${dates.getDate()}日(${dayname[date
     */
 /*    let playerEquipment = ev.deadEntity.getComponent("equipment_inventory")
     const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
-    for(let i = 0; i < 4;i++) {
+    for(let i = 0; i < 5;i++) {
         if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
         MC.world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),ev.deadEntity.location)
     }
