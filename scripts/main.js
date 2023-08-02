@@ -6,6 +6,8 @@ import "spawn.js"
 import "useitem.js"
 import "worldedit.js"
 
+MC.world.getDimension(`overworld`).fillBlocks(MC.world.getPlayers()[0].location,MC.world.getPlayers()[0].location,MC.MinecraftBlockTypes.glowingobsidian)
+
 /*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
     const { id, entity } = ev;
@@ -63,12 +65,13 @@ MC.system.runInterval((ev)=>{
     if(MC.world.getPlayers({tags:[`map`]})[0].location.x < -1200 && MC.world.getPlayers({tags:[`map`]})[0].location.z > -1600) MC.world.getPlayers({tags:[`map`]})[0].teleport({x: MC.world.getPlayers({tags:[`map`]})[0].location.x,y: MC.world.getPlayers({tags:[`map`]})[0].location.y,z: MC.world.getPlayers({tags:[`map`]})[0].location.z - 10})
 },20)
 
-MC.world.afterEvents.entityDie.subscribe((ev)=>{
+/*
+    MC.world.afterEvents.entityDie.subscribe((ev)=>{
     if(ev.deadEntity.typeId !== `minecraft:player` || ev.deadEntity.hasTag(`keepInventory`)) return;
     /** 
     * @type { MC.Container } 
     */
-    let playerContainer = ev.deadEntity.getComponent(`inventory`).container
+/*/*    let playerContainer = ev.deadEntity.getComponent(`inventory`).container
     for(let i = 0; i < 36;i++) {
         if(typeof playerContainer.getItem(i) === 'undefined') continue;
         MC.world.getDimension(`overworld`).spawnItem(playerContainer.getItem(i),ev.deadEntity.location)
@@ -76,7 +79,7 @@ MC.world.afterEvents.entityDie.subscribe((ev)=>{
     /** 
     * @type { MC.EntityEquipmentInventoryComponent } 
     */
-    let playerEquipment = ev.deadEntity.getComponent(`equipmentInventory`)
+/*    let playerEquipment = ev.deadEntity.getComponent("equipment_inventory")
     const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
     for(let i = 0; i < 4;i++) {
         if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
@@ -84,3 +87,4 @@ MC.world.afterEvents.entityDie.subscribe((ev)=>{
     }
     ev.deadEntity.runCommandAsync(`clear @s`)
 })
+*/
