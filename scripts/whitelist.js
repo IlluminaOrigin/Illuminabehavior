@@ -1,7 +1,7 @@
 import * as MC from "@minecraft/server"
 import { ChatRename } from "functions.js"
 
-const whiteListPlayers = [`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`]
+const whiteListPlayers = [`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`]
 const PlayerNames = new Map()
 
 for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
