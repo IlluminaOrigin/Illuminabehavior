@@ -12,14 +12,16 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
     const { playerName } = ev;
     MC.world.sendMessage(`名前:${playerName}`)
     MC.system.runTimeout(()=>{
-        MC.world.sendMessage(`名前:${playerName}\nMCID:${MC.world.getPlayers({name: playerName})[0].name}\nネームタグ:${MC.world.getPlayers({name: playerName})[0].nameTag}`)
-        if(!MC.world.getPlayers({name: playerName})[0].name.includes(whiteListPlayers)) MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです`)
-        //MC.world.getPlayers({name: playerName})[0].runCommandAsync(`kick "${MC.world.getPlayers({name: playerName})[0].name}"`)
+        if(!whiteListPlayers.includes(MC.world.getPlayers({name: playerName})[0].name)){
+            MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです`)
+            MC.world.getPlayers({name: playerName})[0].runCommandAsync(`kick "${MC.world.getPlayers({name: playerName})[0].name}" "§cあなたはホワイトリストに入っていません`)
+        } 
+        
         if(MC.world.getPlayers({name: playerName})[0].hasTag(`hatu`)) {
             PlayerNames.set(playerName , `${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
             MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eが世界に来た`)
         }
-    },100)
+    },150)
 })
 
 MC.world.afterEvents.playerLeave.subscribe((ev)=>{
