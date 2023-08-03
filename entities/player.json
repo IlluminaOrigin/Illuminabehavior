@@ -168,7 +168,17 @@
               ]
             },
             "event": "minecraft:trigger_raid"
-          }
+          },
+          {
+            "filters": {
+              "test": "on_hurt_by_player",
+              "subject": "self",
+              "domain": "armor",
+              "operator": "equals",
+              "value": "iron_chestplate"
+            },
+            "event": "open"
+            }
         ]
       }
     },
