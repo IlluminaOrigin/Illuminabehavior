@@ -174,8 +174,12 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
     const { damagingEntity: player , hitEntity: entity } = entityHit;
     const { damagingEntity: attacker , hitEntity: sufferer } = entityHit;
 
-
-    if(player.typeId !== `minecraft:player` || entity.typeId === `minecraft:ender_crystal`) return;
+    try {
+        const test = entity.typeId
+    } catch (error) {
+        return
+    }
+    if(player.typeId !== `minecraft:player`) return;
     if (entity) {
         if(sufferer.hasTag(`safety`)) {
             attacker.onScreenDisplay.setActionBar(`§c攻撃禁止エリア`)
