@@ -7,10 +7,6 @@ import "useitem.js"
 import "worldedit.js"
 import "whitelist.js"
 
-MC.world.afterEvents.dataDrivenEntityTriggerEvent.subscribe((ev)=>{
-    if(ev.id === "open") MC.world.sendMessage(`aa`)
-})
-
 /*MC.world.beforeEvents.itemUseOn.subscribe((ev)=>{
     ev.cancel = true
 })*/
