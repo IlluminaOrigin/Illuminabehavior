@@ -177,8 +177,13 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
 
     if(player.typeId !== `minecraft:player`) return;
     if (entity) {
-        if((getScore(`party`,attacker) === getScore(`party`,attacker) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`))|| (getScore(`playerguild`,sufferer) === getScore(`playerguild`,sufferer) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`))) {
-            attacker.onScreenDisplay.setActionBar(`§c仲間には攻撃できません`)
+        if(getScore(`party`,attacker) === getScore(`party`,attacker) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`)) {
+            attacker.onScreenDisplay.setActionBar(`§cパーティメンバーには攻撃できません`)
+            return;
+        }
+        if(getScore(`playerguild`,sufferer) === getScore(`playerguild`,sufferer) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`)) {
+            attacker.onScreenDisplay.setActionBar(`§cギルドメンバーには攻撃できません`)
+            return;
         }
 
         //コンボ
@@ -195,7 +200,7 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         
         //ダメージとノックバック
         sufferer.applyDamage(1,{cause: `entityAttack`,damagingEntity: sufferer})
-        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,1,1)
+        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,0.3,0.3)
 
         if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
         let suffererHealth = getScore(`hp`, sufferer);
