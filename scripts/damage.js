@@ -70,7 +70,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
     for(let i = 0; i < 5;i++) {
         if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
-        MC.world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),sufferer.location)
+        world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),sufferer.location)
     }
 
     //プレイヤーがプレイヤー以外に攻撃
@@ -197,6 +197,7 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         if (Date.now() - Math.max(...player.combos) > 5000 / player.combos.length) player.combos = [];
         player.combos.push(Date.now());
 
+        if(sufferer.typeId !== "minecraft:player") return;
         //PvPシステム
 
         //ダメージとノックバック
@@ -251,10 +252,8 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         let zokusei = 1
         //属性効果演算を書く
 
-
         let hurtValue = Damage(attackPower.value + attackerAttackPower, weaponInfo.命中率 + hitRate,attackerLevel,suffererLevel,defensePower + suffererDefensePower,suffererAvoidance + weaponInfo.強化レベル,zokusei)
         //エンチャントとかの処理
-
 
         sufferer.dimension.spawnEntity("karo:damage", {x: sufferer.location.x+(Math.random() * (1.1 - -1.1) + -1.1), y: sufferer.location.y+(Math.random() * (1.1 - -1.1) + -1.1), z: sufferer.location.z+(Math.random() * (1.1 - -1.1) + -1.1)}).nameTag = `§a${hurtValue}`;
         suffererHealth -= hurtValue;

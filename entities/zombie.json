@@ -1,5 +1,5 @@
 {
-  "format_version": "1.20.10",
+  "format_version": "1.16.0",
   "minecraft:entity": {
     "description": {
       "identifier": "minecraft:zombie",
@@ -400,12 +400,12 @@
 									{
 										"test": "has_tag",
 										"subject": "self",
-										"value": "safe"
+										"value": "hatu"
 									},
 									{
 										"test": "has_tag",
 										"subject": "other",
-										"value": "safe"
+										"value": "hatu"
 									}
 								]
 							}
