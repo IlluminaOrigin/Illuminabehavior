@@ -178,7 +178,26 @@
               "value": "iron_chestplate"
             },
             "event": "open"
-            }
+          },
+          {
+						"on_damage": {
+							"filters": {
+								"all_of": [
+									{
+										"test": "has_tag",
+										"subject": "self",
+										"value": "safe"
+									},
+									{
+										"test": "has_tag",
+										"subject": "other",
+										"value": "safe"
+									}
+								]
+							}
+						},
+						"deals_damage": false
+					}
         ]
       }
     },
