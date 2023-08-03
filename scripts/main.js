@@ -5,7 +5,7 @@ import "chat.js"
 import "spawn.js"
 import "useitem.js"
 import "worldedit.js"
-
+import "whitelist.js"
 
 /*
 world.beforeEvents.dataDrivenEntityTriggerEvent.subscribe(ev=>{
