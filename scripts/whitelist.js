@@ -27,4 +27,3 @@ MC.world.afterEvents.playerLeave.subscribe((ev)=>{
     if(!PlayerNames.get(ev.playerName)) return;
     MC.world.sendMessage(`${ChatRename(PlayerNames.get(ev.playerName))} §r§eがログアウト`)
 })
-
