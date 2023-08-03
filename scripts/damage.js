@@ -33,14 +33,6 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
         }
     }
     if(!attacker || !sufferer) return;
-
-    //フレンドリファイア防止
-    attacker.addTag(`red`)
-    sufferer.addTag(`red`)
-    system.runTimeout(()=>{
-        attacker.removeTag(`red`)
-        sufferer.addTag(`red`)
-    },1)
     
     if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
     let attackerName = Name(attacker.nameTag)
@@ -70,7 +62,6 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
     for(let i = 0; i < 5;i++) {
         if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
-        world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),sufferer.location)
     }
 
     //プレイヤーがプレイヤー以外に攻撃
@@ -186,7 +177,9 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
 
     if(player.typeId !== `minecraft:player`) return;
     if (entity) {
-        if((getScore(`party`,attacker) === getScore(`party`,attacker) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`))|| (getScore(`playerguild`,sufferer) === getScore(`playerguild`,sufferer) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`)))
+        if((getScore(`party`,attacker) === getScore(`party`,attacker) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`))|| (getScore(`playerguild`,sufferer) === getScore(`playerguild`,sufferer) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`))) {
+            attacker.onScreenDisplay.setActionBar(`§c仲間には攻撃できません`)
+        }
 
         //コンボ
         if (!player.clicks) player.clicks = [];
@@ -196,18 +189,19 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         if (!player.combos) player.combos = [];
         if (Date.now() - Math.max(...player.combos) > 5000 / player.combos.length) player.combos = [];
         player.combos.push(Date.now());
-
+        player.onScreenDisplay.setActionBar(`CPS: ${player.clicks.length}\nCombos: ${player.combos.length}`)
         if(sufferer.typeId !== "minecraft:player") return;
         //PvPシステム
-
+        
         //ダメージとノックバック
         sufferer.applyDamage(1,{cause: `entityAttack`,damagingEntity: sufferer})
         sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,1,1)
 
-        if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) {
-            attacker.onScreenDisplay.setActionBar(`§c仲間には攻撃できません`)
-            return
-        }
+        if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
+        let suffererHealth = getScore(`hp`, sufferer);
+        let suffererDefensePower = getScore(`def`,sufferer)
+        let suffererMagicDefensePower = getScore(`mdef`,sufferer)
+        let suffererName = Name(sufferer.nameTag)
         let attackerName = Name(attacker.nameTag)
         let suffererLevel = getScore(`lv`,sufferer);
         let attackerLevel = getScore(`lv`,attacker);
@@ -227,7 +221,6 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         let equipments = [head , chest , legs , feet ]
         let defensePower = 0
 
-        player.onScreenDisplay.setActionBar(`CPS: ${player.clicks.length}\nCombos: ${player.combos.length}`)
         //武器の取得
         /** 
          * @type { Container } 
