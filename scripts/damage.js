@@ -54,6 +54,17 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let equipments = [head , chest , legs , feet ]
     let defensePower = 0
 
+    //防具処理
+    /** 
+    * @type { MC.EntityEquipmentInventoryComponent } 
+    */
+    let playerEquipment = ev.deadEntity.getComponent(`equipment_inventory`)
+    const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
+    for(let i = 0; i < 5;i++) {
+        if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
+        MC.world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),ev.deadEntity.location)
+    }
+
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
 
