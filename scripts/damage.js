@@ -177,6 +177,10 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
 
     if(player.typeId !== `minecraft:player`) return;
     if (entity) {
+        if(sufferer.hasTag(`safety`)) {
+            attacker.onScreenDisplay.setActionBar(`§c攻撃禁止エリア`)
+            return;
+        }
         if(getScore(`party`,attacker) === getScore(`party`,sufferer) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`) && getScore(`party`,attacker) !== 0) {
             attacker.onScreenDisplay.setActionBar(`§cパーティメンバーには攻撃できません`)
             return;
@@ -185,7 +189,7 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
             attacker.onScreenDisplay.setActionBar(`§cギルドメンバーには攻撃できません`)
             return;
         }
-
+        if(sufferer.hasTag(`muteki`)) return;
         //コンボ
         if (!player.clicks) player.clicks = [];
         player.clicks.push(Date.now());
@@ -200,9 +204,11 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         
         //ダメージとノックバック
         sufferer.applyDamage(1,{cause: `anvil`})
-        world.sendMessage(`X:${attacker.getViewDirection().x} Y:${attacker.getViewDirection().y}`)
-        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,0.8,0.3)
-
+        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,0.95,0.4)
+        sufferer.addTag(`muteki`)
+        system.runTimeout(()=>{
+            sufferer.removeTag(`muteki`)
+        },10)
         if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
         let suffererHealth = getScore(`hp`, sufferer);
         let suffererDefensePower = getScore(`def`,sufferer)
@@ -258,11 +264,11 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         suffererHealth -= hurtValue;
         setScore(`hp`,sufferer,suffererHealth);
         if(suffererHealth <= 0){
-            const pn = sufferer.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
-            const tn = attacker.getTags().find(x => x.match("name_")).split(/(?<=^[^_]+?)_/)
+            const pn = sufferer.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
+            const tn = attacker.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
             if(sufferer.hasTag(`toku`)) pn[1] = "情報非公開のプレイヤー"
             if(attacker.hasTag(`toku`)) tn[1] = "情報非公開のプレイヤー"
-            const de = overworld.spawnEntity("karo:tamasii", new Vector({x: sufferer.location.x, y: sufferer.location.y + 1, z: sufferer.location.z}))
+            const de = overworld.spawnEntity("karo:tamasii", {x: sufferer.location.x, y: sufferer.location.y + 1, z: sufferer.location.z})
             de.nameTag = `${suffererName}`
             sufferer.runCommandAsync(`gamemode spectator @s`)
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
