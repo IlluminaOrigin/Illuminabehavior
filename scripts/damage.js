@@ -15,7 +15,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let suffererDefensePower = getScore(`def`,sufferer)
     let suffererMagicDefensePower = getScore(`mdef`,sufferer)
     let suffererName = Name(sufferer.nameTag)
-    if(!attacker) {
+    if(!attacker && cause !== `anvil`) {
         suffererHealth -= damage*10
         setScore(`hp`,sufferer,suffererHealth)
         if(sufferer?.typeId === "minecraft:player" && suffererHealth <= 0){
@@ -177,11 +177,11 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
 
     if(player.typeId !== `minecraft:player`) return;
     if (entity) {
-        if(getScore(`party`,attacker) === getScore(`party`,attacker) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`)) {
+        if(getScore(`party`,attacker) === getScore(`party`,sufferer) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`) && getScore(`party`,attacker) !== 0) {
             attacker.onScreenDisplay.setActionBar(`§cパーティメンバーには攻撃できません`)
             return;
         }
-        if(getScore(`playerguild`,sufferer) === getScore(`playerguild`,sufferer) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`)) {
+        if(getScore(`playerguild`,attacker) === getScore(`playerguild`,sufferer) && !attacker.hasTag(`duel`) && !sufferer.hasTag(`duel`) && getScore(`playerguild`,attacker) !== 0) {
             attacker.onScreenDisplay.setActionBar(`§cギルドメンバーには攻撃できません`)
             return;
         }
@@ -199,8 +199,9 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         //PvPシステム
         
         //ダメージとノックバック
-        sufferer.applyDamage(1,{cause: `entityAttack`,damagingEntity: sufferer})
-        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,0.3,0.3)
+        sufferer.applyDamage(1,{cause: `anvil`})
+        world.sendMessage(`X:${attacker.getViewDirection().x} Y:${attacker.getViewDirection().y}`)
+        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,0.8,0.3)
 
         if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
         let suffererHealth = getScore(`hp`, sufferer);
