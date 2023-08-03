@@ -1,5 +1,5 @@
 {
-  "format_version": "1.18.20",
+  "format_version": "1.16.0",
   "minecraft:entity": {
     "description": {
       "identifier": "minecraft:player",
@@ -170,28 +170,18 @@
             "event": "minecraft:trigger_raid"
           },
           {
-            "filters": {
-              "test": "on_hurt_by_player",
-              "subject": "self",
-              "domain": "armor",
-              "operator": "equals",
-              "value": "iron_chestplate"
-            },
-            "event": "open"
-          },
-          {
 						"on_damage": {
 							"filters": {
 								"all_of": [
 									{
 										"test": "has_tag",
 										"subject": "self",
-										"value": "safe"
+										"value": "hatu"
 									},
 									{
 										"test": "has_tag",
 										"subject": "other",
-										"value": "safe"
+										"value": "hatu"
 									}
 								]
 							}

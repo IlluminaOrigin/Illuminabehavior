@@ -1,4 +1,4 @@
-import { system, world, ItemStack, Vector, Container, ItemTypes,EquipmentSlot, MinecraftItemTypes, BlockType, MinecraftBlockTypes, BlockPermutation, MinecraftEntityTypes, EntityEquipmentInventoryComponent } from "@minecraft/server";
+import { system, world, Vector, Container,EquipmentSlot, EntityEquipmentInventoryComponent } from "@minecraft/server";
 import { getScore,setScore } from "getscore.js";
 import { Damage,Name } from "functions.js";
 const overworld = world.getDimension('overworld')
@@ -7,7 +7,7 @@ const zokuseiNumber = {1:[2,7,"炎"],2:[3,1,"木"],3:[4,2,"雷"],4:[5,3,"水"],5
 const zokuseiType = {"§c炎":[2,1,"炎"],"§a木":[3,2,"木"],"§e雷":[4,3,"雷"],"§b水":[5,4,"水"],"§g土":[6,5,"土"],"§1闇":[7,6,"闇"],"§7無":[1,7,"無"]}
 
 //ダメージをエンティティが受けた時に発火
-world.afterEvents.entityHurt.subscribe(entityHurt => { 
+world.afterEvents.entityHurt.subscribe(entityHurt => {
     //攻撃者、被ダメ者、ダメージ値、原因を取得
     let { damageSource, hurtEntity: sufferer, damage } = entityHurt;
     let { damagingEntity: attacker ,cause} = damageSource;
@@ -32,8 +32,16 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             sufferer.runCommandAsync(`kill @s`)
         }
     }
-
     if(!attacker || !sufferer) return;
+
+    //フレンドリファイア防止
+    attacker.addTag(`red`)
+    sufferer.addTag(`red`)
+    system.runTimeout(()=>{
+        attacker.removeTag(`red`)
+        sufferer.addTag(`red`)
+    },1)
+    
     if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) return
     let attackerName = Name(attacker.nameTag)
     let suffererLevel = getScore(`lv`,sufferer);
@@ -58,11 +66,11 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     /** 
     * @type { MC.EntityEquipmentInventoryComponent } 
     */
-    let playerEquipment = ev.deadEntity.getComponent(`equipment_inventory`)
+    let playerEquipment = sufferer.getComponent(`equipment_inventory`)
     const slotNames = ["chest" , "head" , "feet" , "legs" , "offhand"]
     for(let i = 0; i < 5;i++) {
         if(typeof playerEquipment.getEquipment(slotNames[i]) === 'undefined') continue;
-        MC.world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),ev.deadEntity.location)
+        MC.world.getDimension(`overworld`).spawnItem(playerEquipment.getEquipment(slotNames[i]),sufferer.location)
     }
 
     //プレイヤーがプレイヤー以外に攻撃
@@ -143,7 +151,82 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             sufferer.addTag(`death`)
             sufferer.runCommandAsync(`gamemode spectator @s`)
         }
-    } else if (attacker?.typeId == "minecraft:player" && sufferer?.typeId == "minecraft:player") {
+    }
+})
+
+
+/*const coordinates = new Map();
+world.afterEvents.blockBreak.subscribe(ev => {
+    const { brokenBlockPermutation: block , player } = ev;
+    
+    /** @type { Container} */ /*
+    const container = player.getComponent("inventory").container;
+    const item = container.getItem(player.selectedSlot) || null;
+    if (item && item.typeId === "minecraft:shears") {
+
+        if (!coordinates.has(player.name)) {
+            coordinates.set(player.name, block.location);
+
+            player.sendMessage(`始点座標を ${Object.values(block.location).join(" ")} に設定しました。`);
+
+        } else if (coordinates.has(player.name)) {
+            player.dimension.fillBlocks(block.location, coordinates.get(player.name), MinecraftBlockTypes.unknown,{matchingBlock: BlockPermutation.resolve(MinecraftBlockTypes.air.id)});
+            player.dimension.fillBlocks({ x: block.location.x, y: block.location.y -1, z: block.location.z }, { x: coordinates.get(player.name).x, y: coordinates.get(player.name).y - 1, z: coordinates.get(player.name).z }, MinecraftBlockTypes.stone,{matchingBlock: BlockPermutation.resolve(MinecraftBlockTypes.air.id)});
+            coordinates.delete(player.name);
+        }
+    }
+})
+*/
+
+
+world.afterEvents.entityHitEntity.subscribe(entityHit => {
+    const { damagingEntity: player , hitEntity: entity } = entityHit;
+    const { damagingEntity: attacker , hitEntity: sufferer } = entityHit;
+
+
+    if(player.typeId !== `minecraft:player`) return;
+    if (entity) {
+        if((getScore(`party`,attacker) === getScore(`party`,attacker) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`))|| (getScore(`playerguild`,sufferer) === getScore(`playerguild`,sufferer) && attacker.hasTag(`duel`) && sufferer.hasTag(`duel`)))
+
+        //コンボ
+        if (!player.clicks) player.clicks = [];
+        player.clicks.push(Date.now());
+        player.clicks = player.clicks.filter(v => Date.now() - v <= 1000);
+
+        if (!player.combos) player.combos = [];
+        if (Date.now() - Math.max(...player.combos) > 5000 / player.combos.length) player.combos = [];
+        player.combos.push(Date.now());
+
+        //PvPシステム
+
+        //ダメージとノックバック
+        sufferer.applyDamage(1,{cause: `entityAttack`,damagingEntity: sufferer})
+        sufferer.applyKnockback(attacker.getViewDirection().x,attacker.getViewDirection().z,1,1)
+
+        if(attacker.typeId === `minecraft:player` && (!attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot) || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1] || !attacker.getComponent(`inventory`).container.getItem(attacker.selectedSlot).getLore()[1].split(`:`)[1].startsWith(`武器`))) {
+            attacker.onScreenDisplay.setActionBar(`§c仲間には攻撃できません`)
+            return
+        }
+        let attackerName = Name(attacker.nameTag)
+        let suffererLevel = getScore(`lv`,sufferer);
+        let attackerLevel = getScore(`lv`,attacker);
+        let attackerHealth = getScore(`hp`, attacker);
+        let attackerAttackPower = getScore(`atk`,attacker)
+        let attackerMagicAttackPower = getScore(`matk`,attacker)
+        let hitRate = getScore(`hit`,attacker)
+        let suffererAvoidance = getScore(`agi`,sufferer)
+        let attackerZokuseiType = getScore(`zokusei`,attacker)
+        let suffererZokuseiType = getScore(`zokusei`,sufferer)
+        let head = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.head)
+        let chest = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.chest)
+        let legs = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.legs)
+        let feet = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.feet)
+        let suffererOffhand = sufferer.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
+        let attackerOffhand = attacker.getComponent(EntityEquipmentInventoryComponent.componentId).getEquipment(EquipmentSlot.offhand)
+        let equipments = [head , chest , legs , feet ]
+        let defensePower = 0
+
+        player.onScreenDisplay.setActionBar(`CPS: ${player.clicks.length}\nCombos: ${player.combos.length}`)
         //武器の取得
         /** 
          * @type { Container } 
@@ -164,6 +247,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
             container.setItem(attacker.selectedSlot, item);
             if (weaponDurability.value < 1) container.clearItem(attacker.selectedSlot);
         });
+
         let zokusei = 1
         //属性効果演算を書く
 
@@ -199,47 +283,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
                 setScore(`money`,attacker,money + (kill * 20))
             }
         }
-    } 
-})
 
-
-/*const coordinates = new Map();
-world.afterEvents.blockBreak.subscribe(ev => {
-    const { brokenBlockPermutation: block , player } = ev;
-    
-    /** @type { Container} */ /*
-    const container = player.getComponent("inventory").container;
-    const item = container.getItem(player.selectedSlot) || null;
-    if (item && item.typeId === "minecraft:shears") {
-
-        if (!coordinates.has(player.name)) {
-            coordinates.set(player.name, block.location);
-
-            player.sendMessage(`始点座標を ${Object.values(block.location).join(" ")} に設定しました。`);
-
-        } else if (coordinates.has(player.name)) {
-            player.dimension.fillBlocks(block.location, coordinates.get(player.name), MinecraftBlockTypes.unknown,{matchingBlock: BlockPermutation.resolve(MinecraftBlockTypes.air.id)});
-            player.dimension.fillBlocks({ x: block.location.x, y: block.location.y -1, z: block.location.z }, { x: coordinates.get(player.name).x, y: coordinates.get(player.name).y - 1, z: coordinates.get(player.name).z }, MinecraftBlockTypes.stone,{matchingBlock: BlockPermutation.resolve(MinecraftBlockTypes.air.id)});
-            coordinates.delete(player.name);
-        }
-    }
-})
-*/
-
-
-world.afterEvents.entityHitEntity.subscribe(entityHit => {
-    const { damagingEntity: player , hitEntity: entity } = entityHit;
-    if(player.typeId !== `minecraft:player`) return;
-    if (entity) {
-        if (!player.clicks) player.clicks = [];
-        player.clicks.push(Date.now());
-        player.clicks = player.clicks.filter(v => Date.now() - v <= 1000);
-
-        if (!player.combos) player.combos = [];
-        if (Date.now() - Math.max(...player.combos) > 5000 / player.combos.length) player.combos = [];
-        player.combos.push(Date.now());
-
-        player.onScreenDisplay.setActionBar(`CPS: ${player.clicks.length}\nCombos: ${player.combos.length}`)
     }
 
 });
