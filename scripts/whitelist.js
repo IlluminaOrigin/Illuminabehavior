@@ -10,7 +10,6 @@ for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
 
 MC.world.afterEvents.playerJoin.subscribe((ev)=>{
     const { playerName } = ev;
-    MC.world.sendMessage(`名前:${playerName}`)
     MC.system.runTimeout(()=>{
         if(!whiteListPlayers.includes(MC.world.getPlayers({name: playerName})[0].name)){
             MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです`)
@@ -19,7 +18,7 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
         
         if(MC.world.getPlayers({name: playerName})[0].hasTag(`hatu`)) {
             PlayerNames.set(playerName , `${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
-            MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eが世界に来た`)
+            MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eがログイン`)
         }
     },150)
 })
