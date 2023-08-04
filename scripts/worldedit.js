@@ -14,6 +14,7 @@ world.afterEvents.playerJoin.subscribe((ev)=>{
         },20)
     }
 })
+
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
     if(ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot).typeId === `karo:we_axe`){
@@ -37,7 +38,6 @@ world.afterEvents.blockBreak.subscribe((ev)=>{
 
 world.beforeEvents.itemUseOn.subscribe(async ev => {
     const { itemStack, source, block } = ev;
-  
     if ( itemStack.typeId === "karo:we_shears" ) {
       ev.cancel = true;
       await null
