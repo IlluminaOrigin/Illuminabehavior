@@ -8,7 +8,7 @@ world.beforeEvents.chatSend.subscribe((ev) => {
     let zeroMessage = ""
     if(dates.getMinutes() < 10) zeroMessage = "0"
     ev.sendToTargets = true
-    if(message.startsWith(`\\\\`)) return;
+    if(message.startsWith(`\\\\`) || message.startsWith(`?`)) return;
     switch(true) {
         case message.startsWith(`!name`): world.sendMessage(`${sender.nameTag}`); break;
         case message.startsWith(`!lore`): {
