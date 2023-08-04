@@ -19,6 +19,14 @@ world.beforeEvents.chatSend.subscribe((ev) => {
             })
             break;
         }
+        case message.split[` `][0] = `!lore`: {
+            let item = sender.getComponent(`inventory`).container.getItem(sender.selectedSlot)
+            system.run(()=>{
+                Lore(item,"短剣",1,"E",1000,1,1,20,19,10,"§c炎")
+                sender.getComponent(`inventory`).container.setItem(sender.selectedSlot,item)
+            })
+            break;
+        }
         case message.startsWith(`!item`): {
             sender.sendMessage(`${JSON.stringify(sender.getTags())}`)
             sender.runCommandAsync(`title @s subtitle "[{\"text\":\"${sender.name.replace(/"/,/\"/)}\"},{\"tekitou\":\"zzz\"}]"`)

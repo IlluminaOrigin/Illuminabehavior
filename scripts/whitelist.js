@@ -1,10 +1,7 @@
 import * as MC from "@minecraft/server"
 import { ChatRename } from "functions.js"
 
-const banList = [
-    "",
-    ""
-]
+const banList = []
 
 const whiteListPlayers = [`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
 const PlayerNames = new Map()
