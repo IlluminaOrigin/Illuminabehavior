@@ -48,10 +48,10 @@ world.beforeEvents.itemUseOn.subscribe(async ev => {
       container.addItem(stack);
     }
 });
+
 world.afterEvents.itemStopUseOn.subscribe((ev)=>{
     ev.source.removeTag(`copy`)
 })
-
 
 world.afterEvents.itemUse.subscribe((ev)=>{
     if(typeof ev.source.getBlockFromViewDirection() === 'undefined' || typeof ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot) === 'undefined') return;
@@ -76,6 +76,7 @@ world.afterEvents.itemUse.subscribe((ev)=>{
         world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},MinecraftBlockTypes.unknown,{matchingBlock: airBlock.permutation})
     }
 })
+
 world.afterEvents.chatSend.subscribe((ev)=>{
     if(ev.message.startsWith(`\\\\`)) {
         let minZahyo = []
