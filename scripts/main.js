@@ -103,3 +103,16 @@ MC.world.beforeEvents.explosion.subscribe((ev)=>{
     if(worldGuard < 1) return
     ev.cancel = true
 })
+
+
+MC.world.beforeEvents.chatSend.subscribe((ev) => {
+    if(!ev.message.startsWith(`?`)) return
+    switch(ev.message.split(` `)[0]) {
+        case `?wg` : {
+            const lv = Number(ev.message.split(` `)[1])
+            worldGuard = lv
+            ev.sender.sendMessage(`§l§aワールドセキュリティレベル ${lv} に設定`)
+            MC.world.sendMessage(`§aワールドセキュリティレベルが${lv}に変更されました`)
+        }
+    }
+})
