@@ -19,7 +19,7 @@ world.beforeEvents.chatSend.subscribe((ev) => {
             })
             break;
         }
-        case message.split[` `][0] = `!lore`: {
+        case message.split(` `)[0] = `!lore`: {
             let item = sender.getComponent(`inventory`).container.getItem(sender.selectedSlot)
             system.run(()=>{
                 Lore(item,"短剣",1,"E",1000,1,1,20,19,10,"§c炎")

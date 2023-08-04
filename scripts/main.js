@@ -87,16 +87,19 @@ MC.world.sendMessage(`${dates.getMonth()}月${dates.getDate()}日(${dayname[date
 /* 特殊ブロック
 MC.world.getDimension(`overworld`).fillBlocks(MC.world.getPlayers()[0].location,MC.world.getPlayers()[0].location,MC.MinecraftBlockTypes.glowingobsidian)
 */
+let worldGuard = 0
 
-/*
 MC.world.afterEvents.blockBreak.subscribe((ev)=>{
+    if(worldGuard < 2) return
     ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
 })
 
 MC.world.afterEvents.blockPlace.subscribe((ev)=>{
+    if(worldGuard < 2) return
     ev.dimension.fillBlocks(ev.block.location,ev.block.location,MC.MinecraftBlockTypes.air)
-})*/
+})
 
 MC.world.beforeEvents.explosion.subscribe((ev)=>{
+    if(worldGuard < 1) return
     ev.cancel = true
 })
