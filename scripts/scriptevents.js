@@ -186,4 +186,4 @@ system.runInterval(()=>{
         world.scoreboard.getObjective(`nowX`).setScore(p,Math.ceil(p.location.x / 10))
         world.scoreboard.getObjective(`nowZ`).setScore(p,Math.ceil(p.location.z / 10))
     }
-},10)
+},100)
