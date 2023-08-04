@@ -100,7 +100,7 @@ MC.world.afterEvents.blockPlace.subscribe((ev)=>{
 })
 
 MC.world.beforeEvents.explosion.subscribe((ev)=>{
-    if(worldGuard < 1) return
+    if(worldGuard < 0) return
     ev.cancel = true
 })
 
