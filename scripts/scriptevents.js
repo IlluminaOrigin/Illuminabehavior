@@ -183,9 +183,8 @@ system.runInterval((ev)=>{
 
 system.runInterval(()=>{
     for(const p of world.getPlayers({tags:[`hatu`]})) {
-        
-            world.scoreboard.getObjective(`nowX`).setScore(p , Math.ceil((p.location.x + 64) * 0.31800391389))
-            world.scoreboard.getObjective(`nowZ`).setScore(p , Math.ceil((p.location.z + 64) * 0.31800391389))
+        world.scoreboard.getObjective(`nowX`).setScore(p , Math.ceil((p.location.x + 64) * 0.31800391389))
+        world.scoreboard.getObjective(`nowZ`).setScore(p , Math.ceil((p.location.z + 64) * 0.31800391389))
     }
     let playersName = []
     for(let i = 0;i < world.getPlayers({tags:[`hatu`]}).length;i++){
@@ -193,3 +192,4 @@ system.runInterval(()=>{
     }
     world.getDimension(`overworld`).getPlayers()[0].runCommandAsync(`title @s subtitle "playersList ${playersName.toString()}"`)
 },100)
+
