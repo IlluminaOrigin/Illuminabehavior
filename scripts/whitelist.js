@@ -6,7 +6,7 @@ const banList = [
     ""
 ]
 
-const whiteListPlayers = [`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
+const whiteListPlayers = [`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
 const PlayerNames = new Map()
 
 for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
