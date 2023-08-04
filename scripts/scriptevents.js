@@ -192,4 +192,4 @@ system.runInterval(()=>{
         playersName[playersName.length] = world.getPlayers({tags:[`hatu`]})[i].name
     }
     world.getDimension(`overworld`).getPlayers()[0].runCommandAsync(`title @s subtitle "playersList ${playersName.toString()}"`)
-},10)
+},100)
