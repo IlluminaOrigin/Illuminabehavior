@@ -17,7 +17,7 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
     const { playerName } = ev;
     MC.system.runTimeout(()=>{
         if(!whiteListPlayers.includes(MC.world.getPlayers({name: playerName})[0].name)){
-            MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです`)
+            MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${MC.world.getPlayers({name: playerName})[0].nameTag}`)
             MC.world.getPlayers({name: playerName})[0].runCommandAsync(`kick "${MC.world.getPlayers({name: playerName})[0].name}" "§cあなたはホワイトリストに入っていません`)
         } 
         
