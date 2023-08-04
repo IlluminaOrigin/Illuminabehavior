@@ -190,5 +190,5 @@ system.runInterval(()=>{
     for(let i = 0;i < world.getPlayers({tags:[`hatu`]}).length;i++){
         playersName[playersName.length] = world.getPlayers({tags:[`hatu`]})[i].name
     }
-    world.getDimension(`overworld`).getPlayers()[0].runCommandAsync(`title @s subtitle "playersList ${playersName.toString()}"`)
+    world.getDimension(`overworld`).getPlayers()[0].runCommandAsync(`title @s subtitle playersList ${playersName.toString()}`)
 },100)
