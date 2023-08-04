@@ -192,4 +192,3 @@ system.runInterval(()=>{
     }
     world.getDimension(`overworld`).getPlayers()[0].runCommandAsync(`title @s subtitle "playersList ${playersName.toString()}"`)
 },100)
-
