@@ -11,7 +11,7 @@ world.afterEvents.playerJoin.subscribe((ev)=>{
     if(firstJoin === 0){
         system.runTimeout((sy)=>{
             airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320, z:world.getPlayers()[0].location.z})
-        },20)
+        },200)
     }
 })
 

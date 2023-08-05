@@ -183,8 +183,8 @@ system.runInterval((ev)=>{
 
 system.runInterval(()=>{
     for(const p of world.getPlayers({tags:[`hatu`] , excludeTags:[`noNow`]})) {
-        world.scoreboard.getObjective(`nowX`).setScore(p , Math.ceil((p.location.x + 64) * 0.31800391389))
-        world.scoreboard.getObjective(`nowZ`).setScore(p , Math.ceil((p.location.z + 64) * 0.31800391389))
+        if(p.is)  world.scoreboard.getObjective(`nowX`).setScore(p , Math.ceil((p.location.x + 64) * 0.31800391389))
+          world.scoreboard.getObjective(`nowZ`).setScore(p , Math.ceil((p.location.z + 64) * 0.31800391389))
     }
     let playersName = []
     for(let i = 0;i < world.getPlayers({tags:[`hatu`],excludeTags:[`noNow`]}).length;i++){
