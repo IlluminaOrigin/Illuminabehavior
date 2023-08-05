@@ -21,6 +21,7 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
         if(MC.world.getPlayers({name: playerName})[0].hasTag(`hatu`)) {
             PlayerNames.set(playerName , `${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
             MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eがログイン`)
+            MC.world.scoreboard.getObjective(`party`).setScore(MC.world.getPlayers({name: playerName})[0],0)
         }
     },150)
 })
