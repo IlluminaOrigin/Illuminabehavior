@@ -64,7 +64,7 @@
       "minecraft:can_climb": {
       },
       "minecraft:movement": {
-        "value": 0.4
+        "value": 0.1
       },
       "minecraft:hurt_on_condition": {
         "damage_conditions": [
