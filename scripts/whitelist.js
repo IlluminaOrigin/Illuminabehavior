@@ -35,7 +35,7 @@ MC.world.afterEvents.playerLeave.subscribe((ev)=>{
 
 function name(playersNameArray){
     let p4 = []
-    let p = playersNameArray[0].split(/\n/)
+    let p = playersNameArray.split(/\n/)
     for(let i = 0;i < p.length - 1;i++){
       if(i > 0) p4 += `\n`
       let p2 = p[i].split(`§`)
@@ -44,7 +44,7 @@ function name(playersNameArray){
         p4 += p3
       }
     }
-    if(p4.length === 0) p4[0] = playersNameArray[0]
+    if(p4.length === 0) p4[0] = playersNameArray
     const p6 = p4.toString()
     return p6;
   } 
