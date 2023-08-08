@@ -310,7 +310,7 @@ export function GuildNameChange(source, newName) {
     if(guildNumber === null) return;
     const newGuildNumber = guilds[guildNumber].score
     source.sendMessage(`§aあなたのギルドの名前を§r ${guilds[guildNumber].participant.displayName} §r§aから§r ${newName} §r§aに変更しました。`)
-    source.runCommandAsync(`title @s subtitle "changeNameGuild ${guilds[guildNumber].participant.displayName} から ${newName}"`)
+    source.runCommandAsync(`title @s subtitle "changeNameGuild ギルド「**${guilds[guildNumber].participant.displayName}**」は、ギルド「**${newName}**」に名前が変わった"`)
     world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
     world.scoreboard.getObjective(`guildname`).setScore(`${newName}`,newGuildNumber)
 }
