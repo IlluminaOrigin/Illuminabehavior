@@ -234,6 +234,7 @@ export function GuildCreate(source, guildName) {
     }
     const GuildMaxNumber = Math.max(...guildsAmount)
     source.sendMessage(`§aギルド§r「 ${guildName} §r」§aを作成しました。`)
+    source.runCommandAsync(`title @s subtitle "createGuild ${guildName}"`)
     source.addTag(`guildOwner`)
     const guildAdminItem = new ItemStack(`karo:guildadmin`)
     /**
@@ -267,7 +268,7 @@ export function GuildDelete(source) {
         }
     }
     for(let i = 0;i < members.length;i++){
-        if(members[i].score === sourceGuild) world.scoreboard.getObjective(`playerguild`).removeParticipant(members[i].participant)
+        if(members[i].score === sourceGuild) world.scoreboard.getObjective(`playerguild`).setScore(members[i].participant,0)
     }
     source.runCommandAsync(`title @s subtitle "deleteGuild ${guilds[guildNumber].participant.displayName}"`)
     if(guildNumber === null) return;
@@ -309,6 +310,7 @@ export function GuildNameChange(source, newName) {
     if(guildNumber === null) return;
     const newGuildNumber = guilds[guildNumber].score
     source.sendMessage(`§aあなたのギルドの名前を§r ${guilds[guildNumber].participant.displayName} §r§aから§r ${newName} §r§aに変更しました。`)
+    source.runCommandAsync(`title @s subtitle "changeNameGuild ${guilds[guildNumber].participant.displayName} から ${newName}"`)
     world.scoreboard.getObjective(`guildname`).removeParticipant(guilds[guildNumber].participant.displayName)
     world.scoreboard.getObjective(`guildname`).setScore(`${newName}`,newGuildNumber)
 }
