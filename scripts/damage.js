@@ -287,7 +287,7 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
             const de = overworld.spawnEntity("karo:tamasii", {x: sufferer.location.x, y: sufferer.location.y + 1, z: sufferer.location.z})
             de.nameTag = `${suffererName}`
             sufferer.runCommandAsync(`gamemode spectator @s`)
-
+            sufferer.runCommandAsync(`title @s subtitle "playerdeath **${name(sufferer.nameTag)}** は **${name(attacker.nameTag)}** に倒された"`)
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
             sufferer.addTag(`death`)
             let j = getScore(`${weaponNumbers[weaponType.type][1]}`,attacker)

@@ -3,7 +3,7 @@ import { ChatRename } from "functions.js"
 
 const banList = []
 
-const whiteListPlayers = [`LitheGrain2489`,`IamMavericK777`,`neboko`,`RaRachan1117075`,`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
+const whiteListPlayers = [`Kitune6073`,`LitheGrain2489`,`IamMavericK777`,`neboko`,`RaRachan1117075`,`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
 const PlayerNames = new Map()
 
 for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
@@ -36,6 +36,7 @@ MC.world.afterEvents.playerLeave.subscribe((ev)=>{
 function name(playersNameArray){
     let p4 = []
     let p = playersNameArray.split(/\n/)
+    if(p.length > 2) p.shift()
     for(let i = 0;i < p.length - 1;i++){
       if(i > 0) p4 += `\n`
       let p2 = p[i].split(`§`)
