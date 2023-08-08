@@ -144,6 +144,7 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
                 new Vector(sufferer.location.x, sufferer.location.y + 1,sufferer.location.z)
               );
             de.nameTag = `${suffererName}`
+            sufferer.runCommandAsync(`title @s subtitle "playerdeath **${name(sufferer.nameTag)}** は **${name(attacker.nameTag)}** に倒された"`)
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
             sufferer.addTag(`death`)
             sufferer.runCommandAsync(`gamemode spectator @s`)
@@ -286,6 +287,7 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
             const de = overworld.spawnEntity("karo:tamasii", {x: sufferer.location.x, y: sufferer.location.y + 1, z: sufferer.location.z})
             de.nameTag = `${suffererName}`
             sufferer.runCommandAsync(`gamemode spectator @s`)
+
             world.sendMessage(`§4§lDeath§r\n${suffererName}§r§a§l は§r ${attackerName}§r§a§lに倒された`); 
             sufferer.addTag(`death`)
             let j = getScore(`${weaponNumbers[weaponType.type][1]}`,attacker)
@@ -306,3 +308,20 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
     }
 
 });
+
+function name(playersNameArray){
+    let p4 = []
+    let p = playersNameArray.split(/\n/)
+    if(p.length > 2) p.shift()  
+    for(let i = 0;i < p.length - 1;i++){
+      if(i > 0) p4 += `\n`
+      let p2 = p[i].split(`§`)
+      for(let i2 = 0;i2 < p2.length;i2++){
+        let p3 = p2[i2].substr(1,p2[i2].length)
+        p4 += p3
+      }
+    }
+    if(p4.length === 0) p4[0] = playersNameArray
+    const p6 = p4.toString()
+    return p6;
+  } 

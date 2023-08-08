@@ -8,6 +8,7 @@ const PlayerNames = new Map()
 
 for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
     PlayerNames.set(p.name , `${ChatRename(p.nameTag)}`)
+    p.runCommandAsync(`title @s subtitle join ${p.name}"${name(p.nameTag)}`)
 }
 
 MC.world.afterEvents.playerJoin.subscribe((ev)=>{
@@ -22,6 +23,7 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
             PlayerNames.set(playerName , `${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
             MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eがログイン`)
             MC.world.scoreboard.getObjective(`party`).setScore(MC.world.getPlayers({name: playerName})[0],0)
+            MC.world.getDimension(`overworld`).runCommandAsync(`title @p subtitle join ${playerName}"${name(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
         }
     },150)
 })
@@ -30,3 +32,19 @@ MC.world.afterEvents.playerLeave.subscribe((ev)=>{
     if(!PlayerNames.get(ev.playerName)) return;
     MC.world.sendMessage(`${ChatRename(PlayerNames.get(ev.playerName))} §r§eがログアウト`)
 })
+
+function name(playersNameArray){
+    let p4 = []
+    let p = playersNameArray[0].split(/\n/)
+    for(let i = 0;i < p.length - 1;i++){
+      if(i > 0) p4 += `\n`
+      let p2 = p[i].split(`§`)
+      for(let i2 = 0;i2 < p2.length;i2++){
+        let p3 = p2[i2].substr(1,p2[i2].length)
+        p4 += p3
+      }
+    }
+    if(p4.length === 0) p4[0] = playersNameArray[0]
+    const p6 = p4.toString()
+    return p6;
+  } 
