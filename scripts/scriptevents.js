@@ -1,4 +1,4 @@
-import {  world , system , ItemStack, Vector} from "@minecraft/server";
+import {  world , system , ItemStack, Vector, Player} from "@minecraft/server";
 import { getScore } from "getscore.js";
 import {Name} from "functions.js"
 const dimension = world.getDimension(`overworld`)
@@ -91,6 +91,13 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
 })
 
 system.runInterval((ev)=>{
+    for(const p of world.getPlayers({excludeGameModes: [`creative`,`spectator`]})){
+        p.onScreenDisplay.setActionBar(`${p.getVelocity().x} ${p.getVelocity().y} ${p.getVelocity().z} `)
+        
+        if(p.isFlying) world.sendMessage(`飛んでいる ${p.name}`)
+        if( -15 > p.getVelocity().x || p.getVelocity().x > 15 || p.getVelocity().z > 15 || p.getVelocity().z < -15){ if(!p.getEffect(`speed`)) world.sendMessage(`テレポート ${p.name}`)} else if( -1.5 > p.getVelocity().x || p.getVelocity().x > 1.5 || p.getVelocity().z > 1.5 || p.getVelocity().z < -1.5) {if(!p.getEffect(`speed`)) world.sendMessage(`速度規定 ${p.name}`) } else if( p.getVelocity().y > 15 ) {if(!p.getEffect(`jump_boost`)) world.sendMessage(`フライ ${p.name}`)} else if( p.getVelocity().y > 2 ) {if(!p.getEffect(`jump_boost`)) world.sendMessage(`フライ ${p.name}`)}
+
+    }
     for (const entity of dimension.getEntities()) {
         if(getScore(`hp`,entity) === true) continue;
         switch (true) {
