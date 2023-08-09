@@ -187,6 +187,7 @@ const tree = {
             },
         },
     },
+    '-': 'ー',
 };
 
 export function convertRomanToKana(original) {
@@ -203,7 +204,7 @@ export function convertRomanToKana(original) {
     };
     while (index < len) {
         const char = str.charAt(index);
-        if (char.match(/[a-z]/)) { // 英数字以外は考慮しない
+        if (char.match(/[a-z],-/)) { // 英数字以外は考慮しない
             if (char in node) {
                 const next = node[char];
                 if (typeof next === 'string') {
