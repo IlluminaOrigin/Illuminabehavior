@@ -1,6 +1,6 @@
 import {  world , system } from "@minecraft/server";
 import {rename , ItemLock , Lore, Name , ChatRename} from "functions.js"
-import { KanaToRoman } from "./functions";
+import { convertRomanToKana } from "./functions";
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
@@ -52,15 +52,15 @@ world.beforeEvents.chatSend.subscribe((ev) => {
         default : {
             if(message.startsWith(`!`)) break;
             if(sender.hasTag(`toku`)) {
-                world.sendMessage(`§b情報非公開のプレイヤー §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${KanaToRoman(message)})`);
+                world.sendMessage(`§b情報非公開のプレイヤー §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${convertRomanToKana(message)})`);
                 break;
             }
             if(sender.hasTag(`killer`)){
-                world.sendMessage(`§c${ChatRename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${KanaToRoman(message)})`);
+                world.sendMessage(`§c${ChatRename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${convertRomanToKana(message)})`);
                 break;
             } 
             if(!sender.hasTag(`killer`)){
-                world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${KanaToRoman(message)})`);
+                world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${convertRomanToKana(message)})`);
                 break;
             } 
 

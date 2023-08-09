@@ -86,296 +86,147 @@ export function Name(playerName){
     }
     return returnName
 }
-
-/**
- * ひらがなまたはカタカナからローマ字へ変換
- * @param {string} targetStr ローマ字へ変換する文字列（変換元の文字列）
- * @param {"hepburn"|"kunrei"} [type="hepburn"] ローマ字の種類
- * @param {Object} [options] その他各種オプション
- *                           {boolean} [options.bmp=true] ... "ん"（n）の次がb.m.pの場合にnからmへ変換するかどうか
- *                           {"latin"|"hyphen"} [options.longSound="latin"] ... 長音の表し方
- * @return {string} ローマ字へ変換された文字列を返す
- */
-export function KanaToRoman(targetStr, type, options) {
-	/**
-	 * 変換マップ
-	 */
-	let romanMap = {
-		'あ' : 'a',
-		'い' : 'i',
-		'う' : 'u',
-		'え' : 'e',
-		'お' : 'o',
-		'か' : 'ka',
-		'き' : 'ki',
-		'く' : 'ku',
-		'け' : 'ke',
-		'こ' : 'ko',
-		'さ' : 'sa',
-		'し' : { hepburn : 'shi', kunrei : 'si' },
-		'す' : 'su',
-		'せ' : 'se',
-		'そ' : 'so',
-		'た' : 'ta',
-		'ち' : { hepburn : 'chi', kunrei : 'ti' },
-		'つ' : { hepburn : 'tsu', kunrei : 'tu' },
-		'て' : 'te',
-		'と' : 'to',
-		'な' : 'na',
-		'に' : 'ni',
-		'ぬ' : 'nu',
-		'ね' : 'ne',
-		'の' : 'no',
-		'は' : 'ha',
-		'ひ' : 'hi',
-		'ふ' : { hepburn : 'fu', kunrei : 'hu' },
-		'へ' : 'he',
-		'ほ' : 'ho',
-		'ま' : 'ma',
-		'み' : 'mi',
-		'む' : 'mu',
-		'め' : 'me',
-		'も' : 'mo',
-		'や' : 'ya',
-		'ゆ' : 'yu',
-		'よ' : 'yo',
-		'ら' : 'ra',
-		'り' : 'ri',
-		'る' : 'ru',
-		'れ' : 're',
-		'ろ' : 'ro',
-		'わ' : 'wa',
-		'ゐ' : 'wi',
-		'ゑ' : 'we',
-		'を' : { hepburn : 'o', kunrei : 'wo' },
-		'ん' : 'n',
-		'が' : 'ga',
-		'ぎ' : 'gi',
-		'ぐ' : 'gu',
-		'げ' : 'ge',
-		'ご' : 'go',
-		'ざ' : 'za',
-		'じ' : { hepburn : 'ji', kunrei : 'zi' },
-		'ず' : 'zu',
-		'ぜ' : 'ze',
-		'ぞ' : 'zo',
-		'だ' : 'da',
-		'ぢ' : { hepburn : 'ji', kunrei : 'di' },
-		'づ' : { hepburn : 'zu', kunrei : 'du' },
-		'で' : 'de',
-		'ど' : 'do',
-		'ば' : 'ba',
-		'び' : 'bi',
-		'ぶ' : 'bu',
-		'べ' : 'be',
-		'ぼ' : 'bo',
-		'ぱ' : 'pa',
-		'ぴ' : 'pi',
-		'ぷ' : 'pu',
-		'ぺ' : 'pe',
-		'ぽ' : 'po',
-		'きゃ' : 'kya',
-		'きぃ' : 'kyi',
-		'きゅ' : 'kyu',
-		'きぇ' : 'kye',
-		'きょ' : 'kyo',
-		'くぁ' : 'qa',
-		'くぃ' : 'qi',
-		'くぇ' : 'qe',
-		'くぉ' : 'qo',
-		'くゃ' : 'qya',
-		'くゅ' : 'qyu',
-		'くょ' : 'qyo',
-		'しゃ' : { hepburn : 'sha', kunrei : 'sya' },
-		'しぃ' : 'syi',
-		'しゅ' : { hepburn : 'shu', kunrei : 'syu' },
-		'しぇ' : 'sye',
-		'しょ' : { hepburn : 'sho', kunrei : 'syo' },
-		'ちゃ' : { hepburn : 'cha', kunrei : 'tya' },
-		'ちぃ' : ['tyi'],
-		'ちゅ' : { hepburn : 'chu', kunrei : 'tyu' },
-		'ちぇ' : ['tye'],
-		'ちょ' : { hepburn : 'cho', kunrei : 'tyo' },
-		'てゃ' : 'tha',
-		'てぃ' : 'thi',
-		'てゅ' : 'thu',
-		'てぇ' : 'the',
-		'てょ' : 'tho',
-		'ひゃ' : 'hya',
-		'ひぃ' : 'hyi',
-		'ひゅ' : 'hyu',
-		'ひぇ' : 'hye',
-		'ひょ' : 'hyo',
-		'ふぁ' : 'fa',
-		'ふぃ' : 'fi',
-		'ふぇ' : 'fe',
-		'ふぉ' : 'fo',
-		'みゃ' : 'mya',
-		'みぃ' : 'myi',
-		'みゅ' : 'myu',
-		'みぇ' : 'mye',
-		'みょ' : 'myo',
-		'ヴぁ' : 'va',
-		'ヴぃ' : 'vi',
-		'ヴぇ' : 've',
-		'ヴぉ' : 'vo',
-		'ぎゃ' : 'gya',
-		'ぎぃ' : 'gyi',
-		'ぎゅ' : 'gyu',
-		'ぎぇ' : 'gye',
-		'ぎょ' : 'gyo',
-		'じゃ' : { hepburn : 'ja', kunrei : 'zya' },
-		'じぃ' : 'zyi',
-		'じゅ' : { hepburn : 'ju', kunrei : 'zyu' },
-		'じぇ' : 'zye',
-		'じょ' : { hepburn : 'jo', kunrei : 'zyo' },
-		'ぢゃ' : { hepburn : 'dya', kunrei : 'zya' },
-		'ぢぃ' : 'dyi',
-		'ぢゅ' : { hepburn : 'dyu', kunrei : 'zya' },
-		'ぢぇ' : 'dye',
-		'ぢょ' : { hepburn : 'dyo', kunrei : 'zya' },
-		'びゃ' : 'bya',
-		'びぃ' : 'byi',
-		'びゅ' : 'byu',
-		'びぇ' : 'bye',
-		'びょ' : 'byo',
-		'ぴゃ' : 'pya',
-		'ぴぃ' : 'pyi',
-		'ぴゅ' : 'pyu',
-		'ぴぇ' : 'pye',
-		'ぴょ' : 'pyo',
-		'ぁ' : 'xa',
-		'ぃ' : 'xi',
-		'ぅ' : 'xu',
-		'ぇ' : 'xe',
-		'ぉ' : 'xo',
-		'ゃ' : 'xya',
-		'ゅ' : 'xyu',
-		'ょ' : 'xyo',
-		'っ' : 'xtu',
-		'ヴ' : 'vu',
-		'ー' : '-',
-		'、' : ', ',
-		'，' : ', ',
-		'。' : '.'
-	};
-
-	/**
-	 * 長音のラテン文字
-	 */
-	let latins = {
-		hepburn : {
-			'a' : 257,
-			'i' : 299,
-			'u' : 363,
-			'e' : 275,
-			'o' : 333
-		},
-		kunrei : {
-			'a' : 226,
-			'i' : 238,
-			'u' : 251,
-			'e' : 234,
-			'o' : 244
-		}
-	};
-
-	if (typeof targetStr !== 'string' && typeof targetStr !== 'number') {
-		throw '変換する対象が文字列ではありません。';
-	}
-
-	if (typeof type !== 'string' || !type.match(/^(hepburn|kunrei)$/)) type = 'hepburn';
-
-	if (!options) options = {};
-	if (typeof options.kana !== 'string') options.kana = 'all';
-	if (!options.kana.match(/^(all|hiragana|katakana)$/)) options.kana = 'all';
-	if (typeof options.bmp !== 'boolean') options.bmp = true;
-	if (typeof options.longSound !== 'string') options.longSound = 'latin';
-	if (!options.longSound.match(/^(latin|hyphen)$/)) options.longSound = 'latin';
-
-	let remStr = String(targetStr), result = '', slStr, roman, lastStr;
-
-	/**
-	 * 残りの文字列から1文字を切り抜く
-	 * @return {string} 切り抜いた1つの文字列を返す
-	 */
-	let splice = function() {
-		let oneChar = remStr.slice(0, 1);
-		remStr = remStr.slice(1);
-		return oneChar;
-	};
-
-	/**
-	 * 残りの文字列の最初が小文字か判定
-	 * @return {boolean} 小文字の場合はtrue、そうでない場合はfalseを返す
-	 */
-	let isSmallChar = function() {
-		return !!remStr.slice(0, 1).match(/^[ぁぃぅぇぉゃゅょァィゥェォャュョ]$/);
-	};
-
-	/**
-	 * カタカナからひらがなへ変換
-	 * @param {string} kana 元とおなるカタカナ
-	 * @return {string} ひらがなへ変換された文字列
-	 */
-	let toHiragana = function(kana) {
-		return kana.replace(/[\u30a1-\u30f6]/g, function(match) {
-			return String.fromCharCode(match.charCodeAt(0) - 0x60);
-		});
-	};
-
-	/**
-	 * ひらがなから対応するローマ字を取得
-	 * @param {string} kana 元となるひらがな
-	 * @return {string} 見つかった場合は対応するローマ字、見つからなかったら元のひらがなを返す
-	 */
-	let getRoman = function(kana) {
-		let roman = romanMap[toHiragana(kana)];
-		if (roman) {
-			if (typeof roman === 'string') {
-				return roman;
-			} else if (type === 'hepburn') {
-				return roman.hepburn;
-			} else if (type === 'kunrei') {
-				return roman.kunrei;
-			}
-		} else {
-			return kana;
-		}
-	};
-
-	while (remStr) {
-		slStr = splice();
-
-		if (slStr.match(/^(っ|ッ)$/)) {
-			slStr = splice();
-			if (isSmallChar()) slStr += splice();
-
-			roman = getRoman(slStr);
-			roman = (roman !== slStr ? roman.slice(0, 1) : '') + roman;
-		} else {
-			if (isSmallChar()) slStr += splice();
-
-			roman = getRoman(slStr);
-		}
-
-		let nextRoman = kanaToRoman(remStr.slice(0, 1));
-		if (roman === 'n') {
-			if (nextRoman.match(/^[aiueo]$/)) {
-				roman += type === 'hepburn' ? '-': '\'';
-			} else if (options.bmp && nextRoman.match(/^[bmp]/) && type === 'hepburn') {
-				roman = 'm';
-			}
-		} else if (roman === '-') {
-			lastStr = result.match(/[aiueo]$/);
-			if (lastStr && options.longSound === 'latin') {
-				result = result.slice(0, -1);
-				roman = String.fromCharCode(latins[type][lastStr[0]]);
-			}
-		}
-
-		result += roman;
-	}
-
-	return result;
-};
+  const tree = {
+    a: 'ア', i: 'イ', u: 'ウ', e: 'エ', o: 'オ',
+    k: {
+      a: 'カ', i: 'キ', u: 'ク', e: 'ケ', o: 'コ',
+      y: { a: 'キャ', i: 'キィ', u: 'キュ', e: 'キェ', o: 'キョ' },
+    },
+    s: {
+      a: 'サ', i: 'シ', u: 'ス', e: 'セ', o: 'ソ',
+      h: { a: 'シャ', i: 'シ', u: 'シュ', e: 'シェ', o: 'ショ' },
+      y: { a: 'シャ', i: 'シィ', u: 'シュ', e: 'シェ', o: 'ショ' },
+    },
+    t: {
+      a: 'タ', i: 'チ', u: 'ツ', e: 'テ', o: 'ト',
+      h: { a: 'テャ', i: 'ティ', u: 'テュ', e: 'テェ', o: 'テョ' },
+      y: { a: 'チャ', i: 'チィ', u: 'チュ', e: 'チェ', o: 'チョ' },
+      s: { a: 'ツァ', i: 'ツィ', u: 'ツ', e: 'ツェ', o: 'ツォ' },
+    },
+    c: {
+      a: 'カ', i: 'シ', u: 'ク', e: 'セ', o: 'コ',
+      h: { a: 'チャ', i: 'チ', u: 'チュ', e: 'チェ', o: 'チョ' },
+      y: { a: 'チャ', i: 'チィ', u: 'チュ', e: 'チェ', o: 'チョ' },
+    },
+    q: {
+      a: 'クァ', i: 'クィ', u: 'ク', e: 'クェ', o: 'クォ',
+    },
+    n: {
+      a: 'ナ', i: 'ニ', u: 'ヌ', e: 'ネ', o: 'ノ', n: 'ン',
+      y: { a: 'ニャ', i: 'ニィ', u: 'ニュ', e: 'ニェ', o: 'ニョ' },
+    },
+    h: {
+      a: 'ハ', i: 'ヒ', u: 'フ', e: 'ヘ', o: 'ホ',
+      y: { a: 'ヒャ', i: 'ヒィ', u: 'ヒュ', e: 'ヒェ', o: 'ヒョ' },
+    },
+    f: {
+      a: 'ファ', i: 'フィ', u: 'フ', e: 'フェ', o: 'フォ',
+      y: { a: 'フャ', u: 'フュ', o: 'フョ' },
+    },
+    m: {
+      a: 'マ', i: 'ミ', u: 'ム', e: 'メ', o: 'モ',
+      y: { a: 'ミャ', i: 'ミィ', u: 'ミュ', e: 'ミェ', o: 'ミョ' },
+    },
+    y: { a: 'ヤ', i: 'イ', u: 'ユ', e: 'イェ', o: 'ヨ' },
+    r: {
+      a: 'ラ', i: 'リ', u: 'ル', e: 'レ', o: 'ロ',
+      y: { a: 'リャ', i: 'リィ', u: 'リュ', e: 'リェ', o: 'リョ' },
+    },
+    w: { a: 'ワ', i: 'ウィ', u: 'ウ', e: 'ウェ', o: 'ヲ' },
+    g: {
+      a: 'ガ', i: 'ギ', u: 'グ', e: 'ゲ', o: 'ゴ',
+      y: { a: 'ギャ', i: 'ギィ', u: 'ギュ', e: 'ギェ', o: 'ギョ' },
+    },
+    z: {
+      a: 'ザ', i: 'ジ', u: 'ズ', e: 'ゼ', o: 'ゾ',
+      y: { a: 'ジャ', i: 'ジィ', u: 'ジュ', e: 'ジェ', o: 'ジョ' },
+    },
+    j: {
+      a: 'ジャ', i: 'ジ', u: 'ジュ', e: 'ジェ', o: 'ジョ',
+      y: { a: 'ジャ', i: 'ジィ', u: 'ジュ', e: 'ジェ', o: 'ジョ' },
+    },
+    d: {
+      a: 'ダ', i: 'ヂ', u: 'ヅ', e: 'デ', o: 'ド',
+      h: { a: 'デャ', i: 'ディ', u: 'デュ', e: 'デェ', o: 'デョ' },
+      y: { a: 'ヂャ', i: 'ヂィ', u: 'ヂュ', e: 'ヂェ', o: 'ヂョ' },
+    },
+    b: {
+      a: 'バ', i: 'ビ', u: 'ブ', e: 'ベ', o: 'ボ',
+      y: { a: 'ビャ', i: 'ビィ', u: 'ビュ', e: 'ビェ', o: 'ビョ' },
+    },
+    v: {
+      a: 'ヴァ', i: 'ヴィ', u: 'ヴ', e: 'ヴェ', o: 'ヴォ',
+      y: { a: 'ヴャ', i: 'ヴィ', u: 'ヴュ', e: 'ヴェ', o: 'ヴョ' },
+    },
+    p: {
+      a: 'パ', i: 'ピ', u: 'プ', e: 'ペ', o: 'ポ',
+      y: { a: 'ピャ', i: 'ピィ', u: 'ピュ', e: 'ピェ', o: 'ピョ' },
+    },
+    x: {
+      a: 'ァ', i: 'ィ', u: 'ゥ', e: 'ェ', o: 'ォ',
+      y: {
+        a: 'ャ', i: 'ィ', u: 'ュ', e: 'ェ', o: 'ョ',
+      },
+      t: {
+        u: 'ッ',
+        s: {
+          u: 'ッ',
+        },
+      },
+    },
+    l: {
+      a: 'ァ', i: 'ィ', u: 'ゥ', e: 'ェ', o: 'ォ',
+      y: {
+        a: 'ャ', i: 'ィ', u: 'ュ', e: 'ェ', o: 'ョ',
+      },
+      t: {
+        u: 'ッ',
+        s: {
+          u: 'ッ',
+        },
+      },
+    },
+  };
+  
+  export function convertRomanToKana(original) {
+    const str = original.replace(/[Ａ-Ｚａ-ｚ]/, s => String.fromCharCode(s.charCodeAt(0) - 65248)).toLowerCase(); // 全角→半角→小文字
+    let result = '';
+    let tmp = '';
+    let index = 0;
+    const len = str.length;
+    let node = tree;
+    const push = (char, toRoot = true) => {
+      result += char;
+      tmp = '';
+      node = toRoot ? tree : node;
+    };
+    while (index < len) {
+      const char = str.charAt(index);
+      if (char.match(/[a-z]/)) { // 英数字以外は考慮しない
+        if (char in node) {
+          const next = node[char];
+          if (typeof next === 'string') {
+            push(next);
+          } else {
+            tmp += original.charAt(index);
+            node = next;
+          }
+          index++;
+          continue;
+        }
+        const prev = str.charAt(index - 1);
+        if (prev && (prev === 'n' || prev === char)) { // 促音やnへの対応
+          push(prev === 'n' ? 'ン' : 'ッ', false);
+        }
+        if (node !== tree && char in tree) { // 今のノードがルート以外だった場合、仕切り直してチェックする
+          push(tmp);
+          continue;
+        }
+      }
+      push(tmp + char);
+      index++;
+    }
+    tmp = tmp.replace(/n$/, 'ン'); // 末尾のnは変換する
+    push(tmp);
+    return result;
+  }
