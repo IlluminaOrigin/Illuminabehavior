@@ -459,6 +459,13 @@ export function GuildOwnerChange(source){
   for(const p of players){
     buttons[buttons.length] = Name(p.nameTag)
   }
+  const guilds = world.scoreboard.getObjective(`guildname`).getScores()
+    let guildName
+    for(let i = 0;i < guilds.length;i++){
+      if(guilds[i].score === sourceGuild) {
+        guildName = guilds[i].participant.displayName
+      }
+    }
   const form = new UI.ModalFormData
   form.title(`ギルドオーナー変更`)
   form.dropdown(`ギルドオーナーにするメンバーを選択`,buttons)
@@ -467,7 +474,8 @@ export function GuildOwnerChange(source){
     players[rs.formValues[0]].addTag(`guildOwner`)
     players[rs.formValues[0]].removeTag(`guildAdmin`)
     source.removeTag(`guildOwner`)
-    players[rs.formValues[0]].sendMessage(`${Name(source.nameTag)} §r§aによってギルドオーナーになりました。`)
+    world.sendMessage(`${Name(players[rs.formValues[0]].nameTag)} §r§aが${Name(source.nameTag)} §r§aによってギルド『${guildName}』のオーナーになりました。`)
+    source.runCommandAsync(`title @s subtitle "changeOwner **${name(players[rs.formValues[0]].nameTag)}** §r§aが**${name(source.nameTag)}** §r§aによってギルド『${guildName}』のオーナーになりました"`)
     source.sendMessage(`${buttons[rs.formValues]} §r§aをギルドオーナーにしました。`)
   })
 }
