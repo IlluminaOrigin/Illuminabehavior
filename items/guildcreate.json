@@ -14,6 +14,10 @@
       "minecraft:foil": true,
       "minecraft:display_name": {
         "value": "§lギルド作成"
+      },
+      "minecraft:use_duration": 10000,
+      "minecraft:use_animation": "eat",
+      "minecraft:food": {
       }
     }
   }

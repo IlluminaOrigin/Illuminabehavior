@@ -15,6 +15,10 @@
         "minecraft:foil": true,
         "minecraft:display_name": {
           "value": "§l§a[Admin]§fMasterKey"
+        },
+        "minecraft:use_duration": 10000,
+        "minecraft:use_animation": "eat",
+        "minecraft:food": {
         }
       }
     }
