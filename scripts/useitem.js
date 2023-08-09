@@ -1,5 +1,4 @@
 import { Entity, world ,ItemStack, BlockWaterContainerComponent} from "@minecraft/server";
-import { Name } from "functions.js";
 import * as UI from "@minecraft/server-ui"
 
 world.afterEvents.itemUseOn.subscribe((ev)=>{
@@ -21,9 +20,13 @@ world.afterEvents.itemUse.subscribe((ev)=>{
               return;
             }
             const guilds = world.scoreboard.getObjective(`guildname`).getScores()
+            let guildName = ""
             let guildCheck = "No"
             for(let i = 0;i < guilds.length;i++){
-              if(guilds[i].score === Number(ev.itemStack.getLore()[0])) guildCheck = "OK"
+              if(guilds[i].score === Number(ev.itemStack.getLore()[0])) {
+                guildCheck = "OK"
+                guildName = guilds[i].participant.displayName
+              }
             }
             if(guildCheck === "No") {
               ev.source.sendMessage(`§c招待が無効です。`)
@@ -36,7 +39,8 @@ world.afterEvents.itemUse.subscribe((ev)=>{
               return;
             }
             world.scoreboard.getObjective(`playerguild`).setScore(ev.source,Number(ev.itemStack.getLore()[0]))
-            ev.source.sendMessage(`§aギルドに加入しました。`)
+            world.sendMessage(`${Name(ev.source.nameTag)}§r§aがギルド『${guildName}』に加入しました。`)
+            ev.source.runCommandAsync(`title @s subtitle guildjoin **${name(ev.source.nameTag)}**がギルド『**${guildName}**』に加入`)
             ev.source.removeTag(`guildAdmin`)
             ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
             break;
@@ -58,6 +62,22 @@ world.afterEvents.itemUse.subscribe((ev)=>{
     }
 })
 
+function name(playersNameArray){
+  let p4 = []
+  let p = playersNameArray.split(/\n/)
+  if(p.length > 2) p.shift()  
+  for(let i = 0;i < p.length - 1;i++){
+    if(i > 0) p4 += `\n`
+    let p2 = p[i].split(`§`)
+    for(let i2 = 0;i2 < p2.length;i2++){
+      let p3 = p2[i2].substr(1,p2[i2].length)
+      p4 += p3
+    }
+  }
+  if(p4.length === 0) p4[0] = playersNameArray
+  const p6 = p4.toString()
+  return p6;
+} 
 
 /**********************************************************************************************************************
  * ギルド関係の関数たち　　　　　　　　                                                                                *
@@ -136,7 +156,7 @@ export function GuildAdminForm(source){
     form.button(`§l§0ギルド徴収割合変更`)
     form.button(`§l§0ギルド名変更`)
     form.button(`§l§0オーナー変更`)
-    form.button(`§l§0ギルド削除`)
+    form.button(`§l§cギルド削除`)
     form.show(source).then((rs)=>{
         if(rs.canceled) return;
         switch(rs.selection){
@@ -458,4 +478,15 @@ export function NotPlayerIs(source){
     form.body(`§l§c対象に合うプレイヤーがいません。`)
     form.button(`§lOK`)
     form.show(source)
+}
+
+function Name(playerName){
+  let returnName = ``
+  let p = playerName.split(/\n/)
+  if(p.length > 2) p.shift()
+  for(let i = 0;i < p.length - 1;i++){
+      returnName += p[i]
+      if(i < p.length - 2) returnName += `\n`
+  }
+  return returnName
 }

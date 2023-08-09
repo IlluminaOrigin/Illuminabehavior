@@ -188,11 +188,6 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
     }
     if(player.typeId !== `minecraft:player`) return;
     if (entity) {
-        let cheat = 1
-        for (const entity of attacker.getEntitiesFromViewDirection({maxDistance: 5})){
-            if(entity.entity === sufferer) cheat = 0
-        }
-        if(cheat === 1) attacker.sendMessage(`チートだ`)
         if(sufferer.hasTag(`safety`)) {
             attacker.onScreenDisplay.setActionBar(`§c攻撃禁止エリア`)
             return;
