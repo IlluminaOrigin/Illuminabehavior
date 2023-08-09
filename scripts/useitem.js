@@ -40,7 +40,7 @@ world.afterEvents.itemUse.subscribe((ev)=>{
             }
             world.scoreboard.getObjective(`playerguild`).setScore(ev.source,Number(ev.itemStack.getLore()[0]))
             world.sendMessage(`${Name(ev.source.nameTag)}§r§aがギルド『${guildName}』に加入しました。`)
-            ev.source.runCommandAsync(`title @s subtitle guildjoin **${name(ev.source.nameTag)}**がギルド『**${guildName}**』に加入`)
+            ev.source.runCommandAsync(`title @s subtitle "guildjoin **${name(ev.source.nameTag)}**がギルド『**${guildName}**』に加入"`)
             ev.source.removeTag(`guildAdmin`)
             ev.source.getComponent(`inventory`).container.setItem(ev.source.selectedSlot)
             break;
