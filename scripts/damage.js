@@ -301,7 +301,6 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
         }
 
     }
-
 });
 
 function name(playersNameArray){
