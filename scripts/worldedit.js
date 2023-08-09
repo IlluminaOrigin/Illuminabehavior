@@ -8,7 +8,7 @@ let airBlock
 
 system.runTimeout(()=>{
     airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
-})
+},200)
 
 let firstJoin = 0
 world.afterEvents.playerJoin.subscribe((ev)=>{
