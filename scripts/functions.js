@@ -190,6 +190,7 @@ const tree = {
 };
 
 export function convertRomanToKana(original) {
+    const str = original
     let result = '';
     let tmp = '';
     let index = 0;
@@ -216,7 +217,7 @@ export function convertRomanToKana(original) {
             }
             const prev = str.charAt(index - 1);
             if (prev && (prev === 'n' || prev === char)) { // 促音やnへの対応
-                push(prev === 'n' ? 'ン' : 'ッ', false);
+                push(prev === 'n' ? 'ん' : 'っ', false);
             }
             if (node !== tree && char in tree) { // 今のノードがルート以外だった場合、仕切り直してチェックする
                 push(tmp);

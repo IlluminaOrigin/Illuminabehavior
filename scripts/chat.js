@@ -52,18 +52,15 @@ world.beforeEvents.chatSend.subscribe((ev) => {
         default : {
             if(message.startsWith(`!`)) break;
             if(sender.hasTag(`toku`)) {
-                if(sender.hasTag(`lunaChat`)) world.sendMessage(`§b情報非公開のプレイヤー §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${convertRomanToKana(message)})`);
-                if(!sender.hasTag(`lunaChat`)) world.sendMessage(`§b情報非公開のプレイヤー §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
+                world.sendMessage(`§b情報非公開のプレイヤー §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
                 break;
             }
             if(sender.hasTag(`killer`)){
-                if(sender.hasTag(`lunaChat`)) world.sendMessage(`§c${ChatRename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${convertRomanToKana(message)})`);
-                if(!sender.hasTag(`lunaChat`)) world.sendMessage(`§c${ChatRename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
+                world.sendMessage(`§c${ChatRename(sender.nameTag)} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
                 break;
             } 
             if(!sender.hasTag(`killer`)){
-                if(sender.hasTag(`lunaChat`)) world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message} §r§6(${convertRomanToKana(message)})`);
-                if(!sender.hasTag(`lunaChat`)) world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
+                world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
                 break;
             } 
 
@@ -71,4 +68,3 @@ world.beforeEvents.chatSend.subscribe((ev) => {
 
     }
 })
-

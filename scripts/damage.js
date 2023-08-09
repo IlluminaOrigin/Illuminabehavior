@@ -303,19 +303,19 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
     }
 });
 
-function name(playersNameArray){
+function name(playersNameString){
     let p4 = []
-    let p = playersNameArray.split(/\n/)
+    let p = playersNameString.split(/\n/)
     if(p.length > 2) p.shift()  
     for(let i = 0;i < p.length - 1;i++){
-      if(i > 0) p4 += `\n`
-      let p2 = p[i].split(`§`)
-      for(let i2 = 0;i2 < p2.length;i2++){
-        let p3 = p2[i2].substr(1,p2[i2].length)
-        p4 += p3
-      }
+        if(i > 0) p4 += `\n`
+        let p2 = p[i].split(`§`)
+        for(let i2 = 0;i2 < p2.length;i2++){
+            let p3 = p2[i2].substr(1,p2[i2].length)
+            p4 += p3
+        }
     }
-    if(p4.length === 0) p4[0] = playersNameArray
+    if(p4.length === 0) p4[0] = playersNameString
     const p6 = p4.toString()
     return p6;
-  } 
+} 
