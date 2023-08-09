@@ -189,7 +189,6 @@ const tree = {
     },
 };
 
-  
 export function convertRomanToKana(original) {
     let result = '';
     let tmp = '';
