@@ -18,7 +18,6 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
             MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${MC.world.getPlayers({name: playerName})[0].nameTag}`)
             MC.world.getPlayers({name: playerName})[0].runCommandAsync(`kick "${MC.world.getPlayers({name: playerName})[0].name}" "§cあなたはホワイトリストに入っていません`)
         }
-        
         if(MC.world.getPlayers({name: playerName})[0].hasTag(`hatu`)) {
             PlayerNames.set(playerName , `${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
             MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eがログイン`)
