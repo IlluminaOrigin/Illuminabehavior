@@ -11,21 +11,21 @@ for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
     p.runCommandAsync(`title @s subtitle join ${p.name}"${name(p.nameTag)}`)
 }
 
-MC.world.afterEvents.playerJoin.subscribe((ev)=>{
-    const { playerName } = ev;
-    MC.system.runTimeout(()=>{
-        if(!whiteListPlayers.includes(MC.world.getPlayers({name: playerName})[0].name)){
-            MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${MC.world.getPlayers({name: playerName})[0].nameTag}`)
-            MC.world.getPlayers({name: playerName})[0].runCommandAsync(`kick "${MC.world.getPlayers({name: playerName})[0].name}" "§cあなたはホワイトリストに入っていません`)
+MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
+    const { player } = ev;
+    if(ev.initialSpawn) {
+        if(!whiteListPlayers.includes(player.name)){
+            MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${player.name}`)
+            player.runCommandAsync(`kick "${player.name}" "§cあなたはホワイトリストに入っていません`)
         }
-        MC.world.getPlayers({name: playerName})[0].addEffect(`resistance`,20000000,{amplifier: 250,showParticles: false})
-        if(MC.world.getPlayers({name: playerName})[0].hasTag(`hatu`)) {
-            PlayerNames.set(playerName , `${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
-            MC.world.sendMessage(`${ChatRename(MC.world.getPlayers({name: playerName})[0].nameTag)} §r§eがログイン`)
-            MC.world.scoreboard.getObjective(`party`).setScore(MC.world.getPlayers({name: playerName})[0],0)
-            MC.world.getDimension(`overworld`).runCommandAsync(`title @p subtitle join ${playerName}"${name(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
+        player.addEffect(`resistance`,20000000,{amplifier: 250,showParticles: false})
+        if(player.hasTag(`hatu`)) {
+            PlayerNames.set(playerName , `${ChatRename(player.nameTag)}`)
+            MC.world.sendMessage(`${ChatRename(player.nameTag)} §r§eがログイン`)
+            MC.world.scoreboard.getObjective(`party`).setScore(player,0)
+            MC.world.getDimension(`overworld`).runCommandAsync(`title @p subtitle join ${player.name}"${name(player.nameTag)}`)
         }
-    },250)
+    }
 })
 
 MC.world.afterEvents.playerLeave.subscribe((ev)=>{
