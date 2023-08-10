@@ -20,7 +20,7 @@ MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
         }
         player.addEffect(`resistance`,20000000,{amplifier: 250,showParticles: false})
         if(player.hasTag(`hatu`)) {
-            PlayerNames.set(playerName , `${ChatRename(player.nameTag)}`)
+            PlayerNames.set(player.name , `${ChatRename(player.nameTag)}`)
             MC.world.sendMessage(`${ChatRename(player.nameTag)} §r§eがログイン`)
             MC.world.scoreboard.getObjective(`party`).setScore(player,0)
             MC.world.getDimension(`overworld`).runCommandAsync(`title @p subtitle join ${player.name}"${name(player.nameTag)}`)
