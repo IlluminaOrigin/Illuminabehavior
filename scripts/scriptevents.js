@@ -95,7 +95,6 @@ system.runInterval((ev)=>{
         p.onScreenDisplay.setActionBar(`${p.getVelocity().x} ${p.getVelocity().y} ${p.getVelocity().z} `)
         if(p.isFlying) world.sendMessage(`飛んでいる ${p.name}`)
         if( -15 > p.getVelocity().x || p.getVelocity().x > 15 || p.getVelocity().z > 15 || p.getVelocity().z < -15){ if(!p.getEffect(`speed`)) world.sendMessage(`テレポート ${p.name}`)} else if( -1.5 > p.getVelocity().x || p.getVelocity().x > 1.5 || p.getVelocity().z > 1.5 || p.getVelocity().z < -1.5) {if(!p.getEffect(`speed`)) world.sendMessage(`速度規定 ${p.name}`) } else if( p.getVelocity().y > 15 ) {if(!p.getEffect(`jump_boost`)) world.sendMessage(`フライ ${p.name}`)} else if( p.getVelocity().y > 2 ) {if(!p.getEffect(`jump_boost`)) world.sendMessage(`フライ ${p.name}`)}
-
     }
     for (const entity of dimension.getEntities()) {
         if(getScore(`hp`,entity) === true) continue;
@@ -159,7 +158,7 @@ system.runInterval((ev)=>{
                     if ([...as2].length == 0) {
                         entity.runCommandAsync(`gamemode a @s`)
                         entity.teleport({x: Number(px) + 0.5,y: Number(py) + 0.5,z: Number(pz) + 0.5},{dimension: dimension,rotation:{x:0,y:0},checkForBlocks: false})
-                        entity.runCommandAsync(`scoreboard players operation @s hp = @s maxhp`)
+                        world.scoreboard.getObjective(`hp`).setScore(entity , world.scoreboard.getObjective(`maxhp`).getScore(entity))
                         entity.removeTag(`death`)
                         break;
                     }
