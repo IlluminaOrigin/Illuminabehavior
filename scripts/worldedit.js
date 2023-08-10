@@ -166,7 +166,6 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                     world.getDimension(`overworld`).fillBlocks({x: x,y: y,z: z},{x: x,y: y,z: z},MinecraftBlockTypes[ev.message.split(` `)[2]])
                 }
                 })
-                
             }
         }
         if(ev.message.startsWith(`\\\\kaiten`)) {

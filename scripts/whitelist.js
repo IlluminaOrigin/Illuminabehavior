@@ -25,7 +25,7 @@ MC.world.afterEvents.playerJoin.subscribe((ev)=>{
             MC.world.scoreboard.getObjective(`party`).setScore(MC.world.getPlayers({name: playerName})[0],0)
             MC.world.getDimension(`overworld`).runCommandAsync(`title @p subtitle join ${playerName}"${name(MC.world.getPlayers({name: playerName})[0].nameTag)}`)
         }
-    },200)
+    },250)
 })
 
 MC.world.afterEvents.playerLeave.subscribe((ev)=>{
