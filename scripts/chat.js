@@ -1,6 +1,5 @@
 import {  world , system } from "@minecraft/server";
 import {rename , ItemLock , Lore, Name , ChatRename} from "functions.js"
-import { convertRomanToKana } from "./functions";
 
 world.beforeEvents.chatSend.subscribe((ev) => {
     const {sender , message} = ev;
