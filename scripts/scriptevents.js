@@ -137,6 +137,7 @@ system.runInterval((ev)=>{
             case "minecraft:player":
             {
                 if (!entity.hasTag(`hatu`)) break;
+                
                 const pn = entity.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
                 let atname = "§l§6LV[" + getScore(`lv`,entity) + "] §r" + pn[1]
                 if (entity.getTags().find(x => x.match("SYOGOD_"))) atname = entity.getTags().find(x => x.match("SYOGOD_")).split(/(?<=^[^_]+?)_/)[1] + `\n` + atname
@@ -162,13 +163,7 @@ system.runInterval((ev)=>{
                         entity.removeTag(`death`)
                         break;
                     }
-                    for (const as of dimension.getEntities({
-                        location: location,
-                        type: "karo:tamasii",
-                        name: `${Name(entity.nameTag)}`,
-                        closest: 1,
-                        maxDistance: 5
-                    })) {
+                    for (const as of dimension.getEntities({ location: location, type: "karo:tamasii", name: `${Name(entity.nameTag)}`, closest: 1, maxDistance: 5 })) {
                         entity.teleport(as.location, {dimension: dimension,rotation:{x:0,y:0}})
                     }
                 }
