@@ -14,6 +14,7 @@ for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
 MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
     const { player } = ev;
     if(ev.initialSpawn) {
+        const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
         if(!whiteListPlayers.includes(player.name)){
             MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${player.name}`)
             player.runCommandAsync(`kick "${player.name}" "§cあなたはホワイトリストに入っていません`)
@@ -21,7 +22,7 @@ MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
         player.addEffect(`resistance`,20000000,{amplifier: 250,showParticles: false})
         if(player.hasTag(`hatu`)) {
             PlayerNames.set(player.name , `${ChatRename(player.nameTag)}`)
-            MC.world.sendMessage(`${ChatRename(player.nameTag)} §r§eがログイン`)
+            MC.world.sendMessage(`[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] ${ChatRename(player.nameTag)} §r§eがログイン`)
             MC.world.scoreboard.getObjective(`party`).setScore(player,0)
             MC.world.getDimension(`overworld`).runCommandAsync(`title @p subtitle join ${player.name}"${name(player.nameTag)}`)
         }
@@ -30,7 +31,8 @@ MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
 
 MC.world.afterEvents.playerLeave.subscribe((ev)=>{
     if(!PlayerNames.get(ev.playerName)) return;
-    MC.world.sendMessage(`${ChatRename(PlayerNames.get(ev.playerName))} §r§eがログアウト`)
+    const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
+    MC.world.sendMessage(`[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] ${ChatRename(PlayerNames.get(ev.playerName))} §r§eがログアウト`)
 })
 
 function name(playersNameArray){
