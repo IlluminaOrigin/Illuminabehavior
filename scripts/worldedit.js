@@ -1,23 +1,12 @@
-import {  world , MinecraftBlockTypes,BlockEvent, Block, system} from "@minecraft/server";
+import {  world , MinecraftBlockTypes,BlockEvent, Block, system, BlockPermutation,BlockType} from "@minecraft/server";
 let startVector = new Map()
 let endVector = new Map()
 let degrees = new Map()
 let featherBlock = new Map()
 let supoito = new Map()
-let airBlock
-
-system.runTimeout(()=>{
-    airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320,z: world.getPlayers()[0].location.z})
-},200)
-
-let firstJoin = 0
-world.afterEvents.playerJoin.subscribe((ev)=>{
-    if(firstJoin === 0){
-        system.runTimeout((sy)=>{
-            airBlock = world.getDimension(`overworld`).getBlock({x:world.getPlayers()[0].location.x ,y:320, z:world.getPlayers()[0].location.z})
-        },200)
-    }
-})
+const airBlock = BlockPermutation.resolve('minecraft:air')
+const sandBlock = BlockPermutation.resolve('minecraft:sand')
+const unknownBlock = BlockPermutation.resolve('minecraft:unknown')
 
 world.afterEvents.blockBreak.subscribe((ev)=>{
     if(typeof ev.player.getComponent(`inventory`).container.getItem(ev.player.selectedSlot) === 'undefined') return
@@ -68,16 +57,17 @@ world.afterEvents.itemUse.subscribe((ev)=>{
         world.getDimension(`overworld`).fillBlocks(ev.source.getBlockFromViewDirection().block.location,ev.source.getBlockFromViewDirection().block.location,featherBlock.get(ev.source.name))
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_airblock`){
-        world.getDimension(`overworld`).fillBlocks({x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},{x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},`minecraft:glass`)
+        world.getDimension(`overworld`).fillBlocks({x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},{x: ev.source.location.x,y: ev.source.location.y - 1,z: ev.source.location.z},BlockPermutation.resolve(`minecraft:glass`))
     }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_shovel`){
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},`minecraft:sand`,{matchingBlock:`minecraft:air`})
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},`minecraft:sand`,{matchingBlock: `minecraft:air`})
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},`minecraft:sand`,{matchingBlock: `minecraft:air`})    }
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},sandBlock,{matchingBlock:airBlock})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},sandBlock,{matchingBlock: airBlock})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},sandBlock,{matchingBlock: airBlock})    
+    }
     if(ev.source.getComponent(`inventory`).container.getItem(ev.source.selectedSlot).typeId === `karo:we_brush`){
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},`minecraft:unknown`,{matchingBlock:`minecraft:air`})
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},`minecraft:unknown`,{matchingBlock: `minecraft:air`})
-        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},`minecraft:unknown`,{matchingBlock: `minecraft:air`})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 2,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 2,z: playerViewLocation.z - 1},unknownBlock,{matchingBlock:airBlock})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 2,y: playerViewLocation.y + 1,z: playerViewLocation.z + 1},{x: playerViewLocation.x - 2,y: playerViewLocation.y - 1,z: playerViewLocation.z - 1},unknownBlock,{matchingBlock: airBlock})
+        world.getDimension(`overworld`).fillBlocks({x: playerViewLocation.x + 1,y: playerViewLocation.y + 1,z: playerViewLocation.z + 2},{x: playerViewLocation.x - 1,y: playerViewLocation.y - 1,z: playerViewLocation.z - 2},unknownBlock,{matchingBlock: airBlock})
     }
 })
 
@@ -128,7 +118,7 @@ world.afterEvents.chatSend.subscribe((ev)=>{
             // 1度ずつ右方向に回転しながら座標を取得する
             for (let angle = 0; angle < 360; angle++) {
                 const { x, z } = getCoordinates(angle, A_x, A_z, r);
-                world.getDimension(`overworld`).fillBlocks({x: x,y: ev.sender.location.y,z: z},{x: x,y: ev.sender.location.y,z: z},`minecraft:${ev.message.split(` `)[2]}`)
+                world.getDimension(`overworld`).fillBlocks({x: x,y: ev.sender.location.y,z: z},{x: x,y: ev.sender.location.y,z: z},BlockPermutation.resolve(`minecraft:${ev.message.split(` `)[2]}`))
             }
         }
         if(ev.message.split(` `)[0] === `\\\\star`) {
@@ -163,7 +153,7 @@ world.afterEvents.chatSend.subscribe((ev)=>{
                 system.run(()=>{
                     for (let longitude = 0; longitude < 180; longitude++) {
                     const { x, y, z } = getCoordinates(latitude, longitude, A_x, A_y, A_z, r);
-                    world.getDimension(`overworld`).fillBlocks({x: x,y: y,z: z},{x: x,y: y,z: z},`minecraft:${ev.message.split(` `)[2]}`)
+                    world.getDimension(`overworld`).fillBlocks({x: x,y: y,z: z},{x: x,y: y,z: z},BlockPermutation.resolve(`minecraft:${ev.message.split(` `)[2]}`))
                 }
                 })
             }
