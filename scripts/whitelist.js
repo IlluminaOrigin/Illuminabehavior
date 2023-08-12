@@ -15,6 +15,8 @@ MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
     const { player } = ev;
     if(ev.initialSpawn) {
         const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
+        let zeroMessage = ""
+        if(dates.getMinutes() < 10) zeroMessage = "0"
         if(!whiteListPlayers.includes(player.name)){
             MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${player.name}`)
             player.runCommandAsync(`kick "${player.name}" "§cあなたはホワイトリストに入っていません`)
@@ -32,6 +34,8 @@ MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
 MC.world.afterEvents.playerLeave.subscribe((ev)=>{
     if(!PlayerNames.get(ev.playerName)) return;
     const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
+    let zeroMessage = ""
+    if(dates.getMinutes() < 10) zeroMessage = "0"
     MC.world.sendMessage(`[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] ${ChatRename(PlayerNames.get(ev.playerName))} §r§eがログアウト`)
 })
 
