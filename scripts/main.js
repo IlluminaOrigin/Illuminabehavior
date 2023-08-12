@@ -6,6 +6,7 @@ import "spawn.js"
 import "useitem.js"
 import "worldedit.js"
 import "whitelist.js"
+import "rank.js"
 
 /*MC.world.beforeEvents.itemUseOn.subscribe((ev)=>{
     ev.cancel = true
