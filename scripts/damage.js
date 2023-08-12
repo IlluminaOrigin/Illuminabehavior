@@ -66,13 +66,6 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
 
     //プレイヤーがプレイヤー以外に攻撃
     if (attacker?.typeId === "minecraft:player" && sufferer?.typeId !== "minecraft:player") {
-
-        
-        let cheat = 1
-        for (const entity of attacker.getEntitiesFromViewDirection({maxDistance: 5})){
-            if(entity.entity === sufferer) cheat = 0
-        }
-        if(cheat === 1) attacker.sendMessage(`チートだ`)
         //武器の取得
         /** 
          * @type { Container } 
