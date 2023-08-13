@@ -13,7 +13,6 @@ let first = 0
 let lvObj = new Object()
 system.runTimeout(()=>{
     if(first === 0) {
-        world.sendMessage(`${world.getDynamicProperty(`lvObject`)}`)
         lvObj = JSON.parse(world.getDynamicProperty('lvObject'))
     }
 },20)
@@ -32,7 +31,6 @@ system.runInterval(()=>{
     }
     for(const p of world.getPlayers({tags:[`hatu`],excludeTags: [`toku`]})){
         let playerLv= {[`${RawName(p.nameTag)}`]: world.scoreboard.getObjective(`lv`).getScore(p)}
-        world.sendMessage(`${p.nameTag}`)
         lvObj = Object.assign({}, lvObj, playerLv);
     }
     system.runTimeout(()=>{
