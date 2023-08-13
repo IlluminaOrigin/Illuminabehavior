@@ -1,4 +1,4 @@
-import { system, world, Vector, Container,EquipmentSlot, EntityEquipmentInventoryComponent } from "@minecraft/server";
+import { system, world, Vector, Container,EquipmentSlot, EntityEquipmentInventoryComponent, MolangVariableMap } from "@minecraft/server";
 import { getScore,setScore } from "getscore.js";
 import { Damage,Name } from "functions.js";
 const overworld = world.getDimension('overworld')
@@ -15,6 +15,9 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let suffererDefensePower = getScore(`def`,sufferer)
     let suffererMagicDefensePower = getScore(`mdef`,sufferer)
     let suffererName = Name(sufferer.nameTag)
+    const molang = new MolangVariableMap();
+
+    world.getDimension(`overworld`).spawnParticle(`minecraft:critical_hit_emitter`,sufferer.location,molang)
     if(!attacker && cause !== `anvil`) {
         suffererHealth -= damage*10
         setScore(`hp`,sufferer,suffererHealth)
