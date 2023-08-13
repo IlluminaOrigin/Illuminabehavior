@@ -20,7 +20,6 @@ system.runTimeout(()=>{
 
 world.afterEvents.playerSpawn.subscribe((ev)=>{
     if(ev.initialSpawn && first === 0) {
-        world.sendMessage(`LVダイプロ\n${world.getDynamicProperty(`lvObject`)}`)
         lvObj = JSON.parse(world.getDynamicProperty('lvObject'))
         first = 1
     }    
