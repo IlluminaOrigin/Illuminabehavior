@@ -28,17 +28,16 @@ world.afterEvents.playerSpawn.subscribe((ev)=>{
 
 system.runInterval(()=>{
     if(!world.getDimension(`overworld`).getEntities({tags: [`LvRank`]})[0]) return;
-    for(const p of world.getPlayers({tags:[`hatu`]})){
-        if(p.hasTag(`toku`)) {
-            world.sendMessage(`消しました`)
-            delete lvObj[RawName(p.nameTag)]
-            continue;
-        }
-        let playerLv= {[RawName(p.nameTag)]: world.scoreboard.getObjective(`lv`).getScore(p)}
+    for (const p of world.getPlayers({tags:[`toku`]})) {
+        delete lvObj[`${RawName(p.nameTag)}`]
+    }
+    for(const p of world.getPlayers({tags:[`hatu`],excludeTags: [`toku`]})){
+        let playerLv= {[`${RawName(p.nameTag)}`]: world.scoreboard.getObjective(`lv`).getScore(p)}
         world.sendMessage(`${p.nameTag}`)
         lvObj = Object.assign({}, lvObj, playerLv);
     }
     system.runTimeout(()=>{
+        delete lvObj[0]
         world.setDynamicProperty(`lvObject`,`${JSON.stringify(lvObj)}`)
         const dataArray = Object.entries(lvObj).sort((a, b) => b[1] - a[1]);
 
