@@ -61,7 +61,7 @@ world.beforeEvents.chatSend.subscribe((ev) => {
             if(!sender.hasTag(`killer`)){
                 world.sendMessage(`§a${ChatRename(sender.nameTag).replace()} §r[${dates.getHours()}:${zeroMessage}${dates.getMinutes()}] : ${message}`);
                 break;
-            } 
+            }
 
         }
 

@@ -10,31 +10,54 @@ world.afterEvents.worldInitialize.subscribe(({ propertyRegistry }) => {
 })
 
 let first = 0
-let lvObj = new Object
+let lvObj = new Object()
+system.runTimeout(()=>{
+    if(first === 0) {
+        world.sendMessage(`${world.getDynamicProperty(`lvObject`)}`)
+        lvObj = JSON.parse(world.getDynamicProperty('lvObject'))
+    }
+},20)
+
 world.afterEvents.playerSpawn.subscribe((ev)=>{
     if(ev.initialSpawn && first === 0) {
-        
-        lvObj = `${JSON.parse(world.getDynamicProperty('lvObject'))}`
+        world.sendMessage(`LVダイプロ\n${world.getDynamicProperty(`lvObject`)}`)
+        lvObj = JSON.parse(world.getDynamicProperty('lvObject'))
         first = 1
     }    
 })
 
 system.runInterval(()=>{
     if(!world.getDimension(`overworld`).getEntities({tags: [`LvRank`]})[0]) return;
-    for(const p of world.getAllPlayers()){
-        let playerLv= {[p.name]: p.level}
+    for(const p of world.getPlayers({tags:[`hatu`]})){
+        if(p.hasTag(`toku`)) {
+            world.sendMessage(`消しました`)
+            delete lvObj[RawName(p.nameTag)]
+            continue;
+        }
+        let playerLv= {[RawName(p.nameTag)]: world.scoreboard.getObjective(`lv`).getScore(p)}
+        world.sendMessage(`${p.nameTag}`)
         lvObj = Object.assign({}, lvObj, playerLv);
     }
-    world.setDynamicProperty(`lvObject`,`${JSON.stringify(lvObj)}`)
-    const dataArray = Object.entries(lvObj).sort((a, b) => b[1] - a[1]);
+    system.runTimeout(()=>{
+        world.setDynamicProperty(`lvObject`,`${JSON.stringify(lvObj)}`)
+        const dataArray = Object.entries(lvObj).sort((a, b) => b[1] - a[1]);
 
-    let rankName = `§6Lvランキング`
-    // 上位10個を抽出して整形して表示
-    for (let i = 0; i < Math.min(Object.keys(lvObj).length, 10); i++) {
-        const entry = dataArray[i];
-        rankName += `\n§a${i + 1}位 §r${entry[0]} §r: ${entry[1]}`
-    }
-    for (const entity of world.getDimension(`overworld`).getEntities({tags: [`LvRank`]})) {
-        entity.nameTag = rankName
-    }
+        let rankName = `§6Lvランキング`
+        // 上位10個を抽出して整形して表示
+        for (let i = 0; i < Math.min(dataArray.length, 10); i++) {
+            const entry = dataArray[i];
+            rankName += `\n§a${i + 1}位 §r${entry[0]} §r: ${entry[1]}`
+        }
+        for (const entity of world.getDimension(`overworld`).getEntities({tags: [`LvRank`]})) {
+            entity.nameTag = rankName
+        }
+    },5)
 },200)
+
+function RawName(playersName){
+    let p4 = []
+    let p = playersName.split(/\n/)
+    if(p.length > 2) p.shift()
+    let raw =  p[0].split(/(?<=^[^ ]+?) /)[1]
+    return raw;
+} 
