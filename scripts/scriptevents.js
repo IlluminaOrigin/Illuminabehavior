@@ -8,7 +8,7 @@ let mhp = ""
 let thp
 
 system.afterEvents.scriptEventReceive.subscribe(ev => {
-    const {id , sourceBlock , message } = ev;
+    const {id , sourceBlock , message , sourceEntity , sourceType} = ev;
     const ln = sourceBlock?.location
     let sellButton = new ItemStack(`karo:sell`)
     switch(id) {
@@ -86,6 +86,10 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
             if(args[2] !== `undefined`) item.setLore(args[2].replace(/"/g,``).split(`,`))
             if(args[3] !== `undefined`) item.nameTag = args[3]
             player.getComponent(`inventory`).container.addItem(item)
+            break;
+        }
+        case "karo:attack":{
+            sourceEntity
         }
     }
 })
