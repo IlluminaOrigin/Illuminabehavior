@@ -93,7 +93,7 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
             //sourceEntity
             if(coolTime.get(sourceEntity.name) === 0) {
                 world.sendMessage(`Left Click`)
-                //sourceEntity.triggerEvent(`karo:tanken`)
+                sourceEntity.triggerEvent(`karo:tanken`)
                 coolTime.set(sourceEntity.name,20)
             }
         }
