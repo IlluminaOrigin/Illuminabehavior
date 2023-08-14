@@ -94,7 +94,6 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
             if(!sourceEntity.getEntitiesFromViewDirection({maxDistance: 7})[0]) break
             if(coolTime.get(sourceEntity.name) === 0) {
                 world.sendMessage(`${sourceEntity.getEntitiesFromViewDirection({maxDistance: 7})[0].entity.typeId}`)
-                sourceEntity.triggerEvent(`event_tanken`)
                 coolTime.set(sourceEntity.name,20)
             }
         }
