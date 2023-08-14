@@ -24,7 +24,10 @@
             "max_wait_time": 0,
             "single_use": true,
             "spawn_entity": "karo:tanken",
-            "num_to_spawn": 1
+            "num_to_spawn": 1,
+            "filters":{
+              "test":"has_tag","operator":"==","value":"hatu"
+            }
           }
         ],
         "minecraft:spell_effects": {
