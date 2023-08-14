@@ -5,9 +5,17 @@
       "identifier": "minecraft:player",
       "is_spawnable": false,
       "is_summonable": false,
-      "is_experimental": false
+      "is_experimental": false,
+      "scripts": {
+        "animate": [ "attack" ],
+        "pre_animation": [
+          "variable.cooltime = 0.0;"
+        ]
+      },
+      "animations": {
+        "attack": "controller.animation.attack"
+      }
     },
-
     "component_groups": {
       "minecraft:add_bad_omen": {
         "minecraft:spell_effects": {
