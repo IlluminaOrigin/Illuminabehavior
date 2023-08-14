@@ -3,7 +3,9 @@ import { ChatRename } from "functions.js"
 
 const banList = []
 
-const whiteListPlayers = [`Aria3918`,`kino 1963`,`Shaopipi2525`,`Kitune6073`,`LitheGrain2489`,`IamMavericK777`,`neboko`,`RaRachan1117075`,`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
+const developers = [`Aria3918`,`kino 1963`,`Shaopipi2525`,`Kitune6073`,`LitheGrain2489`,`IamMavericK777`,`neboko`,`RaRachan1117075`,`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
+const whiteListPlayers = []
+const debuggers = []
 const PlayerNames = new Map()
 
 for(const p of MC.world.getPlayers({tags:[`hatu`]})) {
@@ -17,7 +19,7 @@ MC.world.afterEvents.playerSpawn.subscribe((ev)=>{
         const dates = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000))
         let zeroMessage = ""
         if(dates.getMinutes() < 10) zeroMessage = "0"
-        if(!whiteListPlayers.includes(player.name)){
+        if(!whiteListPlayers.includes(player.name) && !developers.includes(player.name) && !debuggers.includes(player.name)){
             MC.world.sendMessage(`§cホワリスに入ってないプレイヤーです : ${player.name}`)
             player.runCommandAsync(`kick "${player.name}" "§cあなたはホワイトリストに入っていません`)
         }
