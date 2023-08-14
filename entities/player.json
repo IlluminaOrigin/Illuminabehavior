@@ -17,22 +17,6 @@
       }
     },
     "component_groups": {
-      "minecraft:tanken": {
-        "minecraft:spawn_entity": [
-          {
-            "min_wait_time": 0,
-            "max_wait_time": 0,
-            "single_use": true,
-            "spawn_entity": "karo:tanken",
-            "num_to_spawn": 1,
-            "filters":{
-              "test":"has_tag","operator":"==","value":"hatu"
-            }
-          }
-        ],
-        "minecraft:spell_effects": {
-        }
-      },
       "minecraft:add_bad_omen": {
         "minecraft:spell_effects": {
           "add_effects": [
@@ -203,13 +187,6 @@
     },
 
     "events": {
-      "event_tanken": {
-        "add": {
-          "component_groups": [
-            "minecraft:tanken"
-          ]
-        }
-      },
       "minecraft:gain_bad_omen": {
         "add": {
           "component_groups": [
