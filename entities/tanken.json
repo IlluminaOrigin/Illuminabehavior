@@ -16,29 +16,28 @@
 		"components": {
 			"minecraft:timer": {
 				"looping": false,
-				"time": 1,
+				"time": 100,
 				"randomInterval": false,
 				"time_down_event": {
 					"event": "despawn"
 				}
 			},
 			"minecraft:collision_box": {
-				"width": 0.01,
-				"height": 0.01
+				"width": 0.1,
+				"height": 0.1
 			},
 			"minecraft:projectile": {
 				"onHit": {
 					"impact_damage": {
 						"damage": 1,
-						"knockback": false
+						"knockback": true
 					},
 					"remove_on_hit": {}
 				},
-				"power": 0.55,
+				"anchor": 2,
+				"power": 0.1,
 				"gravity": 0,
-				"inertia": 1.5,
-				"uncertaintyBase": 0,
-				"uncertaintyMultiplier": 0,
+				"knockback": true,
 				"offset": [
 					0,
 					0,
