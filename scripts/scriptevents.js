@@ -6,6 +6,7 @@ const dimension = world.getDimension(`overworld`)
 let name = ""
 let mhp = ""
 let thp
+let coolTime = new Map()
 
 system.afterEvents.scriptEventReceive.subscribe(ev => {
     const {id , sourceBlock , message , sourceEntity , sourceType} = ev;
@@ -90,7 +91,10 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
         }
         case "karo:attack":{
             //sourceEntity
-            world.sendMessage(`Left Click`)
+            if(coolTime.get(sourceEntity.name) === 0) {
+                world.sendMessage(`Left Click`)
+                coolTime.set(sourceEntity.name,20)
+            }
         }
     }
 })
@@ -142,7 +146,8 @@ system.runInterval((ev)=>{
             case "minecraft:player":
             {
                 if (!entity.hasTag(`hatu`)) break;
-                
+                if(coolTime.get(entity.name) && coolTime.get(entity.name) > 0) coolTime.set(entity.name,coolTime.get(entity.name) - 1)
+                if(!coolTime.get(entity.name)) coolTime.set(entity.name,0)
                 const pn = entity.getTags().find(x => x.match("ID_")).split(/(?<=^[^_]+?)_/)
                 let atname = "§l§6LV[" + getScore(`lv`,entity) + "] §r" + pn[1]
                 if (entity.getTags().find(x => x.match("SYOGOD_"))) atname = entity.getTags().find(x => x.match("SYOGOD_")).split(/(?<=^[^_]+?)_/)[1] + `\n` + atname
