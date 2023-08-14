@@ -99,11 +99,11 @@ MC.world.afterEvents.blockPlace.subscribe((ev)=>{
     if(worldGuard < 2) return
     ev.dimension.fillBlocks(ev.block.location,ev.block.location,MC.MinecraftBlockTypes.air)
 })
-
+/*
 MC.world.beforeEvents.explosion.subscribe((ev)=>{
     if(worldGuard < 0) return
     ev.cancel = true
-})
+})*/
 
 
 MC.world.beforeEvents.chatSend.subscribe((ev) => {

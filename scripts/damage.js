@@ -16,7 +16,11 @@ world.afterEvents.entityHurt.subscribe(entityHurt => {
     let suffererMagicDefensePower = getScore(`mdef`,sufferer)
     let suffererName = Name(sufferer.nameTag)
     const molang = new MolangVariableMap();
-
+    try {
+        const type = sufferer.typeId
+    } catch (error) {
+        return
+    }
     world.getDimension(`overworld`).spawnParticle(`minecraft:critical_hit_emitter`,sufferer.location,molang)
     if(!attacker && cause !== `anvil`) {
         suffererHealth -= damage*10
@@ -172,7 +176,9 @@ world.afterEvents.blockBreak.subscribe(ev => {
 })
 */
 
-
+world.afterEvents.projectileHit.subscribe((ev)=>{
+    world.sendMessage(`${ev.source.typeId}`)
+})
 world.afterEvents.entityHitEntity.subscribe(entityHit => {
     const { damagingEntity: player , hitEntity: entity } = entityHit;
     const { damagingEntity: attacker , hitEntity: sufferer } = entityHit;
@@ -182,6 +188,7 @@ world.afterEvents.entityHitEntity.subscribe(entityHit => {
     } catch (error) {
         return
     }
+    world.sendMessage(`${entity.typeId}`)
     if(player.typeId !== `minecraft:player`) return;
     if (entity) {
         if(sufferer.hasTag(`safety`)) {

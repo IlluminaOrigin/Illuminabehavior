@@ -91,8 +91,9 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
         }
         case "karo:attack":{
             //sourceEntity
+            if(!sourceEntity.getEntitiesFromViewDirection({maxDistance: 7})[0]) break
             if(coolTime.get(sourceEntity.name) === 0) {
-                world.sendMessage(`Left Click`)
+                world.sendMessage(`${sourceEntity.getEntitiesFromViewDirection({maxDistance: 7})[0].entity.typeId}`)
                 sourceEntity.triggerEvent(`event_tanken`)
                 coolTime.set(sourceEntity.name,20)
             }
