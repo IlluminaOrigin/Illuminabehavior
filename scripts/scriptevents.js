@@ -89,7 +89,8 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
             break;
         }
         case "karo:attack":{
-            sourceEntity
+            //sourceEntity
+            world.sendMessage(`Left Click`)
         }
     }
 })
