@@ -3,7 +3,7 @@ import { ChatRename } from "functions.js"
 
 const banList = []
 
-const developers = [`Aria3918`,`kino 1963`,`Shaopipi2525`,`Kitune6073`,`LitheGrain2489`,`IamMavericK777`,`neboko`,`RaRachan1117075`,`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
+const developers = [`TeruTeruB0uzu9792`,`Aria3918`,`kino 1963`,`Shaopipi2525`,`Kitune6073`,`LitheGrain2489`,`IamMavericK777`,`neboko`,`RaRachan1117075`,`Urashima7777`,`ThreeStraw3094`,`Banna6955`,`Nodokaaaaa`,`clare0918`,`polloguff3033`,`Karon8442`,`VeryUmbrella639`,`damenaito0066`,`kurou7524875`,`Youtyan13`,`FartherSuzume`,`syautana`,`oskworkshop8`,`Onebit4405`]
 const whiteListPlayers = []
 const debuggers = []
 const PlayerNames = new Map()
