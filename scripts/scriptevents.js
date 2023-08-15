@@ -100,11 +100,25 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
     }
 })
 
+const afterRiding = new Map() //乗り物に乗ってるとき 20になる
 system.runInterval((ev)=>{
     for(const p of world.getPlayers({excludeGameModes: [`creative`,`spectator`]})){
         p.onScreenDisplay.setActionBar(`${p.getVelocity().x} ${p.getVelocity().y} ${p.getVelocity().z} `)
         if(p.isFlying) world.sendMessage(`飛んでいる ${p.name}`)
-        if( -15 > p.getVelocity().x || p.getVelocity().x > 15 || p.getVelocity().z > 15 || p.getVelocity().z < -15){ if(!p.getEffect(`speed`)) world.sendMessage(`テレポート ${p.name}`)} else if( -1.5 > p.getVelocity().x || p.getVelocity().x > 1.5 || p.getVelocity().z > 1.5 || p.getVelocity().z < -1.5) {if(!p.getEffect(`speed`)) world.sendMessage(`速度規定 ${p.name}`) } else if( p.getVelocity().y > 15 ) {if(!p.getEffect(`jump_boost`)) world.sendMessage(`フライ ${p.name}`)} else if( p.getVelocity().y > 2 ) {if(!p.getEffect(`jump_boost`)) world.sendMessage(`フライ ${p.name}`)}
+    
+        p.lastDimensionId ??= p.dimension.id;
+        if(!afterRiding.get(p.name)) afterRiding.set(p.name,0)
+        if(p.hasComponent("minecraft:riding")) afterRiding.set(p.name,10)
+        if(!p.hasComponent("minecraft:riding")) afterRiding.set(p.name,afterRiding.get(p.name) - 1)
+        if (afterRiding.get(p.name) === 0) {
+            if (Math.abs(v.x) > 15 || Math.abs(v.z) > 15) {
+                if (!p.getEffect("speed")) world.sendMessage(`テレポート ${p.name}`);
+            } else if (!p.getEffect("speed")) {
+                
+            } else if (v.y > 15 || v.y > 2) {
+                if (!p.getEffect("jump_boost")) world.sendMessage(`フライ ${p.name}`);
+            }
+        }
     }
     for (const entity of dimension.getEntities()) {
         if(getScore(`hp`,entity) === true) continue;
@@ -203,3 +217,26 @@ system.runInterval(()=>{
     }
     world.getDimension(`overworld`).getPlayers()[0].runCommandAsync(`title @s subtitle "playersList ${playersName.toString()}"`)
 },100)
+
+  /** @param {import('@minecraft/server').Player} player */
+  function checkMoving(player) {
+    if (!player.lastLocation) {
+      player.isMoved = true;
+      return;
+    }
+    // ディメンション変えた直後速度がバグるから遅延かける
+    if ( 
+      Date.now() - player.dimensionSwitchedAt > 4*1000 &&
+      !vectorEquals(player.lastLocation, player.location)
+    ) {
+      player.isMoved = true;
+    }
+  }
+  
+  /**
+   * @param {import('@minecraft/server').Vector3} vec1
+   * @param {import('@minecraft/server').Vector3} vec2
+   */
+  function vectorEquals(vec1, vec2) {
+    return vec1.x === vec2.x && vec1.y === vec2.y && vec1.z === vec2.z;
+  }

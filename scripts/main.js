@@ -91,19 +91,19 @@ MC.world.getDimension(`overworld`).fillBlocks(MC.world.getPlayers()[0].location,
 let worldGuard = 0
 
 MC.world.afterEvents.blockBreak.subscribe((ev)=>{
-    if(worldGuard < 2) return
+    if(worldGuard > 1 && ev.player.hasTag(`developer`)) return
     ev.dimension.fillBlocks(ev.block.location,ev.block.location,ev.brokenBlockPermutation)
 })
 
 MC.world.afterEvents.blockPlace.subscribe((ev)=>{
-    if(worldGuard < 2) return
+    if(worldGuard > 1 && ev.player.hasTag(`developer`)) return
     ev.dimension.fillBlocks(ev.block.location,ev.block.location,MC.MinecraftBlockTypes.air)
 })
-/*
+
 MC.world.beforeEvents.explosion.subscribe((ev)=>{
     if(worldGuard < 0) return
     ev.cancel = true
-})*/
+})
 
 
 MC.world.beforeEvents.chatSend.subscribe((ev) => {
